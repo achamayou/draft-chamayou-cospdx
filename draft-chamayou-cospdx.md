@@ -19,35 +19,34 @@
 # Change the file extension to match the format (.xml for XML, etc...)
 #
 ###
-title: "TODO - Your title"
-abbrev: "TODO - Abbreviation"
-category: info
+title: "A Deterministic Compact (CBOR) Encoding for SPDX"
+abbrev: "Deterministic Compact SPDX"
+category: std
 
-docname: draft-todo-yourname-protocol-latest
-submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
+docname: draft-chamayou-cospdx
+submissiontype: IETF
 number:
 date:
 consensus: true
 v: 3
-area: AREA
-workgroup: WG Working Group
+area: Security
+workgroup: CBOR
 keyword:
- - next generation
- - unicorn
- - sparkling distributed ledger
+ - CBOR
+ - SPDX
+ - deterministic
 venue:
-  group: WG
+  group: CBOR
   type: Working Group
-  mail: WG@example.com
-  arch: https://example.com/WG
-  github: USER/REPO
-  latest: https://example.com/LATEST
+  mail: cbor@ietf.org
+  arch: [https://example.com/WG](https://www.ietf.org/mail-archive/web/cbor/current/maillist.html)
+  github: achamayou/draft-chamayou-cospdx
 
 author:
  -
-    fullname: Your Name Here
-    organization: Your Organization Here
-    email: your.email@example.com
+    fullname: Amaury Chamayou
+    organization: Microsoft
+    email: amchamay@microsoft.com
 
 normative:
 
