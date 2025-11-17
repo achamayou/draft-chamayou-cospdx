@@ -36,15 +36,15 @@ informative:
 
 --- abstract
 
-TODO Abstract
-
+This document proposes a canonical serialization of SPDX 3.0.1 to CBOR, to enable the reproducible and efficient creation of System Package Data Exchange information. This representation is consistent with, and lends itself to being used with transparency services proposed by the Supply Chain Integrity, Transparency and Trust initiative.
 
 --- middle
 
 # Introduction
 
-TODO Introduction
+The System Package Data Exchange specification defines an open start for communicating bill of materials information for different topic areas, and multiple serialization formats to encode that data model.
 
+Defined serialization formats for SPDX 3.0.1 are text-based and so tend to produce large payloads even for documents that describe a relatively small number of artifacts. A JSON canonical serialisation, using RFC8259, is defined in SPDX 3.0.1, but is unevenly available because not many JSON libraries implement RFC8259.
 
 # Conventions and Definitions
 
