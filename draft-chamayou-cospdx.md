@@ -3,7 +3,7 @@ title: "A Deterministic Compact (CBOR) Encoding for SPDX"
 abbrev: "Deterministic Compact SPDX"
 category: std
 
-docname: draft-chamayou-cospdx
+docname: draft-chamayou-cospdx-latest
 submissiontype: IETF
 number:
 date:
