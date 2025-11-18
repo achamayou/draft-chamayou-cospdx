@@ -17,9 +17,7 @@ keyword:
  - deterministic
 venue:
   group: CBOR
-  type: Working Group
   mail: cbor@ietf.org
-  arch: [https://example.com/WG](https://www.ietf.org/mail-archive/web/cbor/current/maillist.html)
   github: achamayou/draft-chamayou-cospdx
 
 author:
