@@ -9,16 +9,16 @@ number:
 date:
 consensus: true
 v: 3
-area: Security
-workgroup: CBOR
+# area: Security
+# workgroup: CBOR
 keyword:
  - CBOR
  - SPDX
  - deterministic
 venue:
-  group: CBOR
-  mail: cbor@ietf.org
-  github: achamayou/draft-chamayou-cospdx
+#  group: CBOR
+#  mail: cbor@ietf.org
+  github: "achamayou/draft-chamayou-cospdx"
 
 author:
 -  name: Amaury Chamayou
@@ -33,7 +33,7 @@ normative:
     target: https://json-ld.github.io/cbor-ld-spec/
     title: CBOR-LD
   RFC8259:
- 
+
 informative:
 
 ...
