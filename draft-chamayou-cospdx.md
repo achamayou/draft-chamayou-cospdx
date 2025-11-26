@@ -32,9 +32,12 @@ normative:
   CBOR-LD:
     target: https://json-ld.github.io/cbor-ld-spec/
     title: CBOR-LD
-  RFC8259:
 
 informative:
+  CAN-SPDX:
+    target: https://spdx.github.io/spdx-spec/v3.0.1/serializations/#canonical-serialization
+    title: Canonical Serialization for SPDX
+  RFC8259:
 
 ...
 
@@ -48,9 +51,9 @@ This document proposes a canonical serialization of SPDX 3.0.1 to CBOR, to enabl
 
 The System Package Data Exchange specification defines an open start for communicating bill of materials information for different topic areas, and multiple serialization formats to encode that data model.
 
-Defined serialization formats for {{SPDX}} 3.0.1 are text-based and so tend to produce large payloads even for documents that describe a relatively small number of artifacts. A JSON canonical serialisation, using RFC8259, is defined in SPDX 3.0.1, but is unevenly available because not many JSON libraries implement {{RFC8259}}.
+Defined serialization formats for {{SPDX}} 3.0.1 are text-based and so tend to produce large payloads even for documents that describe a relatively small number of artifacts. A JSON canonical serialisation ({{CAN-SPDX}}), based on RFC8259 with additional encoding rules, is defined in SPDX 3.0.1, but is no widely implemented by SBOM generation tools currently.
 
-This document follows the approach defined in {{CBOR-LD}}, and aims to contribute CDDL schemas for the various SPDX profiles that describe how to emit CBOR-encoded SPDX 3.0.1 directly.
+This document follows the approach defined in {{CBOR-LD}}, but aims to contribute CDDL schemas rather than registries for the various SPDX profiles that describe how to emit CBOR-encoded SPDX 3.0.1 directly.
 
 # Conventions and Definitions
 
