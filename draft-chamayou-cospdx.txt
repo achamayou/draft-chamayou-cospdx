@@ -2,14 +2,14 @@
 
 
 
-CBOR                                                         A. Chamayou
+Network Working Group                                        A. Chamayou
 Internet-Draft                                                 Microsoft
-Intended status: Standards Track                        18 November 2025
-Expires: 22 May 2026
+Intended status: Standards Track                        26 November 2025
+Expires: 30 May 2026
 
 
             A Deterministic Compact (CBOR) Encoding for SPDX
-                         draft-chamayou-cospdx
+                      draft-chamayou-cospdx-latest
 
 Abstract
 
@@ -25,12 +25,7 @@ About This Document
    This note is to be removed before publishing as an RFC.
 
    Status information for this document may be found at
-   https://datatracker.ietf.org/doc/draft-chamayou/.
-
-   Discussion of this document takes place on the CBOR Working Group
-   mailing list (mailto:cbor@ietf.org), which is archived at
-   https://mailarchive.ietf.org/arch/browse/cbor/.  Subscribe at
-   https://www.ietf.org/mailman/listinfo/cbor/.
+   https://datatracker.ietf.org/doc/draft-chamayou-cospdx/.
 
    Source for this draft and an issue tracker can be found at
    https://github.com/achamayou/draft-chamayou-cospdx.
@@ -50,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 22 May 2026.
+   This Internet-Draft will expire on 30 May 2026.
 
 Copyright Notice
 
@@ -72,7 +67,9 @@ Table of Contents
    2.  Conventions and Definitions
    3.  Security Considerations
    4.  IANA Considerations
-   5.  Normative References
+   5.  References
+     5.1.  Normative References
+     5.2.  Informative References
    Acknowledgments
    Author's Address
 
@@ -84,14 +81,14 @@ Table of Contents
 
    Defined serialization formats for [SPDX] 3.0.1 are text-based and so
    tend to produce large payloads even for documents that describe a
-   relatively small number of artifacts.  A JSON canonical
-   serialisation, using RFC8259, is defined in SPDX 3.0.1, but is
-   unevenly available because not many JSON libraries implement
-   [RFC8259].
+   relatively small number of artifacts.  A JSON canonical serialisation
+   ([CAN-SPDX]), based on RFC8259 with additional encoding rules, is
+   defined in SPDX 3.0.1, but is no widely implemented by SBOM
+   generation tools currently.
 
-   This document follows the approach defined in [CBOR-LD], and aims to
-   contribute CDDL schemas for the various SPDX profiles that describe
-   how to emit CBOR-encoded SPDX 3.0.1 directly.
+   This document follows the approach defined in [CBOR-LD], but aims to
+   contribute CDDL schemas rather than registries for the various SPDX
+   profiles that describe how to emit CBOR-encoded SPDX 3.0.1 directly.
 
 2.  Conventions and Definitions
 
@@ -109,7 +106,9 @@ Table of Contents
 
    This document has no IANA actions.
 
-5.  Normative References
+5.  References
+
+5.1.  Normative References
 
    [CBOR-LD]  "CBOR-LD", n.d.,
               <https://json-ld.github.io/cbor-ld-spec/>.
@@ -123,13 +122,19 @@ Table of Contents
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
 
+   [SPDX]     "SPDX Specification", n.d.,
+              <https://spdx.dev/use/specifications/>.
+
+5.2.  Informative References
+
+   [CAN-SPDX] "Canonical Serialization for SPDX", n.d.,
+              <https://spdx.github.io/spdx-spec/v3.0.1/
+              serializations/#canonical-serialization>.
+
    [RFC8259]  Bray, T., Ed., "The JavaScript Object Notation (JSON) Data
               Interchange Format", STD 90, RFC 8259,
               DOI 10.17487/RFC8259, December 2017,
               <https://www.rfc-editor.org/rfc/rfc8259>.
-
-   [SPDX]     "SPDX Specification", n.d.,
-              <https://spdx.dev/use/specifications/>.
 
 Acknowledgments
 
