@@ -4,8 +4,8 @@
 
 Network Working Group                                        A. Chamayou
 Internet-Draft                                                 Microsoft
-Intended status: Standards Track                        26 November 2025
-Expires: 30 May 2026
+Intended status: Standards Track                        27 November 2025
+Expires: 31 May 2026
 
 
             A Deterministic Compact (CBOR) Encoding for SPDX
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 30 May 2026.
+   This Internet-Draft will expire on 31 May 2026.
 
 Copyright Notice
 
