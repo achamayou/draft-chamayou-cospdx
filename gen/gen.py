@@ -64,7 +64,26 @@ class StringType:
         return f"{self.name} = tstr"
 
 
-SUPPORTED_TYPES = [StringType]
+class NumberType:
+    @staticmethod
+    def is_one(schema):
+        return schema.get("type") == "number"
+
+    def __init__(self, name, schema):
+        assert NumberType.is_one(schema)
+        assert {"type", "minimum", "maximum"}.issuperset(schema.keys()), schema.keys()
+        self.name = name
+        self.schema = schema
+
+    def to_cddl(self):
+        if self.schema.get("mininum") == 0:
+            parts = [self.name + " = uint"]
+        else:
+            parts = [self.name + " = int"]
+        return " ".join(parts)
+
+
+SUPPORTED_TYPES = [StringType, NumberType]
 
 
 if __name__ == "__main__":
@@ -74,12 +93,12 @@ if __name__ == "__main__":
         input_path = pathlib.Path(sys.argv[1])
     schema = json.loads(input_path.read_text())
     stats(schema)
-    unmapped = 0
+    mapped = 0
     for type_name, type_schema in types_with_no_refs(schema).items():
         for TypeClass in SUPPORTED_TYPES:
             if TypeClass.is_one(type_schema):
                 type_instance = TypeClass(type_name, type_schema)
                 print(type_instance.to_cddl())
-            else:
-                unmapped += 1
-    print(f"{unmapped} unmapped noref types")
+                mapped += 1
+    types_with_no_refs_count = len(types_with_no_refs(schema))
+    print(f"{types_with_no_refs_count - mapped} unmapped noref types")
