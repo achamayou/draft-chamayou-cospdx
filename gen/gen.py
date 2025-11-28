@@ -28,6 +28,23 @@ def refs(node):
     return count
 
 
+def totalrefs(name, defs):
+    count = 0
+    seen = set()
+    unresolved = {name}
+    while unresolved:
+        node_name = unresolved.pop()
+        seen.add(node_name)
+        node = defs[node_name]
+        for key, value in traverse(node):
+            if key == "$ref":
+                count += 1
+                refname = value.split("/")[-1]
+                if refname not in seen:
+                    unresolved.add(refname)
+    return count
+
+
 def types_with_no_refs(schema):
     return {name: node for name, node in schema["$defs"].items() if refs(node) == 0}
 
@@ -262,6 +279,7 @@ class ObjectType:
         # TODO: handle required properties
         if "properties" in schema:
             parts = []
+            # TODO: Allocate integer property keys for compactness
             for prop_name, prop_schema in schema["properties"].items():
                 type_class = find_type(prop_schema)
                 if type_class is None:
@@ -311,7 +329,7 @@ if __name__ == "__main__":
     for type_name, type_schema in schema["$defs"].items():
         type_class = find_type(type_schema)
         if type_class is None:
-            unmapped.append(type_name)
+            unmapped.append((type_name, type_schema))
         else:
             # try:
             type_instance = type_class(type_name, type_schema)
@@ -321,5 +339,13 @@ if __name__ == "__main__":
 
     print()
     print(f"; Unmapped types: {len(unmapped)}")
-    for type_name in unmapped:
-        print(f"; - {type_name}")
+    unmapped_and_totalrefs = sorted(
+        [
+            (type_name, type_schema, totalrefs(type_name, schema["$defs"]))
+            for type_name, type_schema in unmapped
+        ],
+        reverse=True,
+        key=lambda x: x[2],
+    )
+    for type_name, type_schema, total_refs in unmapped_and_totalrefs:
+        print(f"; - {type_name}: {total_refs} refs")
