@@ -2,6 +2,7 @@
 
 import json
 from re import S
+import re
 import sys
 import pathlib
 from tarfile import SUPPORTED_TYPES
@@ -44,6 +45,21 @@ class StringType:
     def is_one(schema):
         return schema.get("type") == "string"
 
+    @staticmethod
+    def cddl(schema):
+        if "pattern" in schema:
+            pattern = schema["pattern"]
+            return f'tstr .regexp "{pattern}"'
+
+        if "allOf" in schema:
+            patterns = []
+            for value in schema["allOf"]:
+                assert value.keys() == {"pattern"}
+                patterns.append(f'tstr .regexp "{value["pattern"]}"')
+            return {" / ".join(patterns)}
+
+        return "tstr"
+
     def __init__(self, name, schema):
         assert StringType.is_one(schema)
         assert {"type", "pattern", "allOf"}.issuperset(schema.keys()), schema.keys()
@@ -51,24 +67,20 @@ class StringType:
         self.schema = schema
 
     def to_cddl(self):
-        if "pattern" in self.schema:
-            pattern = self.schema["pattern"]
-            return f'{self.name} = tstr .regexp "{pattern}"'
-
-        if "allOf" in self.schema:
-            patterns = []
-            for value in self.schema["allOf"]:
-                assert value.keys() == {"pattern"}
-                patterns.append(f'tstr .regexp "{value["pattern"]}"')
-            return f'{self.name} = {" / ".join(patterns)}'
-
-        return f"{self.name} = tstr"
+        return f"{self.name} = {StringType.cddl(self.schema)}"
 
 
 class NumberType:
     @staticmethod
     def is_one(schema):
         return schema.get("type") == "number"
+
+    @staticmethod
+    def cddl(schema):
+        if schema.get("minimum") == 0:
+            return "uint"
+        else:
+            return "int"
 
     def __init__(self, name, schema):
         assert NumberType.is_one(schema)
@@ -77,15 +89,37 @@ class NumberType:
         self.schema = schema
 
     def to_cddl(self):
-        if self.schema.get("mininum") == 0:
-            parts = [self.name + " = uint"]
-        else:
-            parts = [self.name + " = int"]
-        return " ".join(parts)
+        return f"{self.name} = {NumberType.cddl(self.schema)}"
+
+
+class AnyOfType:
+    @staticmethod
+    def is_one(schema):
+        return "anyOf" in schema
+
+    @staticmethod
+    def cddl(schema):
+        parts = []
+        for subschema in schema["anyOf"]:
+            type_class = find_type(subschema)
+            if type_class is None:
+                raise NotImplementedError(
+                    f"Unsupported subschema in anyOf: {subschema}"
+                )
+            parts.append(type_class.cddl(subschema))
+        return " / ".join(parts)
+
+    def __init__(self, name, schema):
+        assert AnyOfType.is_one(schema)
+        self.name = name
+        self.schema = schema
+
+    def to_cddl(self):
+        return f"{self.name} = {AnyOfType.cddl(self.schema)}"
 
 
 def find_type(schema):
-    for type_class in [StringType, NumberType]:
+    for type_class in [StringType, NumberType, AnyOfType]:
         if type_class.is_one(schema):
             return type_class
     return None
@@ -107,6 +141,7 @@ if __name__ == "__main__":
             type_instance = type_class(type_name, type_schema)
             print(type_instance.to_cddl())
 
-    print("\n# Unmapped types with no reference:")
+    print()
+    print(f"# Unmapped types with no reference ({len(unmapped)}):")
     for type_name in unmapped:
         print(f"# - {type_name}")
