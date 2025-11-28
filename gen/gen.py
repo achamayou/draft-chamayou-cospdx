@@ -241,6 +241,24 @@ class AnyOfType:
     def to_cddl(self):
         return f"{self.name} = {AnyOfType.cddl(self.schema)}"
 
+class IfThenElseType:
+    @staticmethod
+    def is_one(schema):
+        return schema.keys() == {"if", "then", "else"}
+
+    def __init__(self, name, schema):
+        assert IfThenElseType.is_one(schema)
+        self.name = name
+        self.schema = schema
+
+    @staticmethod
+    def cddl(schema):
+        # TODO: Implement proper handling of if-then-else constructs
+        return "any"
+    
+    def to_cddl(self):
+        return f"{self.name} = {IfThenElseType.cddl(self.schema)}"
+    
 
 class EnumType:
     @staticmethod
@@ -374,6 +392,7 @@ def find_type(schema):
         ObjectType,
         AllOfType,
         ArrayType,
+        IfThenElseType,
     ]:
         if type_class.is_one(schema):
             return type_class
@@ -386,7 +405,7 @@ if __name__ == "__main__":
     if len(sys.argv) == 2:
         input_path = pathlib.Path(sys.argv[1])
     schema = json.loads(input_path.read_text())
-    stats(schema)
+    #stats(schema)
     unmapped = []
     print("AnyObject = { * any => any }")
     for type_name, type_schema in schema["$defs"].items():
@@ -394,14 +413,12 @@ if __name__ == "__main__":
         if type_class is None:
             unmapped.append((type_name, type_schema))
         else:
-            # try:
-            type_instance = type_class(type_name, type_schema)
-            print(type_instance.to_cddl())
-            # except NotImplementedError as e:
-            #     unmapped.append(type_name)
+            try:
+                type_instance = type_class(type_name, type_schema)
+                print(type_instance.to_cddl())
+            except NotImplementedError as e:
+                unmapped.append(type_name)
 
-    print()
-    print(f"; Unmapped types: {len(unmapped)}")
     unmapped_and_totalrefs = sorted(
         [
             (type_name, type_schema, totalrefs(type_name, schema["$defs"]))
@@ -410,5 +427,4 @@ if __name__ == "__main__":
         reverse=True,
         key=lambda x: x[2],
     )
-    for type_name, type_schema, total_refs in unmapped_and_totalrefs:
-        print(f"; - {type_name}: {total_refs} refs")
+    assert not unmapped_and_totalrefs, unmapped_and_totalrefs
