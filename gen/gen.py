@@ -165,6 +165,37 @@ class IntegerType:
         return f"{self.name} = {IntegerType.cddl(self.schema)}"
 
 
+class ArrayType:
+    @staticmethod
+    def is_one(schema):
+        return schema.get("type") == "array" and {
+            "type",
+            "items",
+            "minItems",
+        }.issuperset(schema.keys())
+
+    @staticmethod
+    def cddl(schema):
+        type_class = find_type(schema["items"])
+        if type_class is None:
+            raise NotImplementedError(
+                f"Unsupported array item schema: {schema['items']}"
+            )
+        item_cddl = type_class.cddl(schema["items"])
+        if schema.get("minItems", 0) == 0:
+            return f"[ * {item_cddl} ]"
+        else:
+            return f"[ + {item_cddl} ]"
+
+    def __init__(self, name, schema):
+        assert ArrayType.is_one(schema)
+        self.name = name
+        self.schema = schema
+
+    def to_cddl(self):
+        return f"{self.name} = {ArrayType.cddl(self.schema)}"
+
+
 class BooleanType:
     @staticmethod
     def is_one(schema):
@@ -195,11 +226,9 @@ class AnyOfType:
         for subschema in schema["anyOf"]:
             type_class = find_type(subschema)
             if type_class is None:
-                # TODO: fix missing subtypes, mostly array?
-                # raise NotImplementedError(
-                #     f"Unsupported subschema in anyOf: {subschema}"
-                # )
-                parts.append("any")
+                raise NotImplementedError(
+                    f"Unsupported subschema in anyOf: {subschema}"
+                )
             else:
                 parts.append(type_class.cddl(subschema))
         return " / ".join(parts)
@@ -344,6 +373,7 @@ def find_type(schema):
         ConstType,
         ObjectType,
         AllOfType,
+        ArrayType,
     ]:
         if type_class.is_one(schema):
             return type_class
