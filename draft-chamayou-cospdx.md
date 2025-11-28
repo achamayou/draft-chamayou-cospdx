@@ -32,8 +32,12 @@ normative:
   CBOR-LD:
     target: https://json-ld.github.io/cbor-ld-spec/
     title: CBOR-LD
+  RFC8610:
 
 informative:
+  SER-SPDX:
+    target: https://spdx.github.io/spdx-spec/v3.0.1/serializations
+    title: Serialization for SPDX
   CAN-SPDX:
     target: https://spdx.github.io/spdx-spec/v3.0.1/serializations/#canonical-serialization
     title: Canonical Serialization for SPDX
@@ -49,11 +53,17 @@ This document proposes a canonical serialization of SPDX 3.0.1 to CBOR, to enabl
 
 # Introduction
 
-The System Package Data Exchange specification defines an open start for communicating bill of materials information for different topic areas, and multiple serialization formats to encode that data model.
+The System Package Data Exchange ({{SPDX}}) specification defines an open standard for communicating bill of materials information for different topic areas, and multiple serialization formats to encode that data model.
 
-Defined serialization formats for {{SPDX}} 3.0.1 are text-based and so tend to produce large payloads even for documents that describe a relatively small number of artifacts. A JSON canonical serialisation ({{CAN-SPDX}}), based on RFC8259 with additional encoding rules, is defined in SPDX 3.0.1, but is no widely implemented by SBOM generation tools currently.
+Serialization formats defined for SPDX 3.0.1 (see {{SER-SPDX}}) are text-based and so tend to produce large payloads even for documents that describe a relatively small number of artifacts. A JSON canonical serialisation ({{CAN-SPDX}}), based on {{RFC8259}} with additional encoding rules, is defined in SPDX 3.0.1, but is not widely implemented by SBOM generation tools currently.
 
-This document follows the approach defined in {{CBOR-LD}}, but aims to contribute CDDL schemas rather than registries for the various SPDX profiles that describe how to emit CBOR-encoded SPDX 3.0.1 directly.
+This document follows an approach similar to that proposed by {{CBOR-LD}}, but aims to contribute CDDL schemas ({{RFC8610}}) rather than registries for the various SPDX profiles that describe how to emit CBOR-encoded SPDX 3.0.1 directly.
+
+# CDDL Schema
+
+~~~ cddl
+{::include cospdx.cddl}
+~~~
 
 # Conventions and Definitions
 
