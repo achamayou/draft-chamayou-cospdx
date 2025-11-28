@@ -43,7 +43,11 @@ def stats(schema):
 class StringType:
     @staticmethod
     def is_one(schema):
-        return schema.get("type") == "string"
+        return schema.get("type") == "string" and {
+            "type",
+            "pattern",
+            "allOf",
+        }.issuperset(schema.keys())
 
     @staticmethod
     def cddl(schema):
@@ -67,7 +71,6 @@ class StringType:
 
     def __init__(self, name, schema):
         assert StringType.is_one(schema)
-        assert {"type", "pattern", "allOf"}.issuperset(schema.keys()), schema.keys()
         self.name = name
         self.schema = schema
 
@@ -78,15 +81,14 @@ class StringType:
 class ConstType:
     @staticmethod
     def is_one(schema):
-        return schema.get("type") == "const"
+        return schema.keys() == {"const"}
 
     @staticmethod
     def cddl(schema):
-        return f"{schema['const']}"
+        return f"\"{schema['const']}\""
 
     def __init__(self, name, schema):
         assert ConstType.is_one(schema)
-        assert {"const"}.issuperset(schema.keys()), schema.keys()
         self.name = name
         self.schema = schema
 
@@ -97,7 +99,11 @@ class ConstType:
 class NumberType:
     @staticmethod
     def is_one(schema):
-        return schema.get("type") == "number"
+        return schema.get("type") == "number" and {
+            "type",
+            "minimum",
+            "maximum",
+        }.issuperset(schema.keys())
 
     @staticmethod
     def cddl(schema):
@@ -109,7 +115,6 @@ class NumberType:
 
     def __init__(self, name, schema):
         assert NumberType.is_one(schema)
-        assert {"type", "minimum", "maximum"}.issuperset(schema.keys()), schema.keys()
         self.name = name
         self.schema = schema
 
@@ -120,7 +125,11 @@ class NumberType:
 class IntegerType:
     @staticmethod
     def is_one(schema):
-        return schema.get("type") == "integer"
+        return schema.get("type") == "integer" and {
+            "type",
+            "minimum",
+            "maximum",
+        }.issuperset(schema.keys())
 
     @staticmethod
     def cddl(schema):
@@ -132,7 +141,6 @@ class IntegerType:
 
     def __init__(self, name, schema):
         assert IntegerType.is_one(schema)
-        assert {"type", "minimum", "maximum"}.issuperset(schema.keys()), schema.keys()
         self.name = name
         self.schema = schema
 
@@ -162,7 +170,7 @@ class BooleanType:
 class AnyOfType:
     @staticmethod
     def is_one(schema):
-        return "anyOf" in schema
+        return schema.keys() == {"anyOf"}
 
     @staticmethod
     def cddl(schema):
@@ -170,10 +178,12 @@ class AnyOfType:
         for subschema in schema["anyOf"]:
             type_class = find_type(subschema)
             if type_class is None:
-                raise NotImplementedError(
-                    f"Unsupported subschema in anyOf: {subschema}"
-                )
-            parts.append(type_class.cddl(subschema))
+                # raise NotImplementedError(
+                #     f"Unsupported subschema in anyOf: {subschema}"
+                # )
+                pass
+            else:
+                parts.append(type_class.cddl(subschema))
         return " / ".join(parts)
 
     def __init__(self, name, schema):
@@ -188,7 +198,7 @@ class AnyOfType:
 class EnumType:
     @staticmethod
     def is_one(schema):
-        return "enum" in schema
+        return schema.keys() == {"enum"}
 
     @staticmethod
     def cddl(schema):
@@ -203,7 +213,6 @@ class EnumType:
 
     def __init__(self, name, schema):
         assert EnumType.is_one(schema)
-        assert {"enum"}.issuperset(schema.keys()), schema.keys()
         self.name = name
         self.schema = schema
 
@@ -214,7 +223,7 @@ class EnumType:
 class RefType:
     @staticmethod
     def is_one(schema):
-        return "$ref" in schema
+        return schema.keys() == {"$ref"}
 
     @staticmethod
     def cddl(schema):
@@ -224,7 +233,6 @@ class RefType:
 
     def __init__(self, name, schema):
         assert RefType.is_one(schema)
-        assert {"$ref"}.issuperset(schema.keys()), schema.keys()
         self.name = name
         self.schema = schema
 
@@ -242,6 +250,7 @@ def find_type(schema):
         BooleanType,
         RefType,
         ConstType,
+        AnyOfType,
     ]:
         if type_class.is_one(schema):
             return type_class
@@ -261,11 +270,11 @@ if __name__ == "__main__":
         if type_class is None:
             unmapped.append(type_name)
         else:
-            try:
-                type_instance = type_class(type_name, type_schema)
-                print(type_instance.to_cddl())
-            except NotImplementedError as e:
-                unmapped.append(type_name)
+            # try:
+            type_instance = type_class(type_name, type_schema)
+            print(type_instance.to_cddl())
+            # except NotImplementedError as e:
+            #     unmapped.append(type_name)
 
     print()
     print(f"; Unmapped types: {len(unmapped)}")
