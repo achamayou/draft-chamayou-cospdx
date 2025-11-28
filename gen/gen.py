@@ -195,9 +195,11 @@ class AnyOfType:
         for subschema in schema["anyOf"]:
             type_class = find_type(subschema)
             if type_class is None:
-                raise NotImplementedError(
-                    f"Unsupported subschema in anyOf: {subschema}"
-                )
+                # TODO: fix missing subtypes, mostly array?
+                # raise NotImplementedError(
+                #     f"Unsupported subschema in anyOf: {subschema}"
+                # )
+                parts.append("any")
             else:
                 parts.append(type_class.cddl(subschema))
         return " / ".join(parts)
@@ -242,10 +244,10 @@ class RefType:
         return schema.keys() == {"$ref"}
 
     @staticmethod
-    def cddl(schema):
+    def cddl(schema, unwrap=False):
         defs, ref_name = schema["$ref"].rsplit("/", 1)
         assert defs == "#/$defs"
-        return ref_name
+        return f"~{ref_name}" if unwrap else ref_name
 
     def __init__(self, name, schema):
         assert RefType.is_one(schema)
@@ -254,6 +256,32 @@ class RefType:
 
     def to_cddl(self):
         return f"{self.name} = {RefType.cddl(self.schema)}"
+
+
+class AllOfType:
+    @staticmethod
+    def is_one(schema):
+        return schema.keys() == {"allOf"}
+
+    @staticmethod
+    def cddl(schema):
+        parts = []
+        for subschema in schema["allOf"]:
+            type_class = find_type(subschema)
+            if type_class is None:
+                raise NotImplementedError(
+                    f"Unsupported subschema in allOf: {subschema}"
+                )
+            parts.append(type_class.cddl(subschema, unwrap=True))
+        return f"{{ {', '.join(parts)} }}"
+
+    def __init__(self, name, schema):
+        assert AllOfType.is_one(schema)
+        self.name = name
+        self.schema = schema
+
+    def to_cddl(self):
+        return f"{self.name} = {AllOfType.cddl(self.schema)}"
 
 
 class ObjectType:
@@ -268,11 +296,11 @@ class ObjectType:
                 "required",
                 "properties",
             }.issuperset(schema.keys())
-            and (schema.get("properties") is None or schema.get("anyOf") is None)
+            and sum(["properties" in schema, "anyOf" in schema]) == 1
         )
 
     @staticmethod
-    def cddl(schema):
+    def cddl(schema, unwrap=False):
         # TODO: when unevaluatedProperties is true (not set), we should allow additional properties
         if "anyOf" in schema:
             return AnyOfType.cddl({"anyOf": schema["anyOf"]})
@@ -287,7 +315,11 @@ class ObjectType:
                         f"Unsupported property schema: {prop_schema}"
                     )
                 parts.append(f'"{prop_name}": {type_class.cddl(prop_schema)}')
-            return f"{{ {', '.join(parts)} }}"
+            if not parts:
+                return "~AnyObject" if unwrap else "AnyObject"
+            else:
+                inner = ", ".join(parts)
+                return inner if unwrap else f"{{ {inner} }}"
 
         raise NotImplementedError(f"Unsupported object schema: {schema}")
 
@@ -310,8 +342,8 @@ def find_type(schema):
         BooleanType,
         RefType,
         ConstType,
-        AnyOfType,
         ObjectType,
+        AllOfType,
     ]:
         if type_class.is_one(schema):
             return type_class
@@ -326,6 +358,7 @@ if __name__ == "__main__":
     schema = json.loads(input_path.read_text())
     stats(schema)
     unmapped = []
+    print("AnyObject = { * any => any }")
     for type_name, type_schema in schema["$defs"].items():
         type_class = find_type(type_schema)
         if type_class is None:
