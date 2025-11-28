@@ -56,7 +56,7 @@ class StringType:
             for value in schema["allOf"]:
                 assert value.keys() == {"pattern"}
                 patterns.append(f'tstr .regexp "{value["pattern"]}"')
-            return {" / ".join(patterns)}
+            return " / ".join(patterns)
 
         return "tstr"
 
