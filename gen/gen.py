@@ -32,10 +32,11 @@ def types_with_no_refs(schema):
 
 
 def stats(schema):
-    print(f"{len(schema['$defs'])} definitions")
-    print(f"{refs(schema)} references")
+    print(f"# {len(schema['$defs'])} definitions")
+    print(f"# {refs(schema)} references")
     types_with_no_refs_count = len(types_with_no_refs(schema))
-    print(f"{types_with_no_refs_count} types with no references")
+    print(f"# {types_with_no_refs_count} types with no references")
+    print()
 
 
 class StringType:
@@ -83,7 +84,11 @@ class NumberType:
         return " ".join(parts)
 
 
-SUPPORTED_TYPES = [StringType, NumberType]
+def find_type(schema):
+    for type_class in [StringType, NumberType]:
+        if type_class.is_one(schema):
+            return type_class
+    return None
 
 
 if __name__ == "__main__":
@@ -93,12 +98,15 @@ if __name__ == "__main__":
         input_path = pathlib.Path(sys.argv[1])
     schema = json.loads(input_path.read_text())
     stats(schema)
-    mapped = 0
+    unmapped = []
     for type_name, type_schema in types_with_no_refs(schema).items():
-        for TypeClass in SUPPORTED_TYPES:
-            if TypeClass.is_one(type_schema):
-                type_instance = TypeClass(type_name, type_schema)
-                print(type_instance.to_cddl())
-                mapped += 1
-    types_with_no_refs_count = len(types_with_no_refs(schema))
-    print(f"{types_with_no_refs_count - mapped} unmapped noref types")
+        type_class = find_type(type_schema)
+        if type_class is None:
+            unmapped.append(type_name)
+        else:
+            type_instance = type_class(type_name, type_schema)
+            print(type_instance.to_cddl())
+
+    print("\n# Unmapped types with no reference:")
+    for type_name in unmapped:
+        print(f"# - {type_name}")
