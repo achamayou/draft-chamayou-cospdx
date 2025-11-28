@@ -178,10 +178,9 @@ class AnyOfType:
         for subschema in schema["anyOf"]:
             type_class = find_type(subschema)
             if type_class is None:
-                # raise NotImplementedError(
-                #     f"Unsupported subschema in anyOf: {subschema}"
-                # )
-                pass
+                raise NotImplementedError(
+                    f"Unsupported subschema in anyOf: {subschema}"
+                )
             else:
                 parts.append(type_class.cddl(subschema))
         return " / ".join(parts)
@@ -240,6 +239,31 @@ class RefType:
         return f"{self.name} = {RefType.cddl(self.schema)}"
 
 
+class ObjectType:
+    @staticmethod
+    def is_one(schema):
+        return schema.get("type") == "object" and {
+            "type",
+            "unevaluatedProperties",
+            "anyOf",
+        }.issuperset(schema.keys())
+
+    @staticmethod
+    def cddl(schema):
+        # TODO: when unevaluatedProperties is true (not set), we should allow additional properties
+        if "anyOf" in schema:
+            return AnyOfType.cddl({"anyOf": schema["anyOf"]})
+        raise NotImplementedError(f"Unsupported object schema: {schema}")
+
+    def __init__(self, name, schema):
+        assert ObjectType.is_one(schema)
+        self.name = name
+        self.schema = schema
+
+    def to_cddl(self):
+        return f"{self.name} = {ObjectType.cddl(self.schema)}"
+
+
 def find_type(schema):
     for type_class in [
         StringType,
@@ -251,6 +275,7 @@ def find_type(schema):
         RefType,
         ConstType,
         AnyOfType,
+        ObjectType,
     ]:
         if type_class.is_one(schema):
             return type_class
