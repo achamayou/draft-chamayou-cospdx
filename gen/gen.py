@@ -118,8 +118,33 @@ class AnyOfType:
         return f"{self.name} = {AnyOfType.cddl(self.schema)}"
 
 
+class EnumType:
+    @staticmethod
+    def is_one(schema):
+        return "enum" in schema
+
+    @staticmethod
+    def cddl(schema):
+        parts = []
+        for enum_value in schema["enum"]:
+            if isinstance(enum_value, str):
+                parts.append(f'"{enum_value}"')
+            else:
+                parts.append(str(enum_value))
+        return " / ".join(parts)
+
+    def __init__(self, name, schema):
+        assert EnumType.is_one(schema)
+        assert {"enum"}.issuperset(schema.keys()), schema.keys()
+        self.name = name
+        self.schema = schema
+
+    def to_cddl(self):
+        return f"{self.name} = {EnumType.cddl(self.schema)}"
+
+
 def find_type(schema):
-    for type_class in [StringType, NumberType, AnyOfType]:
+    for type_class in [StringType, NumberType, AnyOfType, EnumType]:
         if type_class.is_one(schema):
             return type_class
     return None
