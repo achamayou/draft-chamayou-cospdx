@@ -101,7 +101,7 @@ Table of Contents
 
    AnyObject = { * any => any }
    ai_EnergyConsumption_derived = ai_EnergyConsumption / BlankNodeOrIRI
-   ai_EnergyConsumption_props = { ~SHACLClass, "ai_finetuningEnergyConsumption": any, "ai_inferenceEnergyConsumption": any, "ai_trainingEnergyConsumption": any }
+   ai_EnergyConsumption_props = { ~SHACLClass, "ai_finetuningEnergyConsumption": [ * prop_ai_EnergyConsumption_ai_finetuningEnergyConsumption ], "ai_inferenceEnergyConsumption": [ * prop_ai_EnergyConsumption_ai_inferenceEnergyConsumption ], "ai_trainingEnergyConsumption": [ * prop_ai_EnergyConsumption_ai_trainingEnergyConsumption ] }
    prop_ai_EnergyConsumption_ai_finetuningEnergyConsumption = ai_EnergyConsumptionDescription_derived
    prop_ai_EnergyConsumption_ai_inferenceEnergyConsumption = ai_EnergyConsumptionDescription_derived
    prop_ai_EnergyConsumption_ai_trainingEnergyConsumption = ai_EnergyConsumptionDescription_derived
@@ -116,7 +116,7 @@ Table of Contents
    AnnotationType_derived = AnnotationType / "spdx:Core/AnnotationType/other" / "spdx:Core/AnnotationType/review" / BlankNodeOrIRI
    AnnotationType_props = { ~SHACLClass, ~AnyObject }
    CreationInfo_derived = CreationInfo / BlankNodeOrIRI
-   CreationInfo_props = { ~SHACLClass, "comment": prop_CreationInfo_comment, "created": prop_CreationInfo_created, "createdBy": any, "createdUsing": any, "specVersion": prop_CreationInfo_specVersion }
+   CreationInfo_props = { ~SHACLClass, "comment": prop_CreationInfo_comment, "created": prop_CreationInfo_created, "createdBy": [ + prop_CreationInfo_createdBy ], "createdUsing": [ * prop_CreationInfo_createdUsing ], "specVersion": prop_CreationInfo_specVersion }
    prop_CreationInfo_comment = tstr
    prop_CreationInfo_created = tstr .regexp "^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-6][0-9]:[0-6][0-9](Z|[+-][0-9]{2}:[0-9]{2})$" / tstr .regexp "^\\d\\d\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ$"
    prop_CreationInfo_createdBy = Agent_derived
@@ -127,7 +127,7 @@ Table of Contents
    prop_DictionaryEntry_key = tstr
    prop_DictionaryEntry_value = tstr
    Element_derived = ai_AIPackage / build_Build / Agent / Annotation / Bom / Bundle / IndividualElement / LifecycleScopedRelationship / Organization / Person / Relationship / SoftwareAgent / SpdxDocument / Tool / dataset_DatasetPackage / expandedlicensing_ConjunctiveLicenseSet / expandedlicensing_CustomLicense / expandedlicensing_CustomLicenseAddition / expandedlicensing_DisjunctiveLicenseSet / expandedlicensing_IndividualLicensingInfo / expandedlicensing_ListedLicense / expandedlicensing_ListedLicenseException / expandedlicensing_OrLaterOperator / expandedlicensing_WithAdditionOperator / security_CvssV2VulnAssessmentRelationship / security_CvssV3VulnAssessmentRelationship / security_CvssV4VulnAssessmentRelationship / security_EpssVulnAssessmentRelationship / security_ExploitCatalogVulnAssessmentRelationship / security_SsvcVulnAssessmentRelationship / security_VexAffectedVulnAssessmentRelationship / security_VexFixedVulnAssessmentRelationship / security_VexNotAffectedVulnAssessmentRelationship / security_VexUnderInvestigationVulnAssessmentRelationship / security_Vulnerability / simplelicensing_LicenseExpression / simplelicensing_SimpleLicensingText / software_File / software_Package / software_Sbom / software_Snippet / "NoAssertionElement" / "NoneElement" / "SpdxOrganization" / "expandedlicensing_NoAssertionLicense" / "expandedlicensing_NoneLicense" / BlankNodeOrIRI
-   Element_props = { ~SHACLClass, "comment": prop_Element_comment, "creationInfo": prop_Element_creationInfo, "description": prop_Element_description, "extension": any, "externalIdentifier": any, "externalRef": any, "name": prop_Element_name, "summary": prop_Element_summary, "verifiedUsing": any }
+   Element_props = { ~SHACLClass, "comment": prop_Element_comment, "creationInfo": prop_Element_creationInfo, "description": prop_Element_description, "extension": [ * prop_Element_extension ], "externalIdentifier": [ * prop_Element_externalIdentifier ], "externalRef": [ * prop_Element_externalRef ], "name": prop_Element_name, "summary": prop_Element_summary, "verifiedUsing": [ * prop_Element_verifiedUsing ] }
    prop_Element_comment = tstr
    prop_Element_creationInfo = CreationInfo_derived
    prop_Element_description = tstr
@@ -138,12 +138,12 @@ Table of Contents
    prop_Element_summary = tstr
    prop_Element_verifiedUsing = IntegrityMethod_derived
    ElementCollection_derived = Bom / Bundle / SpdxDocument / software_Sbom / BlankNodeOrIRI
-   ElementCollection_props = { ~Element_props, "element": any, "profileConformance": any, "rootElement": any }
+   ElementCollection_props = { ~Element_props, "element": [ * prop_ElementCollection_element ], "profileConformance": [ * prop_ElementCollection_profileConformance ], "rootElement": [ * prop_ElementCollection_rootElement ] }
    prop_ElementCollection_element = Element_derived
    prop_ElementCollection_profileConformance = "ai" / "build" / "core" / "dataset" / "expandedLicensing" / "extension" / "lite" / "security" / "simpleLicensing" / "software"
    prop_ElementCollection_rootElement = Element_derived
    ExternalIdentifier_derived = ExternalIdentifier / BlankNodeOrIRI
-   ExternalIdentifier_props = { ~SHACLClass, "comment": prop_ExternalIdentifier_comment, "externalIdentifierType": prop_ExternalIdentifier_externalIdentifierType, "identifier": prop_ExternalIdentifier_identifier, "identifierLocator": any, "issuingAuthority": prop_ExternalIdentifier_issuingAuthority }
+   ExternalIdentifier_props = { ~SHACLClass, "comment": prop_ExternalIdentifier_comment, "externalIdentifierType": prop_ExternalIdentifier_externalIdentifierType, "identifier": prop_ExternalIdentifier_identifier, "identifierLocator": [ * prop_ExternalIdentifier_identifierLocator ], "issuingAuthority": prop_ExternalIdentifier_issuingAuthority }
    prop_ExternalIdentifier_comment = tstr
    prop_ExternalIdentifier_externalIdentifierType = "cpe22" / "cpe23" / "cve" / "email" / "gitoid" / "other" / "packageUrl" / "securityOther" / "swhid" / "swid" / "urlScheme"
    prop_ExternalIdentifier_identifier = tstr
@@ -152,13 +152,13 @@ Table of Contents
    ExternalIdentifierType_derived = ExternalIdentifierType / "spdx:Core/ExternalIdentifierType/cpe22" / "spdx:Core/ExternalIdentifierType/cpe23" / "spdx:Core/ExternalIdentifierType/cve" / "spdx:Core/ExternalIdentifierType/email" / "spdx:Core/ExternalIdentifierType/gitoid" / "spdx:Core/ExternalIdentifierType/other" / "spdx:Core/ExternalIdentifierType/packageUrl" / "spdx:Core/ExternalIdentifierType/securityOther" / "spdx:Core/ExternalIdentifierType/swhid" / "spdx:Core/ExternalIdentifierType/swid" / "spdx:Core/ExternalIdentifierType/urlScheme" / BlankNodeOrIRI
    ExternalIdentifierType_props = { ~SHACLClass, ~AnyObject }
    ExternalMap_derived = ExternalMap / BlankNodeOrIRI
-   ExternalMap_props = { ~SHACLClass, "definingArtifact": prop_ExternalMap_definingArtifact, "externalSpdxId": prop_ExternalMap_externalSpdxId, "locationHint": prop_ExternalMap_locationHint, "verifiedUsing": any }
+   ExternalMap_props = { ~SHACLClass, "definingArtifact": prop_ExternalMap_definingArtifact, "externalSpdxId": prop_ExternalMap_externalSpdxId, "locationHint": prop_ExternalMap_locationHint, "verifiedUsing": [ * prop_ExternalMap_verifiedUsing ] }
    prop_ExternalMap_definingArtifact = Artifact_derived
    prop_ExternalMap_externalSpdxId = anyURI
    prop_ExternalMap_locationHint = anyURI
    prop_ExternalMap_verifiedUsing = IntegrityMethod_derived
    ExternalRef_derived = ExternalRef / BlankNodeOrIRI
-   ExternalRef_props = { ~SHACLClass, "comment": prop_ExternalRef_comment, "contentType": prop_ExternalRef_contentType, "externalRefType": prop_ExternalRef_externalRefType, "locator": any }
+   ExternalRef_props = { ~SHACLClass, "comment": prop_ExternalRef_comment, "contentType": prop_ExternalRef_contentType, "externalRefType": prop_ExternalRef_externalRefType, "locator": [ * prop_ExternalRef_locator ] }
    prop_ExternalRef_comment = tstr
    prop_ExternalRef_contentType = tstr .regexp "^[^\\/]+\\/[^\\/]+$"
    prop_ExternalRef_externalRefType = "altDownloadLocation" / "altWebPage" / "binaryArtifact" / "bower" / "buildMeta" / "buildSystem" / "certificationReport" / "chat" / "componentAnalysisReport" / "cwe" / "documentation" / "dynamicAnalysisReport" / "eolNotice" / "exportControlAssessment" / "funding" / "issueTracker" / "license" / "mailingList" / "mavenCentral" / "metrics" / "npm" / "nuget" / "other" / "privacyAssessment" / "productMetadata" / "purchaseOrder" / "qualityAssessmentReport" / "releaseHistory" / "releaseNotes" / "riskAssessment" / "runtimeAnalysisReport" / "secureSoftwareAttestation" / "securityAdversaryModel" / "securityAdvisory" / "securityFix" / "securityOther" / "securityPenTestReport" / "securityPolicy" / "securityThreatModel" / "socialMedia" / "sourceArtifact" / "staticAnalysisReport" / "support" / "vcs" / "vulnerabilityDisclosureReport" / "vulnerabilityExploitabilityAssessment"
@@ -179,7 +179,7 @@ Table of Contents
    prop_NamespaceMap_namespace = anyURI
    prop_NamespaceMap_prefix = tstr
    PackageVerificationCode_derived = PackageVerificationCode / BlankNodeOrIRI
-   PackageVerificationCode_props = { ~IntegrityMethod_props, "algorithm": prop_PackageVerificationCode_algorithm, "hashValue": prop_PackageVerificationCode_hashValue, "packageVerificationCodeExcludedFile": any }
+   PackageVerificationCode_props = { ~IntegrityMethod_props, "algorithm": prop_PackageVerificationCode_algorithm, "hashValue": prop_PackageVerificationCode_hashValue, "packageVerificationCodeExcludedFile": [ * prop_PackageVerificationCode_packageVerificationCodeExcludedFile ] }
    prop_PackageVerificationCode_algorithm = "adler32" / "blake2b256" / "blake2b384" / "blake2b512" / "blake3" / "crystalsDilithium" / "crystalsKyber" / "falcon" / "md2" / "md4" / "md5" / "md6" / "other" / "sha1" / "sha224" / "sha256" / "sha384" / "sha3_224" / "sha3_256" / "sha3_384" / "sha3_512" / "sha512"
    prop_PackageVerificationCode_hashValue = tstr
    prop_PackageVerificationCode_packageVerificationCodeExcludedFile = tstr
@@ -192,7 +192,7 @@ Table of Contents
    ProfileIdentifierType_derived = ProfileIdentifierType / "spdx:Core/ProfileIdentifierType/ai" / "spdx:Core/ProfileIdentifierType/build" / "spdx:Core/ProfileIdentifierType/core" / "spdx:Core/ProfileIdentifierType/dataset" / "spdx:Core/ProfileIdentifierType/expandedLicensing" / "spdx:Core/ProfileIdentifierType/extension" / "spdx:Core/ProfileIdentifierType/lite" / "spdx:Core/ProfileIdentifierType/security" / "spdx:Core/ProfileIdentifierType/simpleLicensing" / "spdx:Core/ProfileIdentifierType/software" / BlankNodeOrIRI
    ProfileIdentifierType_props = { ~SHACLClass, ~AnyObject }
    Relationship_derived = LifecycleScopedRelationship / security_CvssV2VulnAssessmentRelationship / security_CvssV3VulnAssessmentRelationship / security_CvssV4VulnAssessmentRelationship / security_EpssVulnAssessmentRelationship / security_ExploitCatalogVulnAssessmentRelationship / security_SsvcVulnAssessmentRelationship / security_VexAffectedVulnAssessmentRelationship / security_VexFixedVulnAssessmentRelationship / security_VexNotAffectedVulnAssessmentRelationship / security_VexUnderInvestigationVulnAssessmentRelationship / Relationship / BlankNodeOrIRI
-   Relationship_props = { ~Element_props, "completeness": prop_Relationship_completeness, "endTime": prop_Relationship_endTime, "from": prop_Relationship_from_, "relationshipType": prop_Relationship_relationshipType, "startTime": prop_Relationship_startTime, "to": any }
+   Relationship_props = { ~Element_props, "completeness": prop_Relationship_completeness, "endTime": prop_Relationship_endTime, "from": prop_Relationship_from_, "relationshipType": prop_Relationship_relationshipType, "startTime": prop_Relationship_startTime, "to": [ + prop_Relationship_to ] }
    prop_Relationship_completeness = "complete" / "incomplete" / "noAssertion"
    prop_Relationship_endTime = tstr .regexp "^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-6][0-9]:[0-6][0-9](Z|[+-][0-9]{2}:[0-9]{2})$" / tstr .regexp "^\\d\\d\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ$"
    prop_Relationship_from_ = Element_derived
@@ -204,7 +204,7 @@ Table of Contents
    RelationshipType_derived = RelationshipType / "spdx:Core/RelationshipType/affects" / "spdx:Core/RelationshipType/amendedBy" / "spdx:Core/RelationshipType/ancestorOf" / "spdx:Core/RelationshipType/availableFrom" / "spdx:Core/RelationshipType/configures" / "spdx:Core/RelationshipType/contains" / "spdx:Core/RelationshipType/coordinatedBy" / "spdx:Core/RelationshipType/copiedTo" / "spdx:Core/RelationshipType/delegatedTo" / "spdx:Core/RelationshipType/dependsOn" / "spdx:Core/RelationshipType/descendantOf" / "spdx:Core/RelationshipType/describes" / "spdx:Core/RelationshipType/doesNotAffect" / "spdx:Core/RelationshipType/expandsTo" / "spdx:Core/RelationshipType/exploitCreatedBy" / "spdx:Core/RelationshipType/fixedBy" / "spdx:Core/RelationshipType/fixedIn" / "spdx:Core/RelationshipType/foundBy" / "spdx:Core/RelationshipType/generates" / "spdx:Core/RelationshipType/hasAddedFile" / "spdx:Core/RelationshipType/hasAssessmentFor" / "spdx:Core/RelationshipType/hasAssociatedVulnerability" / "spdx:Core/RelationshipType/hasConcludedLicense" / "spdx:Core/RelationshipType/hasDataFile" / "spdx:Core/RelationshipType/hasDeclaredLicense" / "spdx:Core/RelationshipType/hasDeletedFile" / "spdx:Core/RelationshipType/hasDependencyManifest" / "spdx:Core/RelationshipType/hasDistributionArtifact" / "spdx:Core/RelationshipType/hasDocumentation" / "spdx:Core/RelationshipType/hasDynamicLink" / "spdx:Core/RelationshipType/hasEvidence" / "spdx:Core/RelationshipType/hasExample" / "spdx:Core/RelationshipType/hasHost" / "spdx:Core/RelationshipType/hasInput" / "spdx:Core/RelationshipType/hasMetadata" / "spdx:Core/RelationshipType/hasOptionalComponent" / "spdx:Core/RelationshipType/hasOptionalDependency" / "spdx:Core/RelationshipType/hasOutput" / "spdx:Core/RelationshipType/hasPrerequisite" / "spdx:Core/RelationshipType/hasProvidedDependency" / "spdx:Core/RelationshipType/hasRequirement" / "spdx:Core/RelationshipType/hasSpecification" / "spdx:Core/RelationshipType/hasStaticLink" / "spdx:Core/RelationshipType/hasTest" / "spdx:Core/RelationshipType/hasTestCase" / "spdx:Core/RelationshipType/hasVariant" / "spdx:Core/RelationshipType/invokedBy" / "spdx:Core/RelationshipType/modifiedBy" / "spdx:Core/RelationshipType/other" / "spdx:Core/RelationshipType/packagedBy" / "spdx:Core/RelationshipType/patchedBy" / "spdx:Core/RelationshipType/publishedBy" / "spdx:Core/RelationshipType/reportedBy" / "spdx:Core/RelationshipType/republishedBy" / "spdx:Core/RelationshipType/serializedInArtifact" / "spdx:Core/RelationshipType/testedOn" / "spdx:Core/RelationshipType/trainedOn" / "spdx:Core/RelationshipType/underInvestigationFor" / "spdx:Core/RelationshipType/usesTool" / BlankNodeOrIRI
    RelationshipType_props = { ~SHACLClass, ~AnyObject }
    SpdxDocument_derived = SpdxDocument / BlankNodeOrIRI
-   SpdxDocument_props = { ~ElementCollection_props, "dataLicense": prop_SpdxDocument_dataLicense, "import": any, "namespaceMap": any }
+   SpdxDocument_props = { ~ElementCollection_props, "dataLicense": prop_SpdxDocument_dataLicense, "import": [ * prop_SpdxDocument_import_ ], "namespaceMap": [ * prop_SpdxDocument_namespaceMap ] }
    prop_SpdxDocument_dataLicense = simplelicensing_AnyLicenseInfo_derived
    prop_SpdxDocument_import_ = ExternalMap_derived
    prop_SpdxDocument_namespaceMap = NamespaceMap_derived
@@ -219,7 +219,7 @@ Table of Contents
    dataset_DatasetType_derived = dataset_DatasetType / "spdx:Dataset/DatasetType/audio" / "spdx:Dataset/DatasetType/categorical" / "spdx:Dataset/DatasetType/graph" / "spdx:Dataset/DatasetType/image" / "spdx:Dataset/DatasetType/noAssertion" / "spdx:Dataset/DatasetType/numeric" / "spdx:Dataset/DatasetType/other" / "spdx:Dataset/DatasetType/sensor" / "spdx:Dataset/DatasetType/structured" / "spdx:Dataset/DatasetType/syntactic" / "spdx:Dataset/DatasetType/text" / "spdx:Dataset/DatasetType/timeseries" / "spdx:Dataset/DatasetType/timestamp" / "spdx:Dataset/DatasetType/video" / BlankNodeOrIRI
    dataset_DatasetType_props = { ~SHACLClass, ~AnyObject }
    expandedlicensing_LicenseAddition_derived = expandedlicensing_CustomLicenseAddition / expandedlicensing_ListedLicenseException / BlankNodeOrIRI
-   expandedlicensing_LicenseAddition_props = { ~Element_props, "expandedlicensing_additionText": prop_expandedlicensing_LicenseAddition_expandedlicensing_additionText, "expandedlicensing_isDeprecatedAdditionId": prop_expandedlicensing_LicenseAddition_expandedlicensing_isDeprecatedAdditionId, "expandedlicensing_licenseXml": prop_expandedlicensing_LicenseAddition_expandedlicensing_licenseXml, "expandedlicensing_obsoletedBy": prop_expandedlicensing_LicenseAddition_expandedlicensing_obsoletedBy, "expandedlicensing_seeAlso": any, "expandedlicensing_standardAdditionTemplate": prop_expandedlicensing_LicenseAddition_expandedlicensing_standardAdditionTemplate }
+   expandedlicensing_LicenseAddition_props = { ~Element_props, "expandedlicensing_additionText": prop_expandedlicensing_LicenseAddition_expandedlicensing_additionText, "expandedlicensing_isDeprecatedAdditionId": prop_expandedlicensing_LicenseAddition_expandedlicensing_isDeprecatedAdditionId, "expandedlicensing_licenseXml": prop_expandedlicensing_LicenseAddition_expandedlicensing_licenseXml, "expandedlicensing_obsoletedBy": prop_expandedlicensing_LicenseAddition_expandedlicensing_obsoletedBy, "expandedlicensing_seeAlso": [ * prop_expandedlicensing_LicenseAddition_expandedlicensing_seeAlso ], "expandedlicensing_standardAdditionTemplate": prop_expandedlicensing_LicenseAddition_expandedlicensing_standardAdditionTemplate }
    prop_expandedlicensing_LicenseAddition_expandedlicensing_additionText = tstr
    prop_expandedlicensing_LicenseAddition_expandedlicensing_isDeprecatedAdditionId = bool
    prop_expandedlicensing_LicenseAddition_expandedlicensing_licenseXml = tstr
@@ -254,7 +254,7 @@ Table of Contents
    simplelicensing_AnyLicenseInfo_derived = expandedlicensing_ConjunctiveLicenseSet / expandedlicensing_CustomLicense / expandedlicensing_DisjunctiveLicenseSet / expandedlicensing_IndividualLicensingInfo / expandedlicensing_ListedLicense / expandedlicensing_OrLaterOperator / expandedlicensing_WithAdditionOperator / simplelicensing_LicenseExpression / "expandedlicensing_NoAssertionLicense" / "expandedlicensing_NoneLicense" / BlankNodeOrIRI
    simplelicensing_AnyLicenseInfo_props = { ~Element_props, ~AnyObject }
    simplelicensing_LicenseExpression_derived = simplelicensing_LicenseExpression / BlankNodeOrIRI
-   simplelicensing_LicenseExpression_props = { ~simplelicensing_AnyLicenseInfo_props, "simplelicensing_customIdToUri": any, "simplelicensing_licenseExpression": prop_simplelicensing_LicenseExpression_simplelicensing_licenseExpression, "simplelicensing_licenseListVersion": prop_simplelicensing_LicenseExpression_simplelicensing_licenseListVersion }
+   simplelicensing_LicenseExpression_props = { ~simplelicensing_AnyLicenseInfo_props, "simplelicensing_customIdToUri": [ * prop_simplelicensing_LicenseExpression_simplelicensing_customIdToUri ], "simplelicensing_licenseExpression": prop_simplelicensing_LicenseExpression_simplelicensing_licenseExpression, "simplelicensing_licenseListVersion": prop_simplelicensing_LicenseExpression_simplelicensing_licenseListVersion }
    prop_simplelicensing_LicenseExpression_simplelicensing_customIdToUri = DictionaryEntry_derived
    prop_simplelicensing_LicenseExpression_simplelicensing_licenseExpression = tstr
    prop_simplelicensing_LicenseExpression_simplelicensing_licenseListVersion = tstr .regexp "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$"
@@ -274,7 +274,7 @@ Table of Contents
    software_SoftwarePurpose_derived = software_SoftwarePurpose / "spdx:Software/SoftwarePurpose/application" / "spdx:Software/SoftwarePurpose/archive" / "spdx:Software/SoftwarePurpose/bom" / "spdx:Software/SoftwarePurpose/configuration" / "spdx:Software/SoftwarePurpose/container" / "spdx:Software/SoftwarePurpose/data" / "spdx:Software/SoftwarePurpose/device" / "spdx:Software/SoftwarePurpose/deviceDriver" / "spdx:Software/SoftwarePurpose/diskImage" / "spdx:Software/SoftwarePurpose/documentation" / "spdx:Software/SoftwarePurpose/evidence" / "spdx:Software/SoftwarePurpose/executable" / "spdx:Software/SoftwarePurpose/file" / "spdx:Software/SoftwarePurpose/filesystemImage" / "spdx:Software/SoftwarePurpose/firmware" / "spdx:Software/SoftwarePurpose/framework" / "spdx:Software/SoftwarePurpose/install" / "spdx:Software/SoftwarePurpose/library" / "spdx:Software/SoftwarePurpose/manifest" / "spdx:Software/SoftwarePurpose/model" / "spdx:Software/SoftwarePurpose/module" / "spdx:Software/SoftwarePurpose/operatingSystem" / "spdx:Software/SoftwarePurpose/other" / "spdx:Software/SoftwarePurpose/patch" / "spdx:Software/SoftwarePurpose/platform" / "spdx:Software/SoftwarePurpose/requirement" / "spdx:Software/SoftwarePurpose/source" / "spdx:Software/SoftwarePurpose/specification" / "spdx:Software/SoftwarePurpose/test" / BlankNodeOrIRI
    software_SoftwarePurpose_props = { ~SHACLClass, ~AnyObject }
    build_Build_derived = build_Build / BlankNodeOrIRI
-   build_Build_props = { ~Element_props, "build_buildEndTime": prop_build_Build_build_buildEndTime, "build_buildId": prop_build_Build_build_buildId, "build_buildStartTime": prop_build_Build_build_buildStartTime, "build_buildType": prop_build_Build_build_buildType, "build_configSourceDigest": any, "build_configSourceEntrypoint": any, "build_configSourceUri": any, "build_environment": any, "build_parameter": any }
+   build_Build_props = { ~Element_props, "build_buildEndTime": prop_build_Build_build_buildEndTime, "build_buildId": prop_build_Build_build_buildId, "build_buildStartTime": prop_build_Build_build_buildStartTime, "build_buildType": prop_build_Build_build_buildType, "build_configSourceDigest": [ * prop_build_Build_build_configSourceDigest ], "build_configSourceEntrypoint": [ * prop_build_Build_build_configSourceEntrypoint ], "build_configSourceUri": [ * prop_build_Build_build_configSourceUri ], "build_environment": [ * prop_build_Build_build_environment ], "build_parameter": [ * prop_build_Build_build_parameter ] }
    prop_build_Build_build_buildEndTime = tstr .regexp "^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-6][0-9]:[0-6][0-9](Z|[+-][0-9]{2}:[0-9]{2})$" / tstr .regexp "^\\d\\d\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ$"
    prop_build_Build_build_buildId = tstr
    prop_build_Build_build_buildStartTime = tstr .regexp "^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-6][0-9]:[0-6][0-9](Z|[+-][0-9]{2}:[0-9]{2})$" / tstr .regexp "^\\d\\d\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ$"
@@ -293,7 +293,7 @@ Table of Contents
    prop_Annotation_statement = tstr
    prop_Annotation_subject = Element_derived
    Artifact_derived = ai_AIPackage / dataset_DatasetPackage / security_Vulnerability / software_File / software_Package / software_Snippet / BlankNodeOrIRI
-   Artifact_props = { ~Element_props, "builtTime": prop_Artifact_builtTime, "originatedBy": any, "releaseTime": prop_Artifact_releaseTime, "standardName": any, "suppliedBy": prop_Artifact_suppliedBy, "supportLevel": any, "validUntilTime": prop_Artifact_validUntilTime }
+   Artifact_props = { ~Element_props, "builtTime": prop_Artifact_builtTime, "originatedBy": [ * prop_Artifact_originatedBy ], "releaseTime": prop_Artifact_releaseTime, "standardName": [ * prop_Artifact_standardName ], "suppliedBy": prop_Artifact_suppliedBy, "supportLevel": [ * prop_Artifact_supportLevel ], "validUntilTime": prop_Artifact_validUntilTime }
    prop_Artifact_builtTime = tstr .regexp "^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-6][0-9]:[0-6][0-9](Z|[+-][0-9]{2}:[0-9]{2})$" / tstr .regexp "^\\d\\d\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ$"
    prop_Artifact_originatedBy = Agent_derived
    prop_Artifact_releaseTime = tstr .regexp "^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-6][0-9]:[0-6][0-9](Z|[+-][0-9]{2}:[0-9]{2})$" / tstr .regexp "^\\d\\d\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ$"
@@ -318,19 +318,19 @@ Table of Contents
    SoftwareAgent_derived = SoftwareAgent / BlankNodeOrIRI
    SoftwareAgent_props = { ~Agent_props, ~AnyObject }
    expandedlicensing_ConjunctiveLicenseSet_derived = expandedlicensing_ConjunctiveLicenseSet / BlankNodeOrIRI
-   expandedlicensing_ConjunctiveLicenseSet_props = { ~simplelicensing_AnyLicenseInfo_props, "expandedlicensing_member": any }
+   expandedlicensing_ConjunctiveLicenseSet_props = { ~simplelicensing_AnyLicenseInfo_props, "expandedlicensing_member": [ + prop_expandedlicensing_ConjunctiveLicenseSet_expandedlicensing_member ] }
    prop_expandedlicensing_ConjunctiveLicenseSet_expandedlicensing_member = simplelicensing_AnyLicenseInfo_derived
    expandedlicensing_CustomLicenseAddition_derived = expandedlicensing_CustomLicenseAddition / BlankNodeOrIRI
    expandedlicensing_CustomLicenseAddition_props = { ~expandedlicensing_LicenseAddition_props, ~AnyObject }
    expandedlicensing_DisjunctiveLicenseSet_derived = expandedlicensing_DisjunctiveLicenseSet / BlankNodeOrIRI
-   expandedlicensing_DisjunctiveLicenseSet_props = { ~simplelicensing_AnyLicenseInfo_props, "expandedlicensing_member": any }
+   expandedlicensing_DisjunctiveLicenseSet_props = { ~simplelicensing_AnyLicenseInfo_props, "expandedlicensing_member": [ + prop_expandedlicensing_DisjunctiveLicenseSet_expandedlicensing_member ] }
    prop_expandedlicensing_DisjunctiveLicenseSet_expandedlicensing_member = simplelicensing_AnyLicenseInfo_derived
    expandedlicensing_ExtendableLicense_derived = expandedlicensing_CustomLicense / expandedlicensing_ListedLicense / expandedlicensing_OrLaterOperator / BlankNodeOrIRI
    expandedlicensing_ExtendableLicense_props = { ~simplelicensing_AnyLicenseInfo_props, ~AnyObject }
    expandedlicensing_IndividualLicensingInfo_derived = expandedlicensing_IndividualLicensingInfo / "expandedlicensing_NoAssertionLicense" / "expandedlicensing_NoneLicense" / BlankNodeOrIRI
    expandedlicensing_IndividualLicensingInfo_props = { ~simplelicensing_AnyLicenseInfo_props, ~AnyObject }
    expandedlicensing_License_derived = expandedlicensing_CustomLicense / expandedlicensing_ListedLicense / BlankNodeOrIRI
-   expandedlicensing_License_props = { ~expandedlicensing_ExtendableLicense_props, "expandedlicensing_isDeprecatedLicenseId": prop_expandedlicensing_License_expandedlicensing_isDeprecatedLicenseId, "expandedlicensing_isFsfLibre": prop_expandedlicensing_License_expandedlicensing_isFsfLibre, "expandedlicensing_isOsiApproved": prop_expandedlicensing_License_expandedlicensing_isOsiApproved, "expandedlicensing_licenseXml": prop_expandedlicensing_License_expandedlicensing_licenseXml, "expandedlicensing_obsoletedBy": prop_expandedlicensing_License_expandedlicensing_obsoletedBy, "expandedlicensing_seeAlso": any, "expandedlicensing_standardLicenseHeader": prop_expandedlicensing_License_expandedlicensing_standardLicenseHeader, "expandedlicensing_standardLicenseTemplate": prop_expandedlicensing_License_expandedlicensing_standardLicenseTemplate, "simplelicensing_licenseText": prop_expandedlicensing_License_simplelicensing_licenseText }
+   expandedlicensing_License_props = { ~expandedlicensing_ExtendableLicense_props, "expandedlicensing_isDeprecatedLicenseId": prop_expandedlicensing_License_expandedlicensing_isDeprecatedLicenseId, "expandedlicensing_isFsfLibre": prop_expandedlicensing_License_expandedlicensing_isFsfLibre, "expandedlicensing_isOsiApproved": prop_expandedlicensing_License_expandedlicensing_isOsiApproved, "expandedlicensing_licenseXml": prop_expandedlicensing_License_expandedlicensing_licenseXml, "expandedlicensing_obsoletedBy": prop_expandedlicensing_License_expandedlicensing_obsoletedBy, "expandedlicensing_seeAlso": [ * prop_expandedlicensing_License_expandedlicensing_seeAlso ], "expandedlicensing_standardLicenseHeader": prop_expandedlicensing_License_expandedlicensing_standardLicenseHeader, "expandedlicensing_standardLicenseTemplate": prop_expandedlicensing_License_expandedlicensing_standardLicenseTemplate, "simplelicensing_licenseText": prop_expandedlicensing_License_simplelicensing_licenseText }
    prop_expandedlicensing_License_expandedlicensing_isDeprecatedLicenseId = bool
    prop_expandedlicensing_License_expandedlicensing_isFsfLibre = bool
    prop_expandedlicensing_License_expandedlicensing_isOsiApproved = bool
@@ -352,7 +352,7 @@ Table of Contents
    prop_expandedlicensing_WithAdditionOperator_expandedlicensing_subjectAddition = expandedlicensing_LicenseAddition_derived
    prop_expandedlicensing_WithAdditionOperator_expandedlicensing_subjectExtendableLicense = expandedlicensing_ExtendableLicense_derived
    extension_CdxPropertiesExtension_derived = extension_CdxPropertiesExtension / BlankNodeOrIRI
-   extension_CdxPropertiesExtension_props = { ~extension_Extension_props, "extension_cdxProperty": any }
+   extension_CdxPropertiesExtension_props = { ~extension_Extension_props, "extension_cdxProperty": [ + prop_extension_CdxPropertiesExtension_extension_cdxProperty ] }
    prop_extension_CdxPropertiesExtension_extension_cdxProperty = extension_CdxPropertyEntry_derived
    security_CvssV2VulnAssessmentRelationship_derived = security_CvssV2VulnAssessmentRelationship / BlankNodeOrIRI
    security_CvssV2VulnAssessmentRelationship_props = { ~security_VulnAssessmentRelationship_props, "security_score": prop_security_CvssV2VulnAssessmentRelationship_security_score, "security_vectorString": prop_security_CvssV2VulnAssessmentRelationship_security_vectorString }
@@ -390,7 +390,7 @@ Table of Contents
    prop_security_Vulnerability_security_publishedTime = tstr .regexp "^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-6][0-9]:[0-6][0-9](Z|[+-][0-9]{2}:[0-9]{2})$" / tstr .regexp "^\\d\\d\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ$"
    prop_security_Vulnerability_security_withdrawnTime = tstr .regexp "^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-6][0-9]:[0-6][0-9](Z|[+-][0-9]{2}:[0-9]{2})$" / tstr .regexp "^\\d\\d\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ$"
    software_SoftwareArtifact_derived = ai_AIPackage / dataset_DatasetPackage / software_File / software_Package / software_Snippet / BlankNodeOrIRI
-   software_SoftwareArtifact_props = { ~Artifact_props, "software_additionalPurpose": any, "software_attributionText": any, "software_contentIdentifier": any, "software_copyrightText": prop_software_SoftwareArtifact_software_copyrightText, "software_primaryPurpose": prop_software_SoftwareArtifact_software_primaryPurpose }
+   software_SoftwareArtifact_props = { ~Artifact_props, "software_additionalPurpose": [ * prop_software_SoftwareArtifact_software_additionalPurpose ], "software_attributionText": [ * prop_software_SoftwareArtifact_software_attributionText ], "software_contentIdentifier": [ * prop_software_SoftwareArtifact_software_contentIdentifier ], "software_copyrightText": prop_software_SoftwareArtifact_software_copyrightText, "software_primaryPurpose": prop_software_SoftwareArtifact_software_primaryPurpose }
    prop_software_SoftwareArtifact_software_additionalPurpose = "application" / "archive" / "bom" / "configuration" / "container" / "data" / "device" / "deviceDriver" / "diskImage" / "documentation" / "evidence" / "executable" / "file" / "filesystemImage" / "firmware" / "framework" / "install" / "library" / "manifest" / "model" / "module" / "operatingSystem" / "other" / "patch" / "platform" / "requirement" / "source" / "specification" / "test"
    prop_software_SoftwareArtifact_software_attributionText = tstr
    prop_software_SoftwareArtifact_software_contentIdentifier = software_ContentIdentifier_derived
@@ -425,7 +425,7 @@ Table of Contents
    prop_software_Package_software_packageVersion = tstr
    prop_software_Package_software_sourceInfo = tstr
    software_Sbom_derived = software_Sbom / BlankNodeOrIRI
-   software_Sbom_props = { ~Bom_props, "software_sbomType": any }
+   software_Sbom_props = { ~Bom_props, "software_sbomType": [ * prop_software_Sbom_software_sbomType ] }
    prop_software_Sbom_software_sbomType = "analyzed" / "build" / "deployed" / "design" / "runtime" / "source"
    software_Snippet_derived = software_Snippet / BlankNodeOrIRI
    software_Snippet_props = { ~software_SoftwareArtifact_props, "software_byteRange": prop_software_Snippet_software_byteRange, "software_lineRange": prop_software_Snippet_software_lineRange, "software_snippetFromFile": prop_software_Snippet_software_snippetFromFile }
@@ -433,7 +433,7 @@ Table of Contents
    prop_software_Snippet_software_lineRange = PositiveIntegerRange_derived
    prop_software_Snippet_software_snippetFromFile = software_File_derived
    ai_AIPackage_derived = ai_AIPackage / BlankNodeOrIRI
-   ai_AIPackage_props = { ~software_Package_props, "ai_autonomyType": prop_ai_AIPackage_ai_autonomyType, "ai_domain": any, "ai_energyConsumption": prop_ai_AIPackage_ai_energyConsumption, "ai_hyperparameter": any, "ai_informationAboutApplication": prop_ai_AIPackage_ai_informationAboutApplication, "ai_informationAboutTraining": prop_ai_AIPackage_ai_informationAboutTraining, "ai_limitation": prop_ai_AIPackage_ai_limitation, "ai_metric": any, "ai_metricDecisionThreshold": any, "ai_modelDataPreprocessing": any, "ai_modelExplainability": any, "ai_safetyRiskAssessment": prop_ai_AIPackage_ai_safetyRiskAssessment, "ai_standardCompliance": any, "ai_typeOfModel": any, "ai_useSensitivePersonalInformation": prop_ai_AIPackage_ai_useSensitivePersonalInformation }
+   ai_AIPackage_props = { ~software_Package_props, "ai_autonomyType": prop_ai_AIPackage_ai_autonomyType, "ai_domain": [ * prop_ai_AIPackage_ai_domain ], "ai_energyConsumption": prop_ai_AIPackage_ai_energyConsumption, "ai_hyperparameter": [ * prop_ai_AIPackage_ai_hyperparameter ], "ai_informationAboutApplication": prop_ai_AIPackage_ai_informationAboutApplication, "ai_informationAboutTraining": prop_ai_AIPackage_ai_informationAboutTraining, "ai_limitation": prop_ai_AIPackage_ai_limitation, "ai_metric": [ * prop_ai_AIPackage_ai_metric ], "ai_metricDecisionThreshold": [ * prop_ai_AIPackage_ai_metricDecisionThreshold ], "ai_modelDataPreprocessing": [ * prop_ai_AIPackage_ai_modelDataPreprocessing ], "ai_modelExplainability": [ * prop_ai_AIPackage_ai_modelExplainability ], "ai_safetyRiskAssessment": prop_ai_AIPackage_ai_safetyRiskAssessment, "ai_standardCompliance": [ * prop_ai_AIPackage_ai_standardCompliance ], "ai_typeOfModel": [ * prop_ai_AIPackage_ai_typeOfModel ], "ai_useSensitivePersonalInformation": prop_ai_AIPackage_ai_useSensitivePersonalInformation }
    prop_ai_AIPackage_ai_autonomyType = "no" / "noAssertion" / "yes"
    prop_ai_AIPackage_ai_domain = tstr
    prop_ai_AIPackage_ai_energyConsumption = ai_EnergyConsumption_derived
@@ -450,7 +450,7 @@ Table of Contents
    prop_ai_AIPackage_ai_typeOfModel = tstr
    prop_ai_AIPackage_ai_useSensitivePersonalInformation = "no" / "noAssertion" / "yes"
    dataset_DatasetPackage_derived = dataset_DatasetPackage / BlankNodeOrIRI
-   dataset_DatasetPackage_props = { ~software_Package_props, "dataset_anonymizationMethodUsed": any, "dataset_confidentialityLevel": prop_dataset_DatasetPackage_dataset_confidentialityLevel, "dataset_dataCollectionProcess": prop_dataset_DatasetPackage_dataset_dataCollectionProcess, "dataset_dataPreprocessing": any, "dataset_datasetAvailability": prop_dataset_DatasetPackage_dataset_datasetAvailability, "dataset_datasetNoise": prop_dataset_DatasetPackage_dataset_datasetNoise, "dataset_datasetSize": prop_dataset_DatasetPackage_dataset_datasetSize, "dataset_datasetType": any, "dataset_datasetUpdateMechanism": prop_dataset_DatasetPackage_dataset_datasetUpdateMechanism, "dataset_hasSensitivePersonalInformation": prop_dataset_DatasetPackage_dataset_hasSensitivePersonalInformation, "dataset_intendedUse": prop_dataset_DatasetPackage_dataset_intendedUse, "dataset_knownBias": any, "dataset_sensor": any }
+   dataset_DatasetPackage_props = { ~software_Package_props, "dataset_anonymizationMethodUsed": [ * prop_dataset_DatasetPackage_dataset_anonymizationMethodUsed ], "dataset_confidentialityLevel": prop_dataset_DatasetPackage_dataset_confidentialityLevel, "dataset_dataCollectionProcess": prop_dataset_DatasetPackage_dataset_dataCollectionProcess, "dataset_dataPreprocessing": [ * prop_dataset_DatasetPackage_dataset_dataPreprocessing ], "dataset_datasetAvailability": prop_dataset_DatasetPackage_dataset_datasetAvailability, "dataset_datasetNoise": prop_dataset_DatasetPackage_dataset_datasetNoise, "dataset_datasetSize": prop_dataset_DatasetPackage_dataset_datasetSize, "dataset_datasetType": [ + prop_dataset_DatasetPackage_dataset_datasetType ], "dataset_datasetUpdateMechanism": prop_dataset_DatasetPackage_dataset_datasetUpdateMechanism, "dataset_hasSensitivePersonalInformation": prop_dataset_DatasetPackage_dataset_hasSensitivePersonalInformation, "dataset_intendedUse": prop_dataset_DatasetPackage_dataset_intendedUse, "dataset_knownBias": [ * prop_dataset_DatasetPackage_dataset_knownBias ], "dataset_sensor": [ * prop_dataset_DatasetPackage_dataset_sensor ] }
    prop_dataset_DatasetPackage_dataset_anonymizationMethodUsed = tstr
    prop_dataset_DatasetPackage_dataset_confidentialityLevel = "amber" / "clear" / "green" / "red"
    prop_dataset_DatasetPackage_dataset_dataCollectionProcess = tstr
