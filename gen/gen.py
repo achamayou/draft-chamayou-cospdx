@@ -33,10 +33,10 @@ def types_with_no_refs(schema):
 
 
 def stats(schema):
-    print(f"# {len(schema['$defs'])} definitions")
-    print(f"# {refs(schema)} references")
+    print(f"; {len(schema['$defs'])} definitions")
+    print(f"; {refs(schema)} references")
     types_with_no_refs_count = len(types_with_no_refs(schema))
-    print(f"# {types_with_no_refs_count} types with no references")
+    print(f"; {types_with_no_refs_count} types with no references")
     print()
 
 
@@ -47,15 +47,20 @@ class StringType:
 
     @staticmethod
     def cddl(schema):
+        def escape_pattern(pattern):
+            return pattern.replace("\\", "\\\\")
+
         if "pattern" in schema:
-            pattern = schema["pattern"]
+            # \ needs to be escaped in CDDL regexps
+            pattern = escape_pattern(schema["pattern"])
             return f'tstr .regexp "{pattern}"'
 
         if "allOf" in schema:
             patterns = []
             for value in schema["allOf"]:
                 assert value.keys() == {"pattern"}
-                patterns.append(f'tstr .regexp "{value["pattern"]}"')
+                pattern = escape_pattern(value["pattern"])
+                patterns.append(f'tstr .regexp "{pattern}"')
             return " / ".join(patterns)
 
         return "tstr"
@@ -68,6 +73,25 @@ class StringType:
 
     def to_cddl(self):
         return f"{self.name} = {StringType.cddl(self.schema)}"
+
+
+class ConstType:
+    @staticmethod
+    def is_one(schema):
+        return schema.get("type") == "const"
+
+    @staticmethod
+    def cddl(schema):
+        return f"{schema['const']}"
+
+    def __init__(self, name, schema):
+        assert ConstType.is_one(schema)
+        assert {"const"}.issuperset(schema.keys()), schema.keys()
+        self.name = name
+        self.schema = schema
+
+    def to_cddl(self):
+        return f"{self.name} = {ConstType.cddl(self.schema)}"
 
 
 class NumberType:
@@ -187,6 +211,27 @@ class EnumType:
         return f"{self.name} = {EnumType.cddl(self.schema)}"
 
 
+class RefType:
+    @staticmethod
+    def is_one(schema):
+        return "$ref" in schema
+
+    @staticmethod
+    def cddl(schema):
+        defs, ref_name = schema["$ref"].rsplit("/", 1)
+        assert defs == "#/$defs"
+        return ref_name
+
+    def __init__(self, name, schema):
+        assert RefType.is_one(schema)
+        assert {"$ref"}.issuperset(schema.keys()), schema.keys()
+        self.name = name
+        self.schema = schema
+
+    def to_cddl(self):
+        return f"{self.name} = {RefType.cddl(self.schema)}"
+
+
 def find_type(schema):
     for type_class in [
         StringType,
@@ -195,6 +240,8 @@ def find_type(schema):
         AnyOfType,
         EnumType,
         BooleanType,
+        RefType,
+        ConstType,
     ]:
         if type_class.is_one(schema):
             return type_class
@@ -209,20 +256,18 @@ if __name__ == "__main__":
     schema = json.loads(input_path.read_text())
     stats(schema)
     unmapped = []
-    for type_name, type_schema in types_with_no_refs(schema).items():
+    for type_name, type_schema in schema["$defs"].items():
         type_class = find_type(type_schema)
         if type_class is None:
             unmapped.append(type_name)
         else:
-            type_instance = type_class(type_name, type_schema)
-            print(type_instance.to_cddl())
+            try:
+                type_instance = type_class(type_name, type_schema)
+                print(type_instance.to_cddl())
+            except NotImplementedError as e:
+                unmapped.append(type_name)
 
     print()
-    print(f"# Unmapped types with no reference ({len(unmapped)}):")
+    print(f"; Unmapped types: {len(unmapped)}")
     for type_name in unmapped:
-        print(f"# - {type_name}")
-    unmapped = 0
-    for type_name, type_schema in schema["$defs"].items():
-        if find_type(type_schema) is None:
-            unmapped += 1
-    print(f"# Unmapped types: {unmapped}")
+        print(f"; - {type_name}")
