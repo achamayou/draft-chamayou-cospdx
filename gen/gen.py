@@ -242,17 +242,35 @@ class RefType:
 class ObjectType:
     @staticmethod
     def is_one(schema):
-        return schema.get("type") == "object" and {
-            "type",
-            "unevaluatedProperties",
-            "anyOf",
-        }.issuperset(schema.keys())
+        return (
+            schema.get("type") == "object"
+            and {
+                "type",
+                "unevaluatedProperties",
+                "anyOf",
+                "required",
+                "properties",
+            }.issuperset(schema.keys())
+            and (schema.get("properties") is None or schema.get("anyOf") is None)
+        )
 
     @staticmethod
     def cddl(schema):
         # TODO: when unevaluatedProperties is true (not set), we should allow additional properties
         if "anyOf" in schema:
             return AnyOfType.cddl({"anyOf": schema["anyOf"]})
+        # TODO: handle required properties
+        if "properties" in schema:
+            parts = []
+            for prop_name, prop_schema in schema["properties"].items():
+                type_class = find_type(prop_schema)
+                if type_class is None:
+                    raise NotImplementedError(
+                        f"Unsupported property schema: {prop_schema}"
+                    )
+                parts.append(f'"{prop_name}": {type_class.cddl(prop_schema)}')
+            return f"{{ {', '.join(parts)} }}"
+
         raise NotImplementedError(f"Unsupported object schema: {schema}")
 
     def __init__(self, name, schema):
