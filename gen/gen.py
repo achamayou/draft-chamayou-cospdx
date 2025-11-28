@@ -77,10 +77,11 @@ class NumberType:
 
     @staticmethod
     def cddl(schema):
+        # TODO: can we handle maximum / minimum better?
         if schema.get("minimum") == 0:
-            return "uint"
+            return "uint / float"
         else:
-            return "int"
+            return "int / float"
 
     def __init__(self, name, schema):
         assert NumberType.is_one(schema)
@@ -90,6 +91,48 @@ class NumberType:
 
     def to_cddl(self):
         return f"{self.name} = {NumberType.cddl(self.schema)}"
+
+
+class IntegerType:
+    @staticmethod
+    def is_one(schema):
+        return schema.get("type") == "integer"
+
+    @staticmethod
+    def cddl(schema):
+        # TODO: can we handle maximum / minimum better?
+        if schema.get("minimum") == 0:
+            return "uint"
+        else:
+            return "int"
+
+    def __init__(self, name, schema):
+        assert IntegerType.is_one(schema)
+        assert {"type", "minimum", "maximum"}.issuperset(schema.keys()), schema.keys()
+        self.name = name
+        self.schema = schema
+
+    def to_cddl(self):
+        return f"{self.name} = {IntegerType.cddl(self.schema)}"
+
+
+class BooleanType:
+    @staticmethod
+    def is_one(schema):
+        return schema.get("type") == "boolean"
+
+    @staticmethod
+    def cddl(schema):
+        return "bool"
+
+    def __init__(self, name, schema):
+        assert BooleanType.is_one(schema)
+        assert {"type"}.issuperset(schema.keys()), schema.keys()
+        self.name = name
+        self.schema = schema
+
+    def to_cddl(self):
+        return f"{self.name} = {BooleanType.cddl(self.schema)}"
 
 
 class AnyOfType:
@@ -126,6 +169,7 @@ class EnumType:
     @staticmethod
     def cddl(schema):
         parts = []
+        # TODO: Systematic mapping to integers
         for enum_value in schema["enum"]:
             if isinstance(enum_value, str):
                 parts.append(f'"{enum_value}"')
@@ -144,7 +188,14 @@ class EnumType:
 
 
 def find_type(schema):
-    for type_class in [StringType, NumberType, AnyOfType, EnumType]:
+    for type_class in [
+        StringType,
+        NumberType,
+        IntegerType,
+        AnyOfType,
+        EnumType,
+        BooleanType,
+    ]:
         if type_class.is_one(schema):
             return type_class
     return None
@@ -170,3 +221,8 @@ if __name__ == "__main__":
     print(f"# Unmapped types with no reference ({len(unmapped)}):")
     for type_name in unmapped:
         print(f"# - {type_name}")
+    unmapped = 0
+    for type_name, type_schema in schema["$defs"].items():
+        if find_type(type_schema) is None:
+            unmapped += 1
+    print(f"# Unmapped types: {unmapped}")
