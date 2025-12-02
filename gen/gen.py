@@ -334,7 +334,6 @@ if __name__ == "__main__":
     if len(sys.argv) == 2:
         input_path = pathlib.Path(sys.argv[1])
     schema = json.loads(input_path.read_text())
-    # stats(schema)
     unmapped = []
     print("AnyObject = { * any => any }")
     for type_name, type_schema in schema["$defs"].items():
