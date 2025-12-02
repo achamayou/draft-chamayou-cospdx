@@ -87,11 +87,6 @@ class StringType:
 
         return "tstr"
 
-    def __init__(self, name, schema):
-        assert StringType.is_one(schema)
-        self.name = name
-        self.schema = schema
-
 
 class ConstType:
     @staticmethod
@@ -101,11 +96,6 @@ class ConstType:
     @staticmethod
     def cddl(schema):
         return f"\"{schema['const']}\""
-
-    def __init__(self, name, schema):
-        assert ConstType.is_one(schema)
-        self.name = name
-        self.schema = schema
 
 
 class NumberType:
@@ -125,11 +115,6 @@ class NumberType:
         else:
             return "int / float"
 
-    def __init__(self, name, schema):
-        assert NumberType.is_one(schema)
-        self.name = name
-        self.schema = schema
-
 
 class IntegerType:
     @staticmethod
@@ -147,11 +132,6 @@ class IntegerType:
             return "uint"
         else:
             return "int"
-
-    def __init__(self, name, schema):
-        assert IntegerType.is_one(schema)
-        self.name = name
-        self.schema = schema
 
 
 class ArrayType:
@@ -176,11 +156,6 @@ class ArrayType:
         else:
             return f"[ + {item_cddl} ]"
 
-    def __init__(self, name, schema):
-        assert ArrayType.is_one(schema)
-        self.name = name
-        self.schema = schema
-
 
 class BooleanType:
     @staticmethod
@@ -190,12 +165,6 @@ class BooleanType:
     @staticmethod
     def cddl(schema):
         return "bool"
-
-    def __init__(self, name, schema):
-        assert BooleanType.is_one(schema)
-        assert {"type"}.issuperset(schema.keys()), schema.keys()
-        self.name = name
-        self.schema = schema
 
 
 class AnyOfType:
@@ -216,21 +185,11 @@ class AnyOfType:
                 parts.append(type_class.cddl(subschema))
         return " / ".join(parts)
 
-    def __init__(self, name, schema):
-        assert AnyOfType.is_one(schema)
-        self.name = name
-        self.schema = schema
-
 
 class IfThenElseType:
     @staticmethod
     def is_one(schema):
         return schema.keys() == {"if", "then", "else"}
-
-    def __init__(self, name, schema):
-        assert IfThenElseType.is_one(schema)
-        self.name = name
-        self.schema = schema
 
     @staticmethod
     def cddl(schema):
@@ -264,11 +223,6 @@ class EnumType:
                 parts.append(str(enum_value))
         return " / ".join(parts)
 
-    def __init__(self, name, schema):
-        assert EnumType.is_one(schema)
-        self.name = name
-        self.schema = schema
-
 
 class NotConstType:
     @staticmethod
@@ -281,11 +235,6 @@ class NotConstType:
         # TODO: add back once line returns are added
         # return f"; must not be {ConstType.cddl(schema['not'])}"
 
-    def __init__(self, name, schema):
-        assert NotConstType.is_one(schema)
-        self.name = name
-        self.schema = schema
-
 
 class RefType:
     @staticmethod
@@ -297,11 +246,6 @@ class RefType:
         defs, ref_name = schema["$ref"].rsplit("/", 1)
         assert defs == "#/$defs"
         return f"~{ref_name}" if unwrap else ref_name
-
-    def __init__(self, name, schema):
-        assert RefType.is_one(schema)
-        self.name = name
-        self.schema = schema
 
 
 class AllOfType:
@@ -321,11 +265,6 @@ class AllOfType:
             parts.append(type_class.cddl(subschema, unwrap=True))
         inner = ", ".join(parts)
         return inner if unwrap else f"{{ {inner} }}"
-
-    def __init__(self, name, schema):
-        assert AllOfType.is_one(schema)
-        self.name = name
-        self.schema = schema
 
 
 class ObjectType:
@@ -366,11 +305,6 @@ class ObjectType:
                 return inner if unwrap else f"{{ {inner} }}"
 
         raise NotImplementedError(f"Unsupported object schema: {schema}")
-
-    def __init__(self, name, schema):
-        assert ObjectType.is_one(schema)
-        self.name = name
-        self.schema = schema
 
 
 def find_type(schema):
