@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from gettext import find
 import json
 import sys
 import pathlib
@@ -335,13 +336,16 @@ if __name__ == "__main__":
         input_path = pathlib.Path(sys.argv[1])
     schema = json.loads(input_path.read_text())
     unmapped = []
-    print("AnyObject = { * any => any }")
+    toplevel = {key: value for key, value in schema.items() if key != "$defs"}
+    # print(declaration("SPDX_Document", toplevel, find_type(toplevel)))
+
     for type_name, type_schema in schema["$defs"].items():
         type_class = find_type(type_schema)
         if type_class is None:
             unmapped.append((type_name, type_schema))
         else:
             print(declaration(type_name, type_schema, type_class))
+    print("AnyObject = { * any => any }")
 
     unmapped_and_totalrefs = sorted(
         [
