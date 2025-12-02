@@ -1045,11 +1045,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">Deterministic Compact SPDX</td>
-<td class="right">November 2025</td>
+<td class="right">December 2025</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Chamayou</td>
-<td class="center">Expires 1 June 2026</td>
+<td class="center">Expires 5 June 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1062,12 +1062,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-chamayou-cospdx-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-11-28" class="published">28 November 2025</time>
+<time datetime="2025-12-02" class="published">2 December 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-06-01">1 June 2026</time></dd>
+<dd class="expires"><time datetime="2026-06-05">5 June 2026</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1111,7 +1111,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 1 June 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 5 June 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1359,6 +1359,7 @@ extension_CdxPropertyEntry_derived = extension_CdxPropertyEntry / BlankNodeOrIRI
 extension_CdxPropertyEntry_props = { ~SHACLClass, "extension_cdxPropName": prop_extension_CdxPropertyEntry_extension_cdxPropName, "extension_cdxPropValue": prop_extension_CdxPropertyEntry_extension_cdxPropValue }
 prop_extension_CdxPropertyEntry_extension_cdxPropName = tstr
 prop_extension_CdxPropertyEntry_extension_cdxPropValue = tstr
+extension_Extension = { "type": { ~IRI,  }, "@id": BlankNodeOrIRI, "type": tstr, ~extension_Extension_props }
 extension_Extension_derived = extension_CdxPropertiesExtension / extension_Extension_props / BlankNodeOrIRI
 extension_Extension_props = { ~SHACLClass, ~AnyObject }
 security_CvssSeverityType = { "type": "security_CvssSeverityType", "@id": BlankNodeOrIRI, "type": tstr, ~security_CvssSeverityType_props }
@@ -1642,7 +1643,6 @@ BlankNodeOrIRI = IRI / BlankNode
 anyURI = tstr
 SHACLClass = { "type": IRI / "ai_EnergyConsumption" / "ai_EnergyConsumptionDescription" / "ai_EnergyUnitType" / "ai_SafetyRiskAssessmentType" / "AnnotationType" / "CreationInfo" / "DictionaryEntry" / "ExternalIdentifier" / "ExternalIdentifierType" / "ExternalMap" / "ExternalRef" / "ExternalRefType" / "HashAlgorithm" / "IndividualElement" / "LifecycleScopeType" / "NamespaceMap" / "PackageVerificationCode" / "PositiveIntegerRange" / "PresenceType" / "ProfileIdentifierType" / "Relationship" / "RelationshipCompleteness" / "RelationshipType" / "SpdxDocument" / "SupportType" / "Tool" / "dataset_ConfidentialityLevelType" / "dataset_DatasetAvailabilityType" / "dataset_DatasetType" / "expandedlicensing_ListedLicenseException" / "extension_CdxPropertyEntry" / "security_CvssSeverityType" / "security_ExploitCatalogType" / "security_SsvcDecisionType" / "security_VexJustificationType" / "simplelicensing_LicenseExpression" / "simplelicensing_SimpleLicensingText" / "software_ContentIdentifier" / "software_ContentIdentifierType" / "software_FileKindType" / "software_SbomType" / "software_SoftwarePurpose" / "build_Build" / "Agent" / "Annotation" / "Bundle" / "Hash" / "LifecycleScopedRelationship" / "Organization" / "Person" / "SoftwareAgent" / "expandedlicensing_ConjunctiveLicenseSet" / "expandedlicensing_CustomLicenseAddition" / "expandedlicensing_DisjunctiveLicenseSet" / "expandedlicensing_IndividualLicensingInfo" / "expandedlicensing_ListedLicense" / "expandedlicensing_OrLaterOperator" / "expandedlicensing_WithAdditionOperator" / "extension_CdxPropertiesExtension" / "security_CvssV2VulnAssessmentRelationship" / "security_CvssV3VulnAssessmentRelationship" / "security_CvssV4VulnAssessmentRelationship" / "security_EpssVulnAssessmentRelationship" / "security_ExploitCatalogVulnAssessmentRelationship" / "security_SsvcVulnAssessmentRelationship" / "security_Vulnerability" / "Bom" / "expandedlicensing_CustomLicense" / "security_VexAffectedVulnAssessmentRelationship" / "security_VexFixedVulnAssessmentRelationship" / "security_VexNotAffectedVulnAssessmentRelationship" / "security_VexUnderInvestigationVulnAssessmentRelationship" / "software_File" / "software_Package" / "software_Sbom" / "software_Snippet" / "ai_AIPackage" / "dataset_DatasetPackage" }
 AnyClass = ai_EnergyConsumption / ai_EnergyConsumptionDescription / ai_EnergyUnitType / ai_SafetyRiskAssessmentType / AnnotationType / CreationInfo / DictionaryEntry / ExternalIdentifier / ExternalIdentifierType / ExternalMap / ExternalRef / ExternalRefType / HashAlgorithm / IndividualElement / LifecycleScopeType / NamespaceMap / PackageVerificationCode / PositiveIntegerRange / PresenceType / ProfileIdentifierType / Relationship / RelationshipCompleteness / RelationshipType / SpdxDocument / SupportType / Tool / dataset_ConfidentialityLevelType / dataset_DatasetAvailabilityType / dataset_DatasetType / expandedlicensing_ListedLicenseException / extension_CdxPropertyEntry / security_CvssSeverityType / security_ExploitCatalogType / security_SsvcDecisionType / security_VexJustificationType / simplelicensing_LicenseExpression / simplelicensing_SimpleLicensingText / software_ContentIdentifier / software_ContentIdentifierType / software_FileKindType / software_SbomType / software_SoftwarePurpose / build_Build / Agent / Annotation / Bundle / Hash / LifecycleScopedRelationship / Organization / Person / SoftwareAgent / expandedlicensing_ConjunctiveLicenseSet / expandedlicensing_CustomLicenseAddition / expandedlicensing_DisjunctiveLicenseSet / expandedlicensing_IndividualLicensingInfo / expandedlicensing_ListedLicense / expandedlicensing_OrLaterOperator / expandedlicensing_WithAdditionOperator / extension_CdxPropertiesExtension / security_CvssV2VulnAssessmentRelationship / security_CvssV3VulnAssessmentRelationship / security_CvssV4VulnAssessmentRelationship / security_EpssVulnAssessmentRelationship / security_ExploitCatalogVulnAssessmentRelationship / security_SsvcVulnAssessmentRelationship / security_Vulnerability / Bom / expandedlicensing_CustomLicense / security_VexAffectedVulnAssessmentRelationship / security_VexFixedVulnAssessmentRelationship / security_VexNotAffectedVulnAssessmentRelationship / security_VexUnderInvestigationVulnAssessmentRelationship / software_File / software_Package / software_Sbom / software_Snippet / ai_AIPackage / dataset_DatasetPackage
-; 1 unmapped types
 </pre><a href="#section-2-1" class="pilcrow">¶</a>
 </div>
 </section>
