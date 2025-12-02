@@ -1193,6 +1193,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
       </h2>
 <div class="breakable lang-cddl sourcecode" id="section-2-1">
 <pre>
+SPDX_Document = { "@graph": any, "@graph": [ * AnyClass ] } / { ~AnyClass }
 ai_EnergyConsumption = { "type": "ai_EnergyConsumption", "@id": BlankNodeOrIRI, "type": tstr, ~ai_EnergyConsumption_props }
 ai_EnergyConsumption_derived = ai_EnergyConsumption / BlankNodeOrIRI
 ai_EnergyConsumption_props = { ~SHACLClass, "ai_finetuningEnergyConsumption": [ * prop_ai_EnergyConsumption_ai_finetuningEnergyConsumption ], "ai_inferenceEnergyConsumption": [ * prop_ai_EnergyConsumption_ai_inferenceEnergyConsumption ], "ai_trainingEnergyConsumption": [ * prop_ai_EnergyConsumption_ai_trainingEnergyConsumption ] }
