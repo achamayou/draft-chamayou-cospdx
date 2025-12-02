@@ -296,7 +296,6 @@ class ObjectType:
         # TODO: when unevaluatedProperties is true (not set), we should allow additional properties
         if "anyOf" in schema:
             return AnyOfType.cddl({"anyOf": schema["anyOf"]})
-        # TODO: handle required properties
         if "properties" in schema:
             parts = []
             # TODO: Allocate integer property keys for compactness
@@ -306,7 +305,10 @@ class ObjectType:
                     raise NotImplementedError(
                         f"Unsupported property schema: {prop_schema}"
                     )
-                parts.append(f'"{prop_name}": {type_class.cddl(prop_schema)}')
+                optionality = "?" if prop_name not in schema.get("required", []) else ""
+                parts.append(
+                    f'{optionality}"{prop_name}": {type_class.cddl(prop_schema)}'
+                )
             if not parts:
                 return "~AnyObject" if unwrap else "AnyObject"
             else:
