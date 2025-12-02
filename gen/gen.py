@@ -293,7 +293,6 @@ class ObjectType:
 
     @staticmethod
     def cddl(schema, unwrap=False):
-        # TODO: when unevaluatedProperties is true (not set), we should allow additional properties
         if "anyOf" in schema:
             return AnyOfType.cddl({"anyOf": schema["anyOf"]})
         if "properties" in schema:
