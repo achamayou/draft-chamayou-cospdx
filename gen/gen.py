@@ -309,7 +309,7 @@ class ObjectType:
                 parts.append(
                     f'{optionality}"{prop_name}": {type_class.cddl(prop_schema)}'
                 )
-            if not parts:
+            if not parts and schema.get("unevaluatedProperties", True):
                 return "~AnyObject" if unwrap else "AnyObject"
             else:
                 inner = ", ".join(parts)
