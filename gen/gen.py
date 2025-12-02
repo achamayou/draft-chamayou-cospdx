@@ -1,11 +1,8 @@
 #!/usr/bin/env python3
 
 import json
-from re import S
-import re
 import sys
 import pathlib
-from tarfile import SUPPORTED_TYPES
 
 
 def traverse(schema):
@@ -296,6 +293,26 @@ class EnumType:
         return f"{self.name} = {EnumType.cddl(self.schema)}"
 
 
+class NotConstType:
+    @staticmethod
+    def is_one(schema):
+        return schema.keys() == {"not"} and ConstType.is_one(schema["not"])
+
+    @staticmethod
+    def cddl(schema, unwrap=False):
+        return ""
+        # TODO: add back once line returns are added
+        # return f"; must not be {ConstType.cddl(schema['not'])}"
+
+    def __init__(self, name, schema):
+        assert NotConstType.is_one(schema)
+        self.name = name
+        self.schema = schema
+
+    def to_cddl(self):
+        return f"{self.name} = {NotConstType.cddl(self.schema)}"
+
+
 class RefType:
     @staticmethod
     def is_one(schema):
@@ -405,6 +422,7 @@ def find_type(schema):
         AllOfType,
         ArrayType,
         IfThenElseType,
+        NotConstType,
     ]:
         if type_class.is_one(schema):
             return type_class
@@ -425,11 +443,8 @@ if __name__ == "__main__":
         if type_class is None:
             unmapped.append((type_name, type_schema))
         else:
-            try:
-                type_instance = type_class(type_name, type_schema)
-                print(type_instance.to_cddl())
-            except NotImplementedError as e:
-                unmapped.append((type_name, type_schema))
+            type_instance = type_class(type_name, type_schema)
+            print(type_instance.to_cddl())
 
     unmapped_and_totalrefs = sorted(
         [
@@ -439,6 +454,4 @@ if __name__ == "__main__":
         reverse=True,
         key=lambda x: x[2],
     )
-    # TODO: add "not" for const at least
-    # assert not unmapped_and_totalrefs, unmapped_and_totalrefs
-    print(f"; {len(unmapped_and_totalrefs)} unmapped types")
+    assert not unmapped_and_totalrefs, unmapped_and_totalrefs
