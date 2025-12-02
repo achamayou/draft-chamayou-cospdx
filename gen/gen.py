@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-from gettext import find
 import json
 import sys
 import pathlib
@@ -142,6 +141,7 @@ class ArrayType:
             "type",
             "items",
             "minItems",
+            "description",
         }.issuperset(schema.keys())
 
     @staticmethod
@@ -205,6 +205,10 @@ class IfThenElseType:
                 f"Unsupported subschema in then: {schema['then']}"
             )
         parts.append(type_class.cddl(schema["then"], unwrap=True))
+        else_schema = schema["else"]
+        if else_schema:
+            assert schema["else"].keys() == {"const"}
+            assert schema["else"]["const"].startswith("Not a")
         return f"{{ {', '.join(parts)} }}"
 
 
@@ -240,7 +244,11 @@ class NotConstType:
 class RefType:
     @staticmethod
     def is_one(schema):
-        return schema.keys() == {"$ref"}
+        return (
+            schema.keys() == {"$ref"}
+            or schema.keys() == {"$ref", "type", "unevaluatedProperties"}
+            and schema.get("type") == "object"
+        )
 
     @staticmethod
     def cddl(schema, unwrap=False):
@@ -280,7 +288,7 @@ class ObjectType:
                 "required",
                 "properties",
             }.issuperset(schema.keys())
-            and sum(["properties" in schema, "anyOf" in schema]) == 1
+            and sum(["properties" in schema, "anyOf" in schema]) <= 1
         )
 
     @staticmethod
@@ -305,7 +313,55 @@ class ObjectType:
                 inner = ", ".join(parts)
                 return inner if unwrap else f"{{ {inner} }}"
 
+        if "required" in schema:
+            parts = []
+            for prop_name in schema["required"]:
+                parts.append(f'"{prop_name}": any')
+            inner = ", ".join(parts)
+            return inner if unwrap else f"{{ {inner} }}"
+
         raise NotImplementedError(f"Unsupported object schema: {schema}")
+
+
+class IfThenElseObjectType:
+    @staticmethod
+    def is_one(schema):
+        return (
+            schema.get("type") == "object"
+            and {
+                "type",
+                "unevaluatedProperties",
+                "required",
+                "properties",
+                "if",
+                "then",
+                "else",
+            }.issuperset(schema.keys())
+            and {"if", "then", "else"}.issubset(schema.keys())
+        )
+
+    @staticmethod
+    def cddl(schema):
+        first_part = []
+        if_class = find_type(schema["if"])
+        if if_class is None:
+            raise NotImplementedError(f"Unsupported subschema in if: {schema['if']}")
+        first_part.append(if_class.cddl(schema["if"], unwrap=True))
+        then_class = find_type(schema["then"])
+        if then_class is None:
+            raise NotImplementedError(
+                f"Unsupported subschema in then: {schema['then']}"
+            )
+        first_part.append(then_class.cddl(schema["then"], unwrap=True))
+        second_part = []
+        else_class = find_type(schema["else"])
+        if else_class is None:
+            raise NotImplementedError(
+                f"Unsupported subschema in else: {schema['else']}"
+            )
+        second_part.append(else_class.cddl(schema["else"], unwrap=True))
+
+        return f"{{ {', '.join(first_part)} }} / {{ {', '.join(second_part)} }}"
 
 
 def find_type(schema):
@@ -323,6 +379,7 @@ def find_type(schema):
         ArrayType,
         IfThenElseType,
         NotConstType,
+        IfThenElseObjectType,
     ]:
         if type_class.is_one(schema):
             return type_class
@@ -336,8 +393,9 @@ if __name__ == "__main__":
         input_path = pathlib.Path(sys.argv[1])
     schema = json.loads(input_path.read_text())
     unmapped = []
-    toplevel = {key: value for key, value in schema.items() if key != "$defs"}
-    # print(declaration("SPDX_Document", toplevel, find_type(toplevel)))
+    toplevel = {key: value for key, value in schema.items() if not key.startswith("$")}
+    # TODO: Tag entry point? Link CDDL as context?
+    print(declaration("SPDX_Document", toplevel, find_type(toplevel)))
 
     for type_name, type_schema in schema["$defs"].items():
         type_class = find_type(type_schema)
