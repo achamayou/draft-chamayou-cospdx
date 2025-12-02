@@ -54,6 +54,10 @@ def stats(schema):
     print()
 
 
+def declaration(name, schema, klass):
+    return f"{name} = {klass.cddl(schema)}"
+
+
 class StringType:
     @staticmethod
     def is_one(schema):
@@ -88,9 +92,6 @@ class StringType:
         self.name = name
         self.schema = schema
 
-    def to_cddl(self):
-        return f"{self.name} = {StringType.cddl(self.schema)}"
-
 
 class ConstType:
     @staticmethod
@@ -105,9 +106,6 @@ class ConstType:
         assert ConstType.is_one(schema)
         self.name = name
         self.schema = schema
-
-    def to_cddl(self):
-        return f"{self.name} = {ConstType.cddl(self.schema)}"
 
 
 class NumberType:
@@ -132,9 +130,6 @@ class NumberType:
         self.name = name
         self.schema = schema
 
-    def to_cddl(self):
-        return f"{self.name} = {NumberType.cddl(self.schema)}"
-
 
 class IntegerType:
     @staticmethod
@@ -157,9 +152,6 @@ class IntegerType:
         assert IntegerType.is_one(schema)
         self.name = name
         self.schema = schema
-
-    def to_cddl(self):
-        return f"{self.name} = {IntegerType.cddl(self.schema)}"
 
 
 class ArrayType:
@@ -189,9 +181,6 @@ class ArrayType:
         self.name = name
         self.schema = schema
 
-    def to_cddl(self):
-        return f"{self.name} = {ArrayType.cddl(self.schema)}"
-
 
 class BooleanType:
     @staticmethod
@@ -207,9 +196,6 @@ class BooleanType:
         assert {"type"}.issuperset(schema.keys()), schema.keys()
         self.name = name
         self.schema = schema
-
-    def to_cddl(self):
-        return f"{self.name} = {BooleanType.cddl(self.schema)}"
 
 
 class AnyOfType:
@@ -234,9 +220,6 @@ class AnyOfType:
         assert AnyOfType.is_one(schema)
         self.name = name
         self.schema = schema
-
-    def to_cddl(self):
-        return f"{self.name} = {AnyOfType.cddl(self.schema)}"
 
 
 class IfThenElseType:
@@ -264,9 +247,6 @@ class IfThenElseType:
         parts.append(type_class.cddl(schema["then"], unwrap=True))
         return f"{{ {', '.join(parts)} }}"
 
-    def to_cddl(self):
-        return f"{self.name} = {IfThenElseType.cddl(self.schema)}"
-
 
 class EnumType:
     @staticmethod
@@ -289,9 +269,6 @@ class EnumType:
         self.name = name
         self.schema = schema
 
-    def to_cddl(self):
-        return f"{self.name} = {EnumType.cddl(self.schema)}"
-
 
 class NotConstType:
     @staticmethod
@@ -309,9 +286,6 @@ class NotConstType:
         self.name = name
         self.schema = schema
 
-    def to_cddl(self):
-        return f"{self.name} = {NotConstType.cddl(self.schema)}"
-
 
 class RefType:
     @staticmethod
@@ -328,9 +302,6 @@ class RefType:
         assert RefType.is_one(schema)
         self.name = name
         self.schema = schema
-
-    def to_cddl(self):
-        return f"{self.name} = {RefType.cddl(self.schema)}"
 
 
 class AllOfType:
@@ -355,9 +326,6 @@ class AllOfType:
         assert AllOfType.is_one(schema)
         self.name = name
         self.schema = schema
-
-    def to_cddl(self):
-        return f"{self.name} = {AllOfType.cddl(self.schema)}"
 
 
 class ObjectType:
@@ -404,9 +372,6 @@ class ObjectType:
         self.name = name
         self.schema = schema
 
-    def to_cddl(self):
-        return f"{self.name} = {ObjectType.cddl(self.schema)}"
-
 
 def find_type(schema):
     for type_class in [
@@ -443,8 +408,7 @@ if __name__ == "__main__":
         if type_class is None:
             unmapped.append((type_name, type_schema))
         else:
-            type_instance = type_class(type_name, type_schema)
-            print(type_instance.to_cddl())
+            print(declaration(type_name, type_schema, type_class))
 
     unmapped_and_totalrefs = sorted(
         [
