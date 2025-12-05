@@ -387,6 +387,43 @@ def find_type(schema):
     return None
 
 
+class Grouping:
+    # Only additional profiles, anything else goes into "Core"
+    _PROFILES_NAMES = [
+        "Software",
+        "Security",
+        "Licensing",
+        "SimpleLicensing",
+        "ExpandedLicensing",
+        "Dataset",
+        "AI",
+        "Build",
+        "Lite",
+        "Extension",
+    ]
+
+    profiles = {}
+
+    def __init__(self, defs):
+        self.defs = defs
+        profile_map = {}
+        for profile_name in self._PROFILES_NAMES:
+            profile_map[profile_name.lower()] = profile_name
+            profile_map[f"prop_{profile_name.lower()}"] = profile_name
+            self.profiles[profile_name] = []
+
+        self.profiles["Core"] = []
+
+        for name, schema in defs.items():
+            core = True
+            for key in profile_map.keys():
+                if name.startswith(key):
+                    self.profiles[profile_map[key]].append((name, schema))
+                    core = False
+            if core:
+                self.profiles["Core"].append((name, schema))
+
+
 if __name__ == "__main__":
     # Default to checked-in 3.0.1 schema if no path is provided
     input_path = pathlib.Path(__file__).parent / "spdx-json-schema.json"
@@ -396,14 +433,31 @@ if __name__ == "__main__":
     unmapped = []
     toplevel = {key: value for key, value in schema.items() if not key.startswith("$")}
     # TODO: Tag entry point? Link CDDL as context?
+    print("; " + "=" * 80)
+    print("; Entry Point")
     print(declaration("SPDX_Document", toplevel, find_type(toplevel)))
+    print("; " + "=" * 80)
+    print()
 
-    for type_name, type_schema in schema["$defs"].items():
-        type_class = find_type(type_schema)
-        if type_class is None:
-            unmapped.append((type_name, type_schema))
-        else:
-            print(declaration(type_name, type_schema, type_class))
+    grouping = Grouping(schema["$defs"])
+
+    for profile_name, definitions in grouping.profiles.items():
+        if definitions:
+            # Not all profiles define types
+            print("; " + "=" * 80)
+            print(f"; {profile_name} Profile")
+            print("; " + "=" * 80)
+            print()
+            for type_name, type_schema in definitions:
+                type_class = find_type(type_schema)
+                if type_class is None:
+                    unmapped.append((type_name, type_schema))
+                else:
+                    print(declaration(type_name, type_schema, type_class))
+            print("; " + "=" * 80)
+            print()
+            print()
+
     print("AnyObject = { * any => any }")
 
     unmapped_and_totalrefs = sorted(
