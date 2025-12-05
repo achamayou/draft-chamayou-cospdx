@@ -109,11 +109,12 @@ class NumberType:
 
     @staticmethod
     def cddl(schema):
-        # TODO: can we handle maximum / minimum better?
-        if schema.get("minimum") == 0:
-            return "uint / float"
-        else:
+        assert "maximum" not in schema
+        if "minimum" not in schema:
             return "int / float"
+
+        if schema.get("minimum") >= 0:
+            return f"uint .ge {schema['minimum']} / float .ge {schema['minimum']}"
 
 
 class IntegerType:
@@ -127,9 +128,13 @@ class IntegerType:
 
     @staticmethod
     def cddl(schema):
-        # TODO: can we handle maximum / minimum better?
-        if schema.get("minimum") == 0:
-            return "uint"
+        assert "minimum" in schema
+        assert "maximum" not in schema
+        if schema.get("minimum") >= 0:
+            if schema.get("minimum") == 0:
+                return "uint"
+            else:
+                return f"uint .ge {schema['minimum']}"
         else:
             return "int"
 
