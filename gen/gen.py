@@ -154,6 +154,26 @@ ENUMS = ContiguousInternedEntries("enum", 1000)
 CONSTS = ContiguousInternedEntries("const", 2000)
 
 
+def drop_optional_dupes(seq):
+    parts = seq.split(", ")
+    defined = set()
+    optional = {}
+    pos = 0
+    for part in parts:
+        if ": " in part:
+            label, _ = part.split(": ")
+            if label.startswith("?"):
+                optional[label[1:]] = pos
+            else:
+                defined.add(label)
+        pos += 1
+    dropped_optionals = {
+        label: position for label, position in optional.items() if label in defined
+    }
+    kept = [part for i, part in enumerate(parts) if i not in dropped_optionals.values()]
+    return ", ".join(kept)
+
+
 class ConstType:
     @staticmethod
     def is_one(schema):
@@ -280,7 +300,7 @@ class IfThenElseType:
         if else_schema:
             assert schema["else"].keys() == {"const"}
             assert schema["else"]["const"].startswith("Not a")
-        return f"{{ {', '.join(parts)} }}"
+        return f"{{ {drop_optional_dupes(', '.join(parts))} }}"
 
 
 class EnumType:
