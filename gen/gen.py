@@ -88,6 +88,48 @@ class StringType:
         return "tstr"
 
 
+class ContiguousInternedEntries:
+    def __init__(self, prefix, offset):
+        self.prefix = prefix
+        self.starting_offset = offset
+        self.latest_index = offset
+        self.entries = {}
+        self.unescaped_entries = set()
+
+    def escape_name(self, name):
+        # The space of possible JSON strings is greater than valid CDDL identifiers.
+        # This is not a general escaping mechanism, but aims to cover SPDX values,
+        # and keeps track of already-escaped entries to detect any collisions.
+        escaped = name.replace(":", "_").replace("/", "_")
+        if escaped in self.entries and escaped not in self.unescaped_entries:
+            raise ValueError(f"Name collision after escaping: {name} -> {escaped}")
+        self.unescaped_entries.add(escaped)
+        return escaped
+
+    def get(self, entry):
+        interned_name = self.escape_name(f"{self.prefix}.{entry}")
+        if not interned_name in self.entries:
+            self.latest_index += 1
+            self.entries[interned_name] = self.latest_index
+        return interned_name
+
+    def definitions(self):
+        return "\n".join(
+            [
+                f"{name} = {index}"
+                for name, index in sorted(self.entries.items(), key=lambda x: x[1])
+            ]
+        )
+
+    def description(self):
+        return f"Value mapping for {self.prefix} entries ({self.starting_offset}-{self.latest_index})"
+
+
+LABELS = ContiguousInternedEntries("label", 0)
+ENUMS = ContiguousInternedEntries("enum", 1000)
+CONSTS = ContiguousInternedEntries("const", 2000)
+
+
 class ConstType:
     @staticmethod
     def is_one(schema):
@@ -95,7 +137,7 @@ class ConstType:
 
     @staticmethod
     def cddl(schema):
-        return f"\"{schema['const']}\""
+        return CONSTS.get(schema["const"])
 
 
 class NumberType:
@@ -225,10 +267,9 @@ class EnumType:
     @staticmethod
     def cddl(schema):
         parts = []
-        # TODO: Systematic mapping to integers
         for enum_value in schema["enum"]:
             if isinstance(enum_value, str):
-                parts.append(f'"{enum_value}"')
+                parts.append(ENUMS.get(enum_value))
             else:
                 parts.append(str(enum_value))
         return " / ".join(parts)
@@ -241,9 +282,9 @@ class NotConstType:
 
     @staticmethod
     def cddl(schema, unwrap=False):
+        # Not directly representable in CDDL, this is only used in the extension_Extension
+        # type, which is defined as any IRI, except the value "extension_Extension"
         return ""
-        # TODO: add back once line returns are added
-        # return f"; must not be {ConstType.cddl(schema['not'])}"
 
 
 class RefType:
@@ -302,7 +343,6 @@ class ObjectType:
             return AnyOfType.cddl({"anyOf": schema["anyOf"]})
         if "properties" in schema:
             parts = []
-            # TODO: Allocate integer property keys for compactness
             for prop_name, prop_schema in schema["properties"].items():
                 type_class = find_type(prop_schema)
                 if type_class is None:
@@ -310,8 +350,9 @@ class ObjectType:
                         f"Unsupported property schema: {prop_schema}"
                     )
                 optionality = "?" if prop_name not in schema.get("required", []) else ""
+                interned_prop_name = LABELS.get(prop_name)
                 parts.append(
-                    f'{optionality}"{prop_name}": {type_class.cddl(prop_schema)}'
+                    f"{optionality}{interned_prop_name}: {type_class.cddl(prop_schema)}"
                 )
             if not parts and schema.get("unevaluatedProperties", True):
                 return "~AnyObject" if unwrap else "AnyObject"
@@ -322,7 +363,8 @@ class ObjectType:
         if "required" in schema:
             parts = []
             for prop_name in schema["required"]:
-                parts.append(f'"{prop_name}": any')
+                interned_prop_name = LABELS.get(prop_name)
+                parts.append(f"{interned_prop_name}: any")
             inner = ", ".join(parts)
             return inner if unwrap else f"{{ {inner} }}"
 
@@ -437,7 +479,9 @@ if __name__ == "__main__":
     schema = json.loads(input_path.read_text())
     unmapped = []
     toplevel = {key: value for key, value in schema.items() if not key.startswith("$")}
-    # TODO: Tag entry point? Link CDDL as context?
+    print(
+        "; https://raw.githubusercontent.com/achamayou/draft-chamayou-cospdx/refs/heads/main/cospdx.cddl"
+    )
     print("; " + "=" * 80)
     print("; Entry Point")
     print(declaration("SPDX_Document", toplevel, find_type(toplevel)))
@@ -464,6 +508,16 @@ if __name__ == "__main__":
             print()
 
     print("AnyObject = { * any => any }")
+    print()
+    print(f"; {LABELS.description()}")
+    print(LABELS.definitions())
+    print()
+    print(f"; {ENUMS.description()}")
+    print(ENUMS.definitions())
+    print()
+    print(f"; {CONSTS.description()}")
+    print(CONSTS.definitions())
+    print()
 
     unmapped_and_totalrefs = sorted(
         [
