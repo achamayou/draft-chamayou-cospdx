@@ -4,6 +4,9 @@ import json
 import sys
 import pathlib
 
+from numpy import full
+from sympy import fu
+
 
 def traverse(schema):
     for key, value in schema.items():
@@ -125,7 +128,28 @@ class ContiguousInternedEntries:
         return f"Value mapping for {self.prefix} entries ({self.starting_offset}-{self.latest_index})"
 
 
-LABELS = ContiguousInternedEntries("label", 0)
+class ContiguousInternedLabels(ContiguousInternedEntries):
+    def __init__(self, prefix, offset):
+        super().__init__(prefix, offset)
+
+    def definitions(self, grouping):
+        text = ""
+        for name, index in sorted(self.entries.items(), key=lambda x: x[1]):
+            prefix, full_name = name.split(".", 1)
+            assert prefix == self.prefix
+            if "_" in full_name:
+                profile, property = full_name.split("_", 1)
+                profile = grouping.to_profile(profile)
+            else:
+                profile = "Core"
+                property = full_name
+            if not (full_name.startswith("@") or full_name == "type"):
+                text += f"; https://spdx.github.io/spdx-spec/v3.0.1/model/{profile}/Properties/{property}/\n"
+            text += f"{name} = {index}\n"
+        return text.strip()
+
+
+LABELS = ContiguousInternedLabels("label", 0)
 ENUMS = ContiguousInternedEntries("enum", 1000)
 CONSTS = ContiguousInternedEntries("const", 2000)
 
@@ -453,22 +477,25 @@ class Grouping:
 
     def __init__(self, defs):
         self.defs = defs
-        profile_map = {}
+        self.profile_map = {}
         for profile_name in self._PROFILES_NAMES:
-            profile_map[profile_name.lower()] = profile_name
-            profile_map[f"prop_{profile_name.lower()}"] = profile_name
+            self.profile_map[profile_name.lower()] = profile_name
+            self.profile_map[f"prop_{profile_name.lower()}"] = profile_name
             self.profiles[profile_name] = []
 
         self.profiles["Core"] = []
 
         for name, schema in defs.items():
             core = True
-            for key in profile_map.keys():
+            for key in self.profile_map.keys():
                 if name.startswith(key):
-                    self.profiles[profile_map[key]].append((name, schema))
+                    self.profiles[self.profile_map[key]].append((name, schema))
                     core = False
             if core:
                 self.profiles["Core"].append((name, schema))
+
+    def to_profile(self, lower):
+        return self.profile_map[lower]
 
 
 if __name__ == "__main__":
@@ -504,7 +531,7 @@ if __name__ == "__main__":
     print("AnyObject = { * any => any }")
     print()
     print(f"; {LABELS.description()}")
-    print(LABELS.definitions())
+    print(LABELS.definitions(grouping))
     print()
     print(f"; {ENUMS.description()}")
     print(ENUMS.definitions())
