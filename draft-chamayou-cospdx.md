@@ -21,9 +21,16 @@ venue:
   github: "achamayou/draft-chamayou-cospdx"
 
 author:
--  name: Amaury Chamayou
-   organization: Microsoft
-   email: amchamay@microsoft.com
+- name: Amaury Chamayou
+  organization: Microsoft
+  email: amchamay@microsoft.com
+- name: Henk Birkholz
+  organization: Fraunhofer SIT
+  email: henk.birkholz@ietf.contact
+  street: Rheinstrasse 75
+  code: '64295'
+  city: Darmstadt
+  country: Germany
 
 normative:
   SPDX:
@@ -78,7 +85,6 @@ TODO Security
 # IANA Considerations
 
 This document has no IANA actions.
-
 
 --- back
 
