@@ -1194,14 +1194,10 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <div class="breakable lang-cddl sourcecode" id="section-2-1">
 <pre>
 ; https://raw.githubusercontent.com/achamayou/draft-chamayou-cospdx/refs/heads/main/cospdx.cddl
-; ================================================================================
 ; Entry Point
 SPDX_Document = { label.@graph: any, label.@graph: [ * AnyClass ] } / { ~AnyClass }
-; ================================================================================
 
-; ================================================================================
 ; Software Profile
-; ================================================================================
 
 software_ContentIdentifier = { label.type: const.software_ContentIdentifier, ?label.@id: BlankNodeOrIRI, ?label.type: tstr, ~software_ContentIdentifier_props }
 software_ContentIdentifier_derived = software_ContentIdentifier / BlankNodeOrIRI
@@ -1250,12 +1246,8 @@ software_Snippet_props = { ~software_SoftwareArtifact_props, ?label.software_byt
 prop_software_Snippet_software_byteRange = PositiveIntegerRange_derived
 prop_software_Snippet_software_lineRange = PositiveIntegerRange_derived
 prop_software_Snippet_software_snippetFromFile = software_File_derived
-; ================================================================================
 
-
-; ================================================================================
 ; Security Profile
-; ================================================================================
 
 security_CvssSeverityType = { label.type: const.security_CvssSeverityType, ?label.@id: BlankNodeOrIRI, ?label.type: tstr, ~security_CvssSeverityType_props }
 security_CvssSeverityType_derived = security_CvssSeverityType / const.spdx_Security_CvssSeverityType_critical / const.spdx_Security_CvssSeverityType_high / const.spdx_Security_CvssSeverityType_low / const.spdx_Security_CvssSeverityType_medium / const.spdx_Security_CvssSeverityType_none / BlankNodeOrIRI
@@ -1335,12 +1327,8 @@ prop_security_VexNotAffectedVulnAssessmentRelationship_security_justificationTyp
 security_VexUnderInvestigationVulnAssessmentRelationship = { label.type: const.security_VexUnderInvestigationVulnAssessmentRelationship, label.spdxId: IRI, ?label.type: tstr, ~security_VexUnderInvestigationVulnAssessmentRelationship_props }
 security_VexUnderInvestigationVulnAssessmentRelationship_derived = security_VexUnderInvestigationVulnAssessmentRelationship / BlankNodeOrIRI
 security_VexUnderInvestigationVulnAssessmentRelationship_props = { ~security_VexVulnAssessmentRelationship_props, ~AnyObject }
-; ================================================================================
 
-
-; ================================================================================
 ; SimpleLicensing Profile
-; ================================================================================
 
 simplelicensing_AnyLicenseInfo_derived = expandedlicensing_ConjunctiveLicenseSet / expandedlicensing_CustomLicense / expandedlicensing_DisjunctiveLicenseSet / expandedlicensing_IndividualLicensingInfo / expandedlicensing_ListedLicense / expandedlicensing_OrLaterOperator / expandedlicensing_WithAdditionOperator / simplelicensing_LicenseExpression / const.expandedlicensing_NoAssertionLicense / const.expandedlicensing_NoneLicense / BlankNodeOrIRI
 simplelicensing_AnyLicenseInfo_props = { ~Element_props, ~AnyObject }
@@ -1354,12 +1342,8 @@ simplelicensing_SimpleLicensingText = { label.type: const.simplelicensing_Simple
 simplelicensing_SimpleLicensingText_derived = simplelicensing_SimpleLicensingText / BlankNodeOrIRI
 simplelicensing_SimpleLicensingText_props = { ~Element_props, label.simplelicensing_licenseText: prop_simplelicensing_SimpleLicensingText_simplelicensing_licenseText }
 prop_simplelicensing_SimpleLicensingText_simplelicensing_licenseText = tstr
-; ================================================================================
 
-
-; ================================================================================
 ; ExpandedLicensing Profile
-; ================================================================================
 
 expandedlicensing_LicenseAddition_derived = expandedlicensing_CustomLicenseAddition / expandedlicensing_ListedLicenseException / BlankNodeOrIRI
 expandedlicensing_LicenseAddition_props = { ~Element_props, label.expandedlicensing_additionText: prop_expandedlicensing_LicenseAddition_expandedlicensing_additionText, ?label.expandedlicensing_isDeprecatedAdditionId: prop_expandedlicensing_LicenseAddition_expandedlicensing_isDeprecatedAdditionId, ?label.expandedlicensing_licenseXml: prop_expandedlicensing_LicenseAddition_expandedlicensing_licenseXml, ?label.expandedlicensing_obsoletedBy: prop_expandedlicensing_LicenseAddition_expandedlicensing_obsoletedBy, ?label.expandedlicensing_seeAlso: [ * prop_expandedlicensing_LicenseAddition_expandedlicensing_seeAlso ], ?label.expandedlicensing_standardAdditionTemplate: prop_expandedlicensing_LicenseAddition_expandedlicensing_standardAdditionTemplate }
@@ -1418,12 +1402,8 @@ prop_expandedlicensing_WithAdditionOperator_expandedlicensing_subjectExtendableL
 expandedlicensing_CustomLicense = { label.type: const.expandedlicensing_CustomLicense, label.spdxId: IRI, ?label.type: tstr, ~expandedlicensing_CustomLicense_props }
 expandedlicensing_CustomLicense_derived = expandedlicensing_CustomLicense / BlankNodeOrIRI
 expandedlicensing_CustomLicense_props = { ~expandedlicensing_License_props, ~AnyObject }
-; ================================================================================
 
-
-; ================================================================================
 ; Dataset Profile
-; ================================================================================
 
 dataset_ConfidentialityLevelType = { label.type: const.dataset_ConfidentialityLevelType, ?label.@id: BlankNodeOrIRI, ?label.type: tstr, ~dataset_ConfidentialityLevelType_props }
 dataset_ConfidentialityLevelType_derived = dataset_ConfidentialityLevelType / const.spdx_Dataset_ConfidentialityLevelType_amber / const.spdx_Dataset_ConfidentialityLevelType_clear / const.spdx_Dataset_ConfidentialityLevelType_green / const.spdx_Dataset_ConfidentialityLevelType_red / BlankNodeOrIRI
@@ -1450,12 +1430,8 @@ prop_dataset_DatasetPackage_dataset_hasSensitivePersonalInformation = enum.no / 
 prop_dataset_DatasetPackage_dataset_intendedUse = tstr
 prop_dataset_DatasetPackage_dataset_knownBias = tstr
 prop_dataset_DatasetPackage_dataset_sensor = DictionaryEntry_derived
-; ================================================================================
 
-
-; ================================================================================
 ; AI Profile
-; ================================================================================
 
 ai_EnergyConsumption = { label.type: const.ai_EnergyConsumption, ?label.@id: BlankNodeOrIRI, ?label.type: tstr, ~ai_EnergyConsumption_props }
 ai_EnergyConsumption_derived = ai_EnergyConsumption / BlankNodeOrIRI
@@ -1492,12 +1468,8 @@ prop_ai_AIPackage_ai_safetyRiskAssessment = enum.high / enum.low / enum.medium /
 prop_ai_AIPackage_ai_standardCompliance = tstr
 prop_ai_AIPackage_ai_typeOfModel = tstr
 prop_ai_AIPackage_ai_useSensitivePersonalInformation = enum.no / enum.noAssertion / enum.yes
-; ================================================================================
 
-
-; ================================================================================
 ; Build Profile
-; ================================================================================
 
 build_Build = { label.type: const.build_Build, label.spdxId: IRI, ?label.type: tstr, ~build_Build_props }
 build_Build_derived = build_Build / BlankNodeOrIRI
@@ -1511,12 +1483,8 @@ prop_build_Build_build_configSourceEntrypoint = tstr
 prop_build_Build_build_configSourceUri = anyURI
 prop_build_Build_build_environment = DictionaryEntry_derived
 prop_build_Build_build_parameter = DictionaryEntry_derived
-; ================================================================================
 
-
-; ================================================================================
 ; Extension Profile
-; ================================================================================
 
 extension_CdxPropertyEntry = { label.type: const.extension_CdxPropertyEntry, ?label.@id: BlankNodeOrIRI, ?label.type: tstr, ~extension_CdxPropertyEntry_props }
 extension_CdxPropertyEntry_derived = extension_CdxPropertyEntry / BlankNodeOrIRI
@@ -1530,12 +1498,8 @@ extension_CdxPropertiesExtension = { label.type: const.extension_CdxPropertiesEx
 extension_CdxPropertiesExtension_derived = extension_CdxPropertiesExtension / BlankNodeOrIRI
 extension_CdxPropertiesExtension_props = { ~extension_Extension_props, label.extension_cdxProperty: [ + prop_extension_CdxPropertiesExtension_extension_cdxProperty ] }
 prop_extension_CdxPropertiesExtension_extension_cdxProperty = extension_CdxPropertyEntry_derived
-; ================================================================================
 
-
-; ================================================================================
 ; Core Profile
-; ================================================================================
 
 AnnotationType = { label.type: const.AnnotationType, ?label.@id: BlankNodeOrIRI, ?label.type: tstr, ~AnnotationType_props }
 AnnotationType_derived = AnnotationType / const.spdx_Core_AnnotationType_other / const.spdx_Core_AnnotationType_review / BlankNodeOrIRI
@@ -1708,8 +1672,6 @@ BlankNodeOrIRI = IRI / BlankNode
 anyURI = tstr
 SHACLClass = { label.type: IRI / enum.ai_EnergyConsumption / enum.ai_EnergyConsumptionDescription / enum.ai_EnergyUnitType / enum.ai_SafetyRiskAssessmentType / enum.AnnotationType / enum.CreationInfo / enum.DictionaryEntry / enum.ExternalIdentifier / enum.ExternalIdentifierType / enum.ExternalMap / enum.ExternalRef / enum.ExternalRefType / enum.HashAlgorithm / enum.IndividualElement / enum.LifecycleScopeType / enum.NamespaceMap / enum.PackageVerificationCode / enum.PositiveIntegerRange / enum.PresenceType / enum.ProfileIdentifierType / enum.Relationship / enum.RelationshipCompleteness / enum.RelationshipType / enum.SpdxDocument / enum.SupportType / enum.Tool / enum.dataset_ConfidentialityLevelType / enum.dataset_DatasetAvailabilityType / enum.dataset_DatasetType / enum.expandedlicensing_ListedLicenseException / enum.extension_CdxPropertyEntry / enum.security_CvssSeverityType / enum.security_ExploitCatalogType / enum.security_SsvcDecisionType / enum.security_VexJustificationType / enum.simplelicensing_LicenseExpression / enum.simplelicensing_SimpleLicensingText / enum.software_ContentIdentifier / enum.software_ContentIdentifierType / enum.software_FileKindType / enum.software_SbomType / enum.software_SoftwarePurpose / enum.build_Build / enum.Agent / enum.Annotation / enum.Bundle / enum.Hash / enum.LifecycleScopedRelationship / enum.Organization / enum.Person / enum.SoftwareAgent / enum.expandedlicensing_ConjunctiveLicenseSet / enum.expandedlicensing_CustomLicenseAddition / enum.expandedlicensing_DisjunctiveLicenseSet / enum.expandedlicensing_IndividualLicensingInfo / enum.expandedlicensing_ListedLicense / enum.expandedlicensing_OrLaterOperator / enum.expandedlicensing_WithAdditionOperator / enum.extension_CdxPropertiesExtension / enum.security_CvssV2VulnAssessmentRelationship / enum.security_CvssV3VulnAssessmentRelationship / enum.security_CvssV4VulnAssessmentRelationship / enum.security_EpssVulnAssessmentRelationship / enum.security_ExploitCatalogVulnAssessmentRelationship / enum.security_SsvcVulnAssessmentRelationship / enum.security_Vulnerability / enum.Bom / enum.expandedlicensing_CustomLicense / enum.security_VexAffectedVulnAssessmentRelationship / enum.security_VexFixedVulnAssessmentRelationship / enum.security_VexNotAffectedVulnAssessmentRelationship / enum.security_VexUnderInvestigationVulnAssessmentRelationship / enum.software_File / enum.software_Package / enum.software_Sbom / enum.software_Snippet / enum.ai_AIPackage / enum.dataset_DatasetPackage }
 AnyClass = ai_EnergyConsumption / ai_EnergyConsumptionDescription / ai_EnergyUnitType / ai_SafetyRiskAssessmentType / AnnotationType / CreationInfo / DictionaryEntry / ExternalIdentifier / ExternalIdentifierType / ExternalMap / ExternalRef / ExternalRefType / HashAlgorithm / IndividualElement / LifecycleScopeType / NamespaceMap / PackageVerificationCode / PositiveIntegerRange / PresenceType / ProfileIdentifierType / Relationship / RelationshipCompleteness / RelationshipType / SpdxDocument / SupportType / Tool / dataset_ConfidentialityLevelType / dataset_DatasetAvailabilityType / dataset_DatasetType / expandedlicensing_ListedLicenseException / extension_CdxPropertyEntry / security_CvssSeverityType / security_ExploitCatalogType / security_SsvcDecisionType / security_VexJustificationType / simplelicensing_LicenseExpression / simplelicensing_SimpleLicensingText / software_ContentIdentifier / software_ContentIdentifierType / software_FileKindType / software_SbomType / software_SoftwarePurpose / build_Build / Agent / Annotation / Bundle / Hash / LifecycleScopedRelationship / Organization / Person / SoftwareAgent / expandedlicensing_ConjunctiveLicenseSet / expandedlicensing_CustomLicenseAddition / expandedlicensing_DisjunctiveLicenseSet / expandedlicensing_IndividualLicensingInfo / expandedlicensing_ListedLicense / expandedlicensing_OrLaterOperator / expandedlicensing_WithAdditionOperator / extension_CdxPropertiesExtension / security_CvssV2VulnAssessmentRelationship / security_CvssV3VulnAssessmentRelationship / security_CvssV4VulnAssessmentRelationship / security_EpssVulnAssessmentRelationship / security_ExploitCatalogVulnAssessmentRelationship / security_SsvcVulnAssessmentRelationship / security_Vulnerability / Bom / expandedlicensing_CustomLicense / security_VexAffectedVulnAssessmentRelationship / security_VexFixedVulnAssessmentRelationship / security_VexNotAffectedVulnAssessmentRelationship / security_VexUnderInvestigationVulnAssessmentRelationship / software_File / software_Package / software_Sbom / software_Snippet / ai_AIPackage / dataset_DatasetPackage
-; ================================================================================
-
 
 AnyObject = { * any =&gt; any }
 
@@ -2521,7 +2483,6 @@ const.Organization = 2334
 const.Person = 2335
 const.SoftwareAgent = 2336
 const.Bom = 2337
-
 </pre><a href="#section-2-1" class="pilcrow">¶</a>
 </div>
 </section>
