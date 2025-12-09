@@ -62,7 +62,7 @@ This document follows an approach similar to that proposed by {{CBOR-LD}}, but a
 # CDDL Schema
 
 ~~~ cddl
-{::include cospdx.cddl}
+{::include_fold cospdx.cddl}
 ~~~
 
 # Conventions and Definitions
