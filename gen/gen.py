@@ -482,10 +482,8 @@ if __name__ == "__main__":
     print(
         "; https://raw.githubusercontent.com/achamayou/draft-chamayou-cospdx/refs/heads/main/cospdx.cddl"
     )
-    print("; " + "=" * 80)
     print("; Entry Point")
     print(declaration("SPDX_Document", toplevel, find_type(toplevel)))
-    print("; " + "=" * 80)
     print()
 
     grouping = Grouping(schema["$defs"])
@@ -493,9 +491,7 @@ if __name__ == "__main__":
     for profile_name, definitions in grouping.profiles.items():
         if definitions:
             # Not all profiles define types
-            print("; " + "=" * 80)
             print(f"; {profile_name} Profile")
-            print("; " + "=" * 80)
             print()
             for type_name, type_schema in definitions:
                 type_class = find_type(type_schema)
@@ -503,8 +499,6 @@ if __name__ == "__main__":
                     unmapped.append((type_name, type_schema))
                 else:
                     print(declaration(type_name, type_schema, type_class))
-            print("; " + "=" * 80)
-            print()
             print()
 
     print("AnyObject = { * any => any }")
@@ -517,7 +511,6 @@ if __name__ == "__main__":
     print()
     print(f"; {CONSTS.description()}")
     print(CONSTS.definitions())
-    print()
 
     unmapped_and_totalrefs = sorted(
         [
