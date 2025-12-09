@@ -4,8 +4,9 @@
 
 Network Working Group                                        A. Chamayou
 Internet-Draft                                                 Microsoft
-Intended status: Standards Track                         9 December 2025
-Expires: 12 June 2026
+Intended status: Standards Track                             H. Birkholz
+Expires: 12 June 2026                                     Fraunhofer SIT
+                                                         9 December 2025
 
 
             A Deterministic Compact (CBOR) Encoding for SPDX
@@ -72,7 +73,7 @@ Table of Contents
      6.1.  Normative References
      6.2.  Informative References
    Acknowledgments
-   Author's Address
+   Authors' Addresses
 
 1.  Introduction
 
@@ -2847,8 +2848,16 @@ Acknowledgments
 
    TODO acknowledge.
 
-Author's Address
+Authors' Addresses
 
    Amaury Chamayou
    Microsoft
    Email: amchamay@microsoft.com
+
+
+   Henk Birkholz
+   Fraunhofer SIT
+   Rheinstrasse 75
+   64295 Darmstadt
+   Germany
+   Email: henk.birkholz@ietf.contact
