@@ -4,10 +4,6 @@ import json
 import sys
 import pathlib
 
-from numpy import full
-from sympy import fu
-
-
 def traverse(schema):
     for key, value in schema.items():
         if isinstance(value, dict):
