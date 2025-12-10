@@ -1203,41 +1203,41 @@ svg :is([fill="white"], [fill^="#fff"]) {
 ; https://raw.githubusercontent.com/achamayou/draft-chamayou-cospdx/\
                                           refs/heads/main/cospdx.cddl
 ; Entry Point
-SPDX_Document = { label.@graph: any, label.@graph: [ * AnyClass ] } \
-                                                      / { ~AnyClass }
+SPDX_Document = { label.@graph =&gt; any, label.@graph =&gt; [ * AnyClass \
+                                                  ] } / { ~AnyClass }
 
 ; Software Profile
 
-software_ContentIdentifier = { label.type: const.\
-software_ContentIdentifier, ?label.@id: BlankNodeOrIRI, ~\
+software_ContentIdentifier = { label.type =&gt; const.\
+software_ContentIdentifier, ?label.@id =&gt; BlankNodeOrIRI, ~\
                                    software_ContentIdentifier_props }
 software_ContentIdentifier_derived = software_ContentIdentifier / \
                                                        BlankNodeOrIRI
 software_ContentIdentifier_props = { ~IntegrityMethod_props, label.\
-software_contentIdentifierType: \
+software_contentIdentifierType =&gt; \
 prop_software_ContentIdentifier_software_contentIdentifierType, \
-label.software_contentIdentifierValue: \
+label.software_contentIdentifierValue =&gt; \
     prop_software_ContentIdentifier_software_contentIdentifierValue }
 prop_software_ContentIdentifier_software_contentIdentifierType = \
                                              enum.gitoid / enum.swhid
 prop_software_ContentIdentifier_software_contentIdentifierValue = \
                                                                anyURI
-software_ContentIdentifierType = { label.type: const.\
-software_ContentIdentifierType, ?label.@id: BlankNodeOrIRI, ~\
+software_ContentIdentifierType = { label.type =&gt; const.\
+software_ContentIdentifierType, ?label.@id =&gt; BlankNodeOrIRI, ~\
                                software_ContentIdentifierType_props }
 software_ContentIdentifierType_derived = \
 software_ContentIdentifierType / const.\
 spdx_Software_ContentIdentifierType_gitoid / const.\
            spdx_Software_ContentIdentifierType_swhid / BlankNodeOrIRI
 software_ContentIdentifierType_props = { ~SHACLClass, ~AnyObject }
-software_FileKindType = { label.type: const.software_FileKindType, ?\
-            label.@id: BlankNodeOrIRI, ~software_FileKindType_props }
+software_FileKindType = { label.type =&gt; const.software_FileKindType\
+       , ?label.@id =&gt; BlankNodeOrIRI, ~software_FileKindType_props }
 software_FileKindType_derived = software_FileKindType / const.\
 spdx_Software_FileKindType_directory / const.\
                      spdx_Software_FileKindType_file / BlankNodeOrIRI
 software_FileKindType_props = { ~SHACLClass, ~AnyObject }
-software_SbomType = { label.type: const.software_SbomType, ?label.@\
-                       id: BlankNodeOrIRI, ~software_SbomType_props }
+software_SbomType = { label.type =&gt; const.software_SbomType, ?label.\
+                    @id =&gt; BlankNodeOrIRI, ~software_SbomType_props }
 software_SbomType_derived = software_SbomType / const.\
 spdx_Software_SbomType_analyzed / const.\
 spdx_Software_SbomType_build / const.\
@@ -1246,8 +1246,8 @@ spdx_Software_SbomType_design / const.\
 spdx_Software_SbomType_runtime / const.\
                        spdx_Software_SbomType_source / BlankNodeOrIRI
 software_SbomType_props = { ~SHACLClass, ~AnyObject }
-software_SoftwarePurpose = { label.type: const.\
-software_SoftwarePurpose, ?label.@id: BlankNodeOrIRI, ~\
+software_SoftwarePurpose = { label.type =&gt; const.\
+software_SoftwarePurpose, ?label.@id =&gt; BlankNodeOrIRI, ~\
                                      software_SoftwarePurpose_props }
 software_SoftwarePurpose_derived = software_SoftwarePurpose / const.\
 spdx_Software_SoftwarePurpose_application / const.\
@@ -1284,15 +1284,15 @@ software_SoftwareArtifact_derived = ai_AIPackage / \
 dataset_DatasetPackage / software_File / software_Package / \
                                     software_Snippet / BlankNodeOrIRI
 software_SoftwareArtifact_props = { ~Artifact_props, ?label.\
-software_additionalPurpose: [ * \
+software_additionalPurpose =&gt; [ * \
 prop_software_SoftwareArtifact_software_additionalPurpose ], ?label.\
-software_attributionText: [ * \
+software_attributionText =&gt; [ * \
 prop_software_SoftwareArtifact_software_attributionText ], ?label.\
-software_contentIdentifier: [ * \
+software_contentIdentifier =&gt; [ * \
 prop_software_SoftwareArtifact_software_contentIdentifier ], ?label.\
-software_copyrightText: \
+software_copyrightText =&gt; \
 prop_software_SoftwareArtifact_software_copyrightText, ?label.\
-software_primaryPurpose: \
+software_primaryPurpose =&gt; \
              prop_software_SoftwareArtifact_software_primaryPurpose }
 prop_software_SoftwareArtifact_software_additionalPurpose = enum.\
 application / enum.archive / enum.bom / enum.configuration / enum.\
@@ -1316,45 +1316,45 @@ enum.install / enum.library / enum.manifest / enum.model / enum.\
 module / enum.operatingSystem / enum.other / enum.patch / enum.\
 platform / enum.requirement / enum.source / enum.specification / \
                                                             enum.test
-software_File = { label.type: const.software_File, label.spdxId: IRI\
-                                             , ~software_File_props }
+software_File = { label.type =&gt; const.software_File, label.spdxId =\
+                                        &gt; IRI, ~software_File_props }
 software_File_derived = software_File / BlankNodeOrIRI
 software_File_props = { ~software_SoftwareArtifact_props, ?label.\
-contentType: prop_software_File_contentType, ?label.\
-            software_fileKind: prop_software_File_software_fileKind }
+contentType =&gt; prop_software_File_contentType, ?label.\
+          software_fileKind =&gt; prop_software_File_software_fileKind }
 prop_software_File_contentType = tstr .regexp "^[^\\/]+\\/[^\\/]+$"
 prop_software_File_software_fileKind = enum.directory / enum.file
-software_Package = { label.type: const.software_Package, label.\
-                               spdxId: IRI, ~software_Package_props }
+software_Package = { label.type =&gt; const.software_Package, label.\
+                             spdxId =&gt; IRI, ~software_Package_props }
 software_Package_derived = ai_AIPackage / dataset_DatasetPackage / \
                                     software_Package / BlankNodeOrIRI
 software_Package_props = { ~software_SoftwareArtifact_props, ?label.\
-software_downloadLocation: \
+software_downloadLocation =&gt; \
 prop_software_Package_software_downloadLocation, ?label.\
-software_homePage: prop_software_Package_software_homePage, ?label.\
-software_packageUrl: prop_software_Package_software_packageUrl, ?\
-label.software_packageVersion: \
+software_homePage =&gt; prop_software_Package_software_homePage, ?label\
+.software_packageUrl =&gt; prop_software_Package_software_packageUrl, ?\
+label.software_packageVersion =&gt; \
 prop_software_Package_software_packageVersion, ?label.\
-     software_sourceInfo: prop_software_Package_software_sourceInfo }
+   software_sourceInfo =&gt; prop_software_Package_software_sourceInfo }
 prop_software_Package_software_downloadLocation = anyURI
 prop_software_Package_software_homePage = anyURI
 prop_software_Package_software_packageUrl = anyURI
 prop_software_Package_software_packageVersion = tstr
 prop_software_Package_software_sourceInfo = tstr
-software_Sbom = { label.type: const.software_Sbom, label.spdxId: IRI\
-                                             , ~software_Sbom_props }
+software_Sbom = { label.type =&gt; const.software_Sbom, label.spdxId =\
+                                        &gt; IRI, ~software_Sbom_props }
 software_Sbom_derived = software_Sbom / BlankNodeOrIRI
-software_Sbom_props = { ~Bom_props, ?label.software_sbomType: [ * \
+software_Sbom_props = { ~Bom_props, ?label.software_sbomType =&gt; [ * \
                              prop_software_Sbom_software_sbomType ] }
 prop_software_Sbom_software_sbomType = enum.analyzed / enum.build / \
              enum.deployed / enum.design / enum.runtime / enum.source
-software_Snippet = { label.type: const.software_Snippet, label.\
-                               spdxId: IRI, ~software_Snippet_props }
+software_Snippet = { label.type =&gt; const.software_Snippet, label.\
+                             spdxId =&gt; IRI, ~software_Snippet_props }
 software_Snippet_derived = software_Snippet / BlankNodeOrIRI
 software_Snippet_props = { ~software_SoftwareArtifact_props, ?label.\
-software_byteRange: prop_software_Snippet_software_byteRange, ?label\
-.software_lineRange: prop_software_Snippet_software_lineRange, label\
-.software_snippetFromFile: \
+software_byteRange =&gt; prop_software_Snippet_software_byteRange, ?\
+label.software_lineRange =&gt; prop_software_Snippet_software_lineRange\
+, label.software_snippetFromFile =&gt; \
                      prop_software_Snippet_software_snippetFromFile }
 prop_software_Snippet_software_byteRange = \
                                          PositiveIntegerRange_derived
@@ -1365,8 +1365,8 @@ prop_software_Snippet_software_snippetFromFile = \
 
 ; Security Profile
 
-security_CvssSeverityType = { label.type: const.\
-security_CvssSeverityType, ?label.@id: BlankNodeOrIRI, ~\
+security_CvssSeverityType = { label.type =&gt; const.\
+security_CvssSeverityType, ?label.@id =&gt; BlankNodeOrIRI, ~\
                                     security_CvssSeverityType_props }
 security_CvssSeverityType_derived = security_CvssSeverityType / \
 const.spdx_Security_CvssSeverityType_critical / const.\
@@ -1375,15 +1375,15 @@ spdx_Security_CvssSeverityType_low / const.\
 spdx_Security_CvssSeverityType_medium / const.\
                  spdx_Security_CvssSeverityType_none / BlankNodeOrIRI
 security_CvssSeverityType_props = { ~SHACLClass, ~AnyObject }
-security_ExploitCatalogType = { label.type: const.\
-security_ExploitCatalogType, ?label.@id: BlankNodeOrIRI, ~\
+security_ExploitCatalogType = { label.type =&gt; const.\
+security_ExploitCatalogType, ?label.@id =&gt; BlankNodeOrIRI, ~\
                                   security_ExploitCatalogType_props }
 security_ExploitCatalogType_derived = security_ExploitCatalogType / \
 const.spdx_Security_ExploitCatalogType_kev / const.\
               spdx_Security_ExploitCatalogType_other / BlankNodeOrIRI
 security_ExploitCatalogType_props = { ~SHACLClass, ~AnyObject }
-security_SsvcDecisionType = { label.type: const.\
-security_SsvcDecisionType, ?label.@id: BlankNodeOrIRI, ~\
+security_SsvcDecisionType = { label.type =&gt; const.\
+security_SsvcDecisionType, ?label.@id =&gt; BlankNodeOrIRI, ~\
                                     security_SsvcDecisionType_props }
 security_SsvcDecisionType_derived = security_SsvcDecisionType / \
 const.spdx_Security_SsvcDecisionType_act / const.\
@@ -1391,8 +1391,8 @@ spdx_Security_SsvcDecisionType_attend / const.\
 spdx_Security_SsvcDecisionType_track / const.\
             spdx_Security_SsvcDecisionType_trackStar / BlankNodeOrIRI
 security_SsvcDecisionType_props = { ~SHACLClass, ~AnyObject }
-security_VexJustificationType = { label.type: const.\
-security_VexJustificationType, ?label.@id: BlankNodeOrIRI, ~\
+security_VexJustificationType = { label.type =&gt; const.\
+security_VexJustificationType, ?label.@id =&gt; BlankNodeOrIRI, ~\
                                 security_VexJustificationType_props }
 security_VexJustificationType_derived = \
 security_VexJustificationType / const.\
@@ -1418,15 +1418,15 @@ security_VexNotAffectedVulnAssessmentRelationship / \
 security_VexUnderInvestigationVulnAssessmentRelationship / \
                                                        BlankNodeOrIRI
 security_VulnAssessmentRelationship_props = { ~Relationship_props, ?\
-label.suppliedBy: \
+label.suppliedBy =&gt; \
 prop_security_VulnAssessmentRelationship_suppliedBy, ?label.\
-security_assessedElement: \
+security_assessedElement =&gt; \
 prop_security_VulnAssessmentRelationship_security_assessedElement, ?\
-label.security_modifiedTime: \
+label.security_modifiedTime =&gt; \
 prop_security_VulnAssessmentRelationship_security_modifiedTime, ?\
-label.security_publishedTime: \
+label.security_publishedTime =&gt; \
 prop_security_VulnAssessmentRelationship_security_publishedTime, ?\
-label.security_withdrawnTime: \
+label.security_withdrawnTime =&gt; \
     prop_security_VulnAssessmentRelationship_security_withdrawnTime }
 prop_security_VulnAssessmentRelationship_suppliedBy = Agent_derived
 prop_security_VulnAssessmentRelationship_security_assessedElement = \
@@ -1443,32 +1443,32 @@ prop_security_VulnAssessmentRelationship_security_withdrawnTime = \
 tstr .regexp "^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-6][0-9]:\
 [0-6][0-9](Z|[+-][0-9]{2}:[0-9]{2})$" / tstr .regexp "^\\d\\d\\d\\d-\
                                 \\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ$"
-security_CvssV2VulnAssessmentRelationship = { label.type: const.\
-security_CvssV2VulnAssessmentRelationship, label.spdxId: IRI, ~\
+security_CvssV2VulnAssessmentRelationship = { label.type =&gt; const.\
+security_CvssV2VulnAssessmentRelationship, label.spdxId =&gt; IRI, ~\
                     security_CvssV2VulnAssessmentRelationship_props }
 security_CvssV2VulnAssessmentRelationship_derived = \
            security_CvssV2VulnAssessmentRelationship / BlankNodeOrIRI
 security_CvssV2VulnAssessmentRelationship_props = { ~\
-security_VulnAssessmentRelationship_props, label.security_score: \
+security_VulnAssessmentRelationship_props, label.security_score =&gt; \
 prop_security_CvssV2VulnAssessmentRelationship_security_score, label\
-.security_vectorString: \
+.security_vectorString =&gt; \
 prop_security_CvssV2VulnAssessmentRelationship_security_vectorStrin\
                                                                   g }
 prop_security_CvssV2VulnAssessmentRelationship_security_score = \
                         float / tstr .regexp "^-?[0-9]+(\\.[0-9]*)?$"
 prop_security_CvssV2VulnAssessmentRelationship_security_vectorStrin\
                                                              g = tstr
-security_CvssV3VulnAssessmentRelationship = { label.type: const.\
-security_CvssV3VulnAssessmentRelationship, label.spdxId: IRI, ~\
+security_CvssV3VulnAssessmentRelationship = { label.type =&gt; const.\
+security_CvssV3VulnAssessmentRelationship, label.spdxId =&gt; IRI, ~\
                     security_CvssV3VulnAssessmentRelationship_props }
 security_CvssV3VulnAssessmentRelationship_derived = \
            security_CvssV3VulnAssessmentRelationship / BlankNodeOrIRI
 security_CvssV3VulnAssessmentRelationship_props = { ~\
-security_VulnAssessmentRelationship_props, label.security_score: \
+security_VulnAssessmentRelationship_props, label.security_score =&gt; \
 prop_security_CvssV3VulnAssessmentRelationship_security_score, label\
-.security_severity: \
+.security_severity =&gt; \
 prop_security_CvssV3VulnAssessmentRelationship_security_severity, \
-label.security_vectorString: \
+label.security_vectorString =&gt; \
 prop_security_CvssV3VulnAssessmentRelationship_security_vectorStrin\
                                                                   g }
 prop_security_CvssV3VulnAssessmentRelationship_security_score = \
@@ -1477,17 +1477,17 @@ prop_security_CvssV3VulnAssessmentRelationship_security_severity = \
        enum.critical / enum.high / enum.low / enum.medium / enum.none
 prop_security_CvssV3VulnAssessmentRelationship_security_vectorStrin\
                                                              g = tstr
-security_CvssV4VulnAssessmentRelationship = { label.type: const.\
-security_CvssV4VulnAssessmentRelationship, label.spdxId: IRI, ~\
+security_CvssV4VulnAssessmentRelationship = { label.type =&gt; const.\
+security_CvssV4VulnAssessmentRelationship, label.spdxId =&gt; IRI, ~\
                     security_CvssV4VulnAssessmentRelationship_props }
 security_CvssV4VulnAssessmentRelationship_derived = \
            security_CvssV4VulnAssessmentRelationship / BlankNodeOrIRI
 security_CvssV4VulnAssessmentRelationship_props = { ~\
-security_VulnAssessmentRelationship_props, label.security_score: \
+security_VulnAssessmentRelationship_props, label.security_score =&gt; \
 prop_security_CvssV4VulnAssessmentRelationship_security_score, label\
-.security_severity: \
+.security_severity =&gt; \
 prop_security_CvssV4VulnAssessmentRelationship_security_severity, \
-label.security_vectorString: \
+label.security_vectorString =&gt; \
 prop_security_CvssV4VulnAssessmentRelationship_security_vectorStrin\
                                                                   g }
 prop_security_CvssV4VulnAssessmentRelationship_security_score = \
@@ -1496,33 +1496,34 @@ prop_security_CvssV4VulnAssessmentRelationship_security_severity = \
        enum.critical / enum.high / enum.low / enum.medium / enum.none
 prop_security_CvssV4VulnAssessmentRelationship_security_vectorStrin\
                                                              g = tstr
-security_EpssVulnAssessmentRelationship = { label.type: const.\
-security_EpssVulnAssessmentRelationship, label.spdxId: IRI, ~\
+security_EpssVulnAssessmentRelationship = { label.type =&gt; const.\
+security_EpssVulnAssessmentRelationship, label.spdxId =&gt; IRI, ~\
                       security_EpssVulnAssessmentRelationship_props }
 security_EpssVulnAssessmentRelationship_derived = \
              security_EpssVulnAssessmentRelationship / BlankNodeOrIRI
 security_EpssVulnAssessmentRelationship_props = { ~\
-security_VulnAssessmentRelationship_props, label.security_percentile\
-: prop_security_EpssVulnAssessmentRelationship_security_percentile, \
-label.security_probability: \
+security_VulnAssessmentRelationship_props, label.\
+security_percentile =&gt; \
+prop_security_EpssVulnAssessmentRelationship_security_percentile, \
+label.security_probability =&gt; \
   prop_security_EpssVulnAssessmentRelationship_security_probability }
 prop_security_EpssVulnAssessmentRelationship_security_percentile = \
                         float / tstr .regexp "^-?[0-9]+(\\.[0-9]*)?$"
 prop_security_EpssVulnAssessmentRelationship_security_probability = \
                         float / tstr .regexp "^-?[0-9]+(\\.[0-9]*)?$"
-security_ExploitCatalogVulnAssessmentRelationship = { label.type: \
+security_ExploitCatalogVulnAssessmentRelationship = { label.type =&gt; \
 const.security_ExploitCatalogVulnAssessmentRelationship, label.\
-spdxId: IRI, ~\
+spdxId =&gt; IRI, ~\
             security_ExploitCatalogVulnAssessmentRelationship_props }
 security_ExploitCatalogVulnAssessmentRelationship_derived = \
    security_ExploitCatalogVulnAssessmentRelationship / BlankNodeOrIRI
 security_ExploitCatalogVulnAssessmentRelationship_props = { ~\
 security_VulnAssessmentRelationship_props, label.\
-security_catalogType: \
+security_catalogType =&gt; \
 prop_security_ExploitCatalogVulnAssessmentRelationship_security_cata\
-logType, label.security_exploited: \
+logType, label.security_exploited =&gt; \
 prop_security_ExploitCatalogVulnAssessmentRelationship_security_expl\
-oited, label.security_locator: \
+oited, label.security_locator =&gt; \
 prop_security_ExploitCatalogVulnAssessmentRelationship_security_loca\
                                                                 tor }
 prop_security_ExploitCatalogVulnAssessmentRelationship_security_cata\
@@ -1531,14 +1532,14 @@ prop_security_ExploitCatalogVulnAssessmentRelationship_security_expl\
                                                          oited = bool
 prop_security_ExploitCatalogVulnAssessmentRelationship_security_loca\
                                                          tor = anyURI
-security_SsvcVulnAssessmentRelationship = { label.type: const.\
-security_SsvcVulnAssessmentRelationship, label.spdxId: IRI, ~\
+security_SsvcVulnAssessmentRelationship = { label.type =&gt; const.\
+security_SsvcVulnAssessmentRelationship, label.spdxId =&gt; IRI, ~\
                       security_SsvcVulnAssessmentRelationship_props }
 security_SsvcVulnAssessmentRelationship_derived = \
              security_SsvcVulnAssessmentRelationship / BlankNodeOrIRI
 security_SsvcVulnAssessmentRelationship_props = { ~\
 security_VulnAssessmentRelationship_props, label.\
-security_decisionType: \
+security_decisionType =&gt; \
  prop_security_SsvcVulnAssessmentRelationship_security_decisionType }
 prop_security_SsvcVulnAssessmentRelationship_security_decisionType \
                = enum.act / enum.attend / enum.track / enum.trackStar
@@ -1550,24 +1551,25 @@ security_VexUnderInvestigationVulnAssessmentRelationship / \
                                                        BlankNodeOrIRI
 security_VexVulnAssessmentRelationship_props = { ~\
 security_VulnAssessmentRelationship_props, ?label.\
-security_statusNotes: \
+security_statusNotes =&gt; \
 prop_security_VexVulnAssessmentRelationship_security_statusNotes, ?\
-label.security_vexVersion: \
+label.security_vexVersion =&gt; \
     prop_security_VexVulnAssessmentRelationship_security_vexVersion }
 prop_security_VexVulnAssessmentRelationship_security_statusNotes = \
                                                                  tstr
 prop_security_VexVulnAssessmentRelationship_security_vexVersion = \
                                                                  tstr
-security_Vulnerability = { label.type: const.security_Vulnerability\
-                 , label.spdxId: IRI, ~security_Vulnerability_props }
+security_Vulnerability = { label.type =&gt; const.\
+security_Vulnerability, label.spdxId =&gt; IRI, ~\
+                                       security_Vulnerability_props }
 security_Vulnerability_derived = security_Vulnerability / \
                                                        BlankNodeOrIRI
 security_Vulnerability_props = { ~Artifact_props, ?label.\
-security_modifiedTime: \
+security_modifiedTime =&gt; \
 prop_security_Vulnerability_security_modifiedTime, ?label.\
-security_publishedTime: \
+security_publishedTime =&gt; \
 prop_security_Vulnerability_security_publishedTime, ?label.\
-security_withdrawnTime: \
+security_withdrawnTime =&gt; \
                  prop_security_Vulnerability_security_withdrawnTime }
 prop_security_Vulnerability_security_modifiedTime = tstr .regexp "^[\
 0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-6][0-9]:[0-6][0-9](Z|[+-\
@@ -1581,16 +1583,16 @@ prop_security_Vulnerability_security_withdrawnTime = tstr .regexp "^\
 [0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-6][0-9]:[0-6][0-9](Z|[+\
 -][0-9]{2}:[0-9]{2})$" / tstr .regexp "^\\d\\d\\d\\d-\\d\\d-\\d\\dT\\
                                                \d\\d:\\d\\d:\\d\\dZ$"
-security_VexAffectedVulnAssessmentRelationship = { label.type: const\
-.security_VexAffectedVulnAssessmentRelationship, label.spdxId: IRI, \
-              ~security_VexAffectedVulnAssessmentRelationship_props }
+security_VexAffectedVulnAssessmentRelationship = { label.type =&gt; \
+const.security_VexAffectedVulnAssessmentRelationship, label.spdxId =\
+       &gt; IRI, ~security_VexAffectedVulnAssessmentRelationship_props }
 security_VexAffectedVulnAssessmentRelationship_derived = \
       security_VexAffectedVulnAssessmentRelationship / BlankNodeOrIRI
 security_VexAffectedVulnAssessmentRelationship_props = { ~\
 security_VexVulnAssessmentRelationship_props, label.\
-security_actionStatement: \
+security_actionStatement =&gt; \
 prop_security_VexAffectedVulnAssessmentRelationship_security_actionS\
-tatement, ?label.security_actionStatementTime: \
+tatement, ?label.security_actionStatementTime =&gt; \
 prop_security_VexAffectedVulnAssessmentRelationship_security_actionS\
                                                        tatementTime }
 prop_security_VexAffectedVulnAssessmentRelationship_security_actionS\
@@ -1599,26 +1601,26 @@ prop_security_VexAffectedVulnAssessmentRelationship_security_actionS\
 tatementTime = tstr .regexp "^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0\
 -9]:[0-6][0-9]:[0-6][0-9](Z|[+-][0-9]{2}:[0-9]{2})$" / tstr .regexp \
                  "^\\d\\d\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ$"
-security_VexFixedVulnAssessmentRelationship = { label.type: const.\
-security_VexFixedVulnAssessmentRelationship, label.spdxId: IRI, ~\
+security_VexFixedVulnAssessmentRelationship = { label.type =&gt; const.\
+security_VexFixedVulnAssessmentRelationship, label.spdxId =&gt; IRI, ~\
                   security_VexFixedVulnAssessmentRelationship_props }
 security_VexFixedVulnAssessmentRelationship_derived = \
          security_VexFixedVulnAssessmentRelationship / BlankNodeOrIRI
 security_VexFixedVulnAssessmentRelationship_props = { ~\
            security_VexVulnAssessmentRelationship_props, ~AnyObject }
-security_VexNotAffectedVulnAssessmentRelationship = { label.type: \
+security_VexNotAffectedVulnAssessmentRelationship = { label.type =&gt; \
 const.security_VexNotAffectedVulnAssessmentRelationship, label.\
-spdxId: IRI, ~\
+spdxId =&gt; IRI, ~\
             security_VexNotAffectedVulnAssessmentRelationship_props }
 security_VexNotAffectedVulnAssessmentRelationship_derived = \
    security_VexNotAffectedVulnAssessmentRelationship / BlankNodeOrIRI
 security_VexNotAffectedVulnAssessmentRelationship_props = { ~\
 security_VexVulnAssessmentRelationship_props, ?label.\
-security_impactStatement: \
+security_impactStatement =&gt; \
 prop_security_VexNotAffectedVulnAssessmentRelationship_security_impa\
-ctStatement, ?label.security_impactStatementTime: \
+ctStatement, ?label.security_impactStatementTime =&gt; \
 prop_security_VexNotAffectedVulnAssessmentRelationship_security_impa\
-ctStatementTime, ?label.security_justificationType: \
+ctStatementTime, ?label.security_justificationType =&gt; \
 prop_security_VexNotAffectedVulnAssessmentRelationship_security_just\
                                                       ificationType }
 prop_security_VexNotAffectedVulnAssessmentRelationship_security_impa\
@@ -1633,8 +1635,9 @@ inlineMitigationsAlreadyExist / enum.\
 vulnerableCodeCannotBeControlledByAdversary / enum.\
        vulnerableCodeNotInExecutePath / enum.vulnerableCodeNotPresent
 security_VexUnderInvestigationVulnAssessmentRelationship = { label.\
-type: const.security_VexUnderInvestigationVulnAssessmentRelationship\
-, label.spdxId: IRI, ~\
+type =&gt; const.\
+security_VexUnderInvestigationVulnAssessmentRelationship, label.\
+spdxId =&gt; IRI, ~\
      security_VexUnderInvestigationVulnAssessmentRelationship_props }
 security_VexUnderInvestigationVulnAssessmentRelationship_derived = \
 security_VexUnderInvestigationVulnAssessmentRelationship / \
@@ -1655,18 +1658,18 @@ simplelicensing_LicenseExpression / const.\
 expandedlicensing_NoAssertionLicense / const.\
                        expandedlicensing_NoneLicense / BlankNodeOrIRI
 simplelicensing_AnyLicenseInfo_props = { ~Element_props, ~AnyObject }
-simplelicensing_LicenseExpression = { label.type: const.\
-simplelicensing_LicenseExpression, label.spdxId: IRI, ~\
+simplelicensing_LicenseExpression = { label.type =&gt; const.\
+simplelicensing_LicenseExpression, label.spdxId =&gt; IRI, ~\
                             simplelicensing_LicenseExpression_props }
 simplelicensing_LicenseExpression_derived = \
                    simplelicensing_LicenseExpression / BlankNodeOrIRI
 simplelicensing_LicenseExpression_props = { ~\
 simplelicensing_AnyLicenseInfo_props, ?label.\
-simplelicensing_customIdToUri: [ * \
+simplelicensing_customIdToUri =&gt; [ * \
 prop_simplelicensing_LicenseExpression_simplelicensing_customIdToUr\
-i ], label.simplelicensing_licenseExpression: \
+i ], label.simplelicensing_licenseExpression =&gt; \
 prop_simplelicensing_LicenseExpression_simplelicensing_licenseExpres\
-sion, ?label.simplelicensing_licenseListVersion: \
+sion, ?label.simplelicensing_licenseListVersion =&gt; \
 prop_simplelicensing_LicenseExpression_simplelicensing_licenseListVe\
                                                               rsion }
 prop_simplelicensing_LicenseExpression_simplelicensing_customIdToUr\
@@ -1678,13 +1681,13 @@ rsion = tstr .regexp "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\
 (?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\
 \\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z\
                                                            -]+)*))?$"
-simplelicensing_SimpleLicensingText = { label.type: const.\
-simplelicensing_SimpleLicensingText, label.spdxId: IRI, ~\
+simplelicensing_SimpleLicensingText = { label.type =&gt; const.\
+simplelicensing_SimpleLicensingText, label.spdxId =&gt; IRI, ~\
                           simplelicensing_SimpleLicensingText_props }
 simplelicensing_SimpleLicensingText_derived = \
                  simplelicensing_SimpleLicensingText / BlankNodeOrIRI
 simplelicensing_SimpleLicensingText_props = { ~Element_props, label.\
-simplelicensing_licenseText: \
+simplelicensing_licenseText =&gt; \
 prop_simplelicensing_SimpleLicensingText_simplelicensing_licenseTex\
                                                                   t }
 prop_simplelicensing_SimpleLicensingText_simplelicensing_licenseTex\
@@ -1696,17 +1699,17 @@ expandedlicensing_LicenseAddition_derived = \
 expandedlicensing_CustomLicenseAddition / \
             expandedlicensing_ListedLicenseException / BlankNodeOrIRI
 expandedlicensing_LicenseAddition_props = { ~Element_props, label.\
-expandedlicensing_additionText: \
+expandedlicensing_additionText =&gt; \
 prop_expandedlicensing_LicenseAddition_expandedlicensing_additionTex\
-t, ?label.expandedlicensing_isDeprecatedAdditionId: \
+t, ?label.expandedlicensing_isDeprecatedAdditionId =&gt; \
 prop_expandedlicensing_LicenseAddition_expandedlicensing_isDeprecate\
-dAdditionId, ?label.expandedlicensing_licenseXml: \
+dAdditionId, ?label.expandedlicensing_licenseXml =&gt; \
 prop_expandedlicensing_LicenseAddition_expandedlicensing_licenseXml\
-, ?label.expandedlicensing_obsoletedBy: \
+, ?label.expandedlicensing_obsoletedBy =&gt; \
 prop_expandedlicensing_LicenseAddition_expandedlicensing_obsoletedBy\
-, ?label.expandedlicensing_seeAlso: [ * \
+, ?label.expandedlicensing_seeAlso =&gt; [ * \
 prop_expandedlicensing_LicenseAddition_expandedlicensing_seeAlso ], \
-?label.expandedlicensing_standardAdditionTemplate: \
+?label.expandedlicensing_standardAdditionTemplate =&gt; \
 prop_expandedlicensing_LicenseAddition_expandedlicensing_standardAdd\
                                                       itionTemplate }
 prop_expandedlicensing_LicenseAddition_expandedlicensing_additionTex\
@@ -1721,49 +1724,49 @@ prop_expandedlicensing_LicenseAddition_expandedlicensing_seeAlso = \
                                                                anyURI
 prop_expandedlicensing_LicenseAddition_expandedlicensing_standardAdd\
                                                  itionTemplate = tstr
-expandedlicensing_ListedLicenseException = { label.type: const.\
-expandedlicensing_ListedLicenseException, label.spdxId: IRI, ~\
+expandedlicensing_ListedLicenseException = { label.type =&gt; const.\
+expandedlicensing_ListedLicenseException, label.spdxId =&gt; IRI, ~\
                      expandedlicensing_ListedLicenseException_props }
 expandedlicensing_ListedLicenseException_derived = \
             expandedlicensing_ListedLicenseException / BlankNodeOrIRI
 expandedlicensing_ListedLicenseException_props = { ~\
 expandedlicensing_LicenseAddition_props, ?label.\
-expandedlicensing_deprecatedVersion: \
+expandedlicensing_deprecatedVersion =&gt; \
 prop_expandedlicensing_ListedLicenseException_expandedlicensing_depr\
-ecatedVersion, ?label.expandedlicensing_listVersionAdded: \
+ecatedVersion, ?label.expandedlicensing_listVersionAdded =&gt; \
 prop_expandedlicensing_ListedLicenseException_expandedlicensing_list\
                                                        VersionAdded }
 prop_expandedlicensing_ListedLicenseException_expandedlicensing_depr\
                                                  ecatedVersion = tstr
 prop_expandedlicensing_ListedLicenseException_expandedlicensing_list\
                                                   VersionAdded = tstr
-expandedlicensing_ConjunctiveLicenseSet = { label.type: const.\
-expandedlicensing_ConjunctiveLicenseSet, label.spdxId: IRI, ~\
+expandedlicensing_ConjunctiveLicenseSet = { label.type =&gt; const.\
+expandedlicensing_ConjunctiveLicenseSet, label.spdxId =&gt; IRI, ~\
                       expandedlicensing_ConjunctiveLicenseSet_props }
 expandedlicensing_ConjunctiveLicenseSet_derived = \
              expandedlicensing_ConjunctiveLicenseSet / BlankNodeOrIRI
 expandedlicensing_ConjunctiveLicenseSet_props = { ~\
-simplelicensing_AnyLicenseInfo_props, label.expandedlicensing_member\
-: [ + \
+simplelicensing_AnyLicenseInfo_props, label.\
+expandedlicensing_member =&gt; [ + \
 prop_expandedlicensing_ConjunctiveLicenseSet_expandedlicensing_membe\
                                                                 r ] }
 prop_expandedlicensing_ConjunctiveLicenseSet_expandedlicensing_membe\
                            r = simplelicensing_AnyLicenseInfo_derived
-expandedlicensing_CustomLicenseAddition = { label.type: const.\
-expandedlicensing_CustomLicenseAddition, label.spdxId: IRI, ~\
+expandedlicensing_CustomLicenseAddition = { label.type =&gt; const.\
+expandedlicensing_CustomLicenseAddition, label.spdxId =&gt; IRI, ~\
                       expandedlicensing_CustomLicenseAddition_props }
 expandedlicensing_CustomLicenseAddition_derived = \
              expandedlicensing_CustomLicenseAddition / BlankNodeOrIRI
 expandedlicensing_CustomLicenseAddition_props = { ~\
                 expandedlicensing_LicenseAddition_props, ~AnyObject }
-expandedlicensing_DisjunctiveLicenseSet = { label.type: const.\
-expandedlicensing_DisjunctiveLicenseSet, label.spdxId: IRI, ~\
+expandedlicensing_DisjunctiveLicenseSet = { label.type =&gt; const.\
+expandedlicensing_DisjunctiveLicenseSet, label.spdxId =&gt; IRI, ~\
                       expandedlicensing_DisjunctiveLicenseSet_props }
 expandedlicensing_DisjunctiveLicenseSet_derived = \
              expandedlicensing_DisjunctiveLicenseSet / BlankNodeOrIRI
 expandedlicensing_DisjunctiveLicenseSet_props = { ~\
-simplelicensing_AnyLicenseInfo_props, label.expandedlicensing_member\
-: [ + \
+simplelicensing_AnyLicenseInfo_props, label.\
+expandedlicensing_member =&gt; [ + \
 prop_expandedlicensing_DisjunctiveLicenseSet_expandedlicensing_membe\
                                                                 r ] }
 prop_expandedlicensing_DisjunctiveLicenseSet_expandedlicensing_membe\
@@ -1773,8 +1776,8 @@ expandedlicensing_CustomLicense / expandedlicensing_ListedLicense / \
                    expandedlicensing_OrLaterOperator / BlankNodeOrIRI
 expandedlicensing_ExtendableLicense_props = { ~\
                    simplelicensing_AnyLicenseInfo_props, ~AnyObject }
-expandedlicensing_IndividualLicensingInfo = { label.type: const.\
-expandedlicensing_IndividualLicensingInfo, label.spdxId: IRI, ~\
+expandedlicensing_IndividualLicensingInfo = { label.type =&gt; const.\
+expandedlicensing_IndividualLicensingInfo, label.spdxId =&gt; IRI, ~\
                     expandedlicensing_IndividualLicensingInfo_props }
 expandedlicensing_IndividualLicensingInfo_derived = \
 expandedlicensing_IndividualLicensingInfo / const.\
@@ -1786,23 +1789,23 @@ expandedlicensing_License_derived = expandedlicensing_CustomLicense \
                    / expandedlicensing_ListedLicense / BlankNodeOrIRI
 expandedlicensing_License_props = { ~\
 expandedlicensing_ExtendableLicense_props, ?label.\
-expandedlicensing_isDeprecatedLicenseId: \
+expandedlicensing_isDeprecatedLicenseId =&gt; \
 prop_expandedlicensing_License_expandedlicensing_isDeprecatedLicense\
-Id, ?label.expandedlicensing_isFsfLibre: \
+Id, ?label.expandedlicensing_isFsfLibre =&gt; \
 prop_expandedlicensing_License_expandedlicensing_isFsfLibre, ?label.\
-expandedlicensing_isOsiApproved: \
+expandedlicensing_isOsiApproved =&gt; \
 prop_expandedlicensing_License_expandedlicensing_isOsiApproved, ?\
-label.expandedlicensing_licenseXml: \
+label.expandedlicensing_licenseXml =&gt; \
 prop_expandedlicensing_License_expandedlicensing_licenseXml, ?label.\
-expandedlicensing_obsoletedBy: \
+expandedlicensing_obsoletedBy =&gt; \
 prop_expandedlicensing_License_expandedlicensing_obsoletedBy, ?label\
-.expandedlicensing_seeAlso: [ * \
+.expandedlicensing_seeAlso =&gt; [ * \
 prop_expandedlicensing_License_expandedlicensing_seeAlso ], ?label.\
-expandedlicensing_standardLicenseHeader: \
+expandedlicensing_standardLicenseHeader =&gt; \
 prop_expandedlicensing_License_expandedlicensing_standardLicenseHead\
-er, ?label.expandedlicensing_standardLicenseTemplate: \
+er, ?label.expandedlicensing_standardLicenseTemplate =&gt; \
 prop_expandedlicensing_License_expandedlicensing_standardLicenseTemp\
-late, label.simplelicensing_licenseText: \
+late, label.simplelicensing_licenseText =&gt; \
          prop_expandedlicensing_License_simplelicensing_licenseText }
 prop_expandedlicensing_License_expandedlicensing_isDeprecatedLicense\
                                                             Id = bool
@@ -1816,52 +1819,52 @@ prop_expandedlicensing_License_expandedlicensing_standardLicenseHead\
 prop_expandedlicensing_License_expandedlicensing_standardLicenseTemp\
                                                           late = tstr
 prop_expandedlicensing_License_simplelicensing_licenseText = tstr
-expandedlicensing_ListedLicense = { label.type: const.\
-expandedlicensing_ListedLicense, label.spdxId: IRI, ~\
+expandedlicensing_ListedLicense = { label.type =&gt; const.\
+expandedlicensing_ListedLicense, label.spdxId =&gt; IRI, ~\
                               expandedlicensing_ListedLicense_props }
 expandedlicensing_ListedLicense_derived = \
                      expandedlicensing_ListedLicense / BlankNodeOrIRI
 expandedlicensing_ListedLicense_props = { ~\
 expandedlicensing_License_props, ?label.\
-expandedlicensing_deprecatedVersion: \
+expandedlicensing_deprecatedVersion =&gt; \
 prop_expandedlicensing_ListedLicense_expandedlicensing_deprecatedVer\
-sion, ?label.expandedlicensing_listVersionAdded: \
+sion, ?label.expandedlicensing_listVersionAdded =&gt; \
 prop_expandedlicensing_ListedLicense_expandedlicensing_listVersionAd\
                                                                 ded }
 prop_expandedlicensing_ListedLicense_expandedlicensing_deprecatedVer\
                                                           sion = tstr
 prop_expandedlicensing_ListedLicense_expandedlicensing_listVersionAd\
                                                            ded = tstr
-expandedlicensing_OrLaterOperator = { label.type: const.\
-expandedlicensing_OrLaterOperator, label.spdxId: IRI, ~\
+expandedlicensing_OrLaterOperator = { label.type =&gt; const.\
+expandedlicensing_OrLaterOperator, label.spdxId =&gt; IRI, ~\
                             expandedlicensing_OrLaterOperator_props }
 expandedlicensing_OrLaterOperator_derived = \
                    expandedlicensing_OrLaterOperator / BlankNodeOrIRI
 expandedlicensing_OrLaterOperator_props = { ~\
 expandedlicensing_ExtendableLicense_props, label.\
-expandedlicensing_subjectLicense: \
+expandedlicensing_subjectLicense =&gt; \
 prop_expandedlicensing_OrLaterOperator_expandedlicensing_subjectLice\
                                                                 nse }
 prop_expandedlicensing_OrLaterOperator_expandedlicensing_subjectLice\
                               nse = expandedlicensing_License_derived
-expandedlicensing_WithAdditionOperator = { label.type: const.\
-expandedlicensing_WithAdditionOperator, label.spdxId: IRI, ~\
+expandedlicensing_WithAdditionOperator = { label.type =&gt; const.\
+expandedlicensing_WithAdditionOperator, label.spdxId =&gt; IRI, ~\
                        expandedlicensing_WithAdditionOperator_props }
 expandedlicensing_WithAdditionOperator_derived = \
               expandedlicensing_WithAdditionOperator / BlankNodeOrIRI
 expandedlicensing_WithAdditionOperator_props = { ~\
 simplelicensing_AnyLicenseInfo_props, label.\
-expandedlicensing_subjectAddition: \
+expandedlicensing_subjectAddition =&gt; \
 prop_expandedlicensing_WithAdditionOperator_expandedlicensing_subjec\
-tAddition, label.expandedlicensing_subjectExtendableLicense: \
+tAddition, label.expandedlicensing_subjectExtendableLicense =&gt; \
 prop_expandedlicensing_WithAdditionOperator_expandedlicensing_subjec\
                                                  tExtendableLicense }
 prop_expandedlicensing_WithAdditionOperator_expandedlicensing_subjec\
                 tAddition = expandedlicensing_LicenseAddition_derived
 prop_expandedlicensing_WithAdditionOperator_expandedlicensing_subjec\
      tExtendableLicense = expandedlicensing_ExtendableLicense_derived
-expandedlicensing_CustomLicense = { label.type: const.\
-expandedlicensing_CustomLicense, label.spdxId: IRI, ~\
+expandedlicensing_CustomLicense = { label.type =&gt; const.\
+expandedlicensing_CustomLicense, label.spdxId =&gt; IRI, ~\
                               expandedlicensing_CustomLicense_props }
 expandedlicensing_CustomLicense_derived = \
                      expandedlicensing_CustomLicense / BlankNodeOrIRI
@@ -1870,8 +1873,8 @@ expandedlicensing_CustomLicense_props = { ~\
 
 ; Dataset Profile
 
-dataset_ConfidentialityLevelType = { label.type: const.\
-dataset_ConfidentialityLevelType, ?label.@id: BlankNodeOrIRI, ~\
+dataset_ConfidentialityLevelType = { label.type =&gt; const.\
+dataset_ConfidentialityLevelType, ?label.@id =&gt; BlankNodeOrIRI, ~\
                              dataset_ConfidentialityLevelType_props }
 dataset_ConfidentialityLevelType_derived = \
 dataset_ConfidentialityLevelType / const.\
@@ -1880,8 +1883,8 @@ spdx_Dataset_ConfidentialityLevelType_clear / const.\
 spdx_Dataset_ConfidentialityLevelType_green / const.\
            spdx_Dataset_ConfidentialityLevelType_red / BlankNodeOrIRI
 dataset_ConfidentialityLevelType_props = { ~SHACLClass, ~AnyObject }
-dataset_DatasetAvailabilityType = { label.type: const.\
-dataset_DatasetAvailabilityType, ?label.@id: BlankNodeOrIRI, ~\
+dataset_DatasetAvailabilityType = { label.type =&gt; const.\
+dataset_DatasetAvailabilityType, ?label.@id =&gt; BlankNodeOrIRI, ~\
                               dataset_DatasetAvailabilityType_props }
 dataset_DatasetAvailabilityType_derived = \
 dataset_DatasetAvailabilityType / const.\
@@ -1891,8 +1894,8 @@ spdx_Dataset_DatasetAvailabilityType_query / const.\
 spdx_Dataset_DatasetAvailabilityType_registration / const.\
  spdx_Dataset_DatasetAvailabilityType_scrapingScript / BlankNodeOrIRI
 dataset_DatasetAvailabilityType_props = { ~SHACLClass, ~AnyObject }
-dataset_DatasetType = { label.type: const.dataset_DatasetType, ?\
-              label.@id: BlankNodeOrIRI, ~dataset_DatasetType_props }
+dataset_DatasetType = { label.type =&gt; const.dataset_DatasetType, ?\
+            label.@id =&gt; BlankNodeOrIRI, ~dataset_DatasetType_props }
 dataset_DatasetType_derived = dataset_DatasetType / const.\
 spdx_Dataset_DatasetType_audio / const.\
 spdx_Dataset_DatasetType_categorical / const.\
@@ -1909,35 +1912,37 @@ spdx_Dataset_DatasetType_timeseries / const.\
 spdx_Dataset_DatasetType_timestamp / const.\
                       spdx_Dataset_DatasetType_video / BlankNodeOrIRI
 dataset_DatasetType_props = { ~SHACLClass, ~AnyObject }
-dataset_DatasetPackage = { label.type: const.dataset_DatasetPackage\
-                 , label.spdxId: IRI, ~dataset_DatasetPackage_props }
+dataset_DatasetPackage = { label.type =&gt; const.\
+dataset_DatasetPackage, label.spdxId =&gt; IRI, ~\
+                                       dataset_DatasetPackage_props }
 dataset_DatasetPackage_derived = dataset_DatasetPackage / \
                                                        BlankNodeOrIRI
 dataset_DatasetPackage_props = { ~software_Package_props, ?label.\
-dataset_anonymizationMethodUsed: [ * \
+dataset_anonymizationMethodUsed =&gt; [ * \
 prop_dataset_DatasetPackage_dataset_anonymizationMethodUsed ], ?\
-label.dataset_confidentialityLevel: \
+label.dataset_confidentialityLevel =&gt; \
 prop_dataset_DatasetPackage_dataset_confidentialityLevel, ?label.\
-dataset_dataCollectionProcess: \
+dataset_dataCollectionProcess =&gt; \
 prop_dataset_DatasetPackage_dataset_dataCollectionProcess, ?label.\
-dataset_dataPreprocessing: [ * \
+dataset_dataPreprocessing =&gt; [ * \
 prop_dataset_DatasetPackage_dataset_dataPreprocessing ], ?label.\
-dataset_datasetAvailability: \
+dataset_datasetAvailability =&gt; \
 prop_dataset_DatasetPackage_dataset_datasetAvailability, ?label.\
-dataset_datasetNoise: \
+dataset_datasetNoise =&gt; \
 prop_dataset_DatasetPackage_dataset_datasetNoise, ?label.\
-dataset_datasetSize: prop_dataset_DatasetPackage_dataset_datasetSize\
-, label.dataset_datasetType: [ + \
+dataset_datasetSize =&gt; \
+prop_dataset_DatasetPackage_dataset_datasetSize, label.\
+dataset_datasetType =&gt; [ + \
 prop_dataset_DatasetPackage_dataset_datasetType ], ?label.\
-dataset_datasetUpdateMechanism: \
+dataset_datasetUpdateMechanism =&gt; \
 prop_dataset_DatasetPackage_dataset_datasetUpdateMechanism, ?label.\
-dataset_hasSensitivePersonalInformation: \
+dataset_hasSensitivePersonalInformation =&gt; \
 prop_dataset_DatasetPackage_dataset_hasSensitivePersonalInformation\
-, ?label.dataset_intendedUse: \
+, ?label.dataset_intendedUse =&gt; \
 prop_dataset_DatasetPackage_dataset_intendedUse, ?label.\
-dataset_knownBias: [ * \
+dataset_knownBias =&gt; [ * \
 prop_dataset_DatasetPackage_dataset_knownBias ], ?label.\
-   dataset_sensor: [ * prop_dataset_DatasetPackage_dataset_sensor ] }
+ dataset_sensor =&gt; [ * prop_dataset_DatasetPackage_dataset_sensor ] }
 prop_dataset_DatasetPackage_dataset_anonymizationMethodUsed = tstr
 prop_dataset_DatasetPackage_dataset_confidentialityLevel = enum.\
                            amber / enum.clear / enum.green / enum.red
@@ -1961,15 +1966,15 @@ prop_dataset_DatasetPackage_dataset_sensor = DictionaryEntry_derived
 
 ; AI Profile
 
-ai_EnergyConsumption = { label.type: const.ai_EnergyConsumption, ?\
-             label.@id: BlankNodeOrIRI, ~ai_EnergyConsumption_props }
+ai_EnergyConsumption = { label.type =&gt; const.ai_EnergyConsumption, ?\
+           label.@id =&gt; BlankNodeOrIRI, ~ai_EnergyConsumption_props }
 ai_EnergyConsumption_derived = ai_EnergyConsumption / BlankNodeOrIRI
 ai_EnergyConsumption_props = { ~SHACLClass, ?label.\
-ai_finetuningEnergyConsumption: [ * \
+ai_finetuningEnergyConsumption =&gt; [ * \
 prop_ai_EnergyConsumption_ai_finetuningEnergyConsumption ], ?label.\
-ai_inferenceEnergyConsumption: [ * \
+ai_inferenceEnergyConsumption =&gt; [ * \
 prop_ai_EnergyConsumption_ai_inferenceEnergyConsumption ], ?label.\
-ai_trainingEnergyConsumption: [ * \
+ai_trainingEnergyConsumption =&gt; [ * \
            prop_ai_EnergyConsumption_ai_trainingEnergyConsumption ] }
 prop_ai_EnergyConsumption_ai_finetuningEnergyConsumption = \
                               ai_EnergyConsumptionDescription_derived
@@ -1977,28 +1982,28 @@ prop_ai_EnergyConsumption_ai_inferenceEnergyConsumption = \
                               ai_EnergyConsumptionDescription_derived
 prop_ai_EnergyConsumption_ai_trainingEnergyConsumption = \
                               ai_EnergyConsumptionDescription_derived
-ai_EnergyConsumptionDescription = { label.type: const.\
-ai_EnergyConsumptionDescription, ?label.@id: BlankNodeOrIRI, ~\
+ai_EnergyConsumptionDescription = { label.type =&gt; const.\
+ai_EnergyConsumptionDescription, ?label.@id =&gt; BlankNodeOrIRI, ~\
                               ai_EnergyConsumptionDescription_props }
 ai_EnergyConsumptionDescription_derived = \
                      ai_EnergyConsumptionDescription / BlankNodeOrIRI
 ai_EnergyConsumptionDescription_props = { ~SHACLClass, label.\
-ai_energyQuantity: \
+ai_energyQuantity =&gt; \
 prop_ai_EnergyConsumptionDescription_ai_energyQuantity, label.\
-  ai_energyUnit: prop_ai_EnergyConsumptionDescription_ai_energyUnit }
+ai_energyUnit =&gt; prop_ai_EnergyConsumptionDescription_ai_energyUnit }
 prop_ai_EnergyConsumptionDescription_ai_energyQuantity = float / \
                                 tstr .regexp "^-?[0-9]+(\\.[0-9]*)?$"
 prop_ai_EnergyConsumptionDescription_ai_energyUnit = enum.\
                            kilowattHour / enum.megajoule / enum.other
-ai_EnergyUnitType = { label.type: const.ai_EnergyUnitType, ?label.@\
-                       id: BlankNodeOrIRI, ~ai_EnergyUnitType_props }
+ai_EnergyUnitType = { label.type =&gt; const.ai_EnergyUnitType, ?label.\
+                    @id =&gt; BlankNodeOrIRI, ~ai_EnergyUnitType_props }
 ai_EnergyUnitType_derived = ai_EnergyUnitType / const.\
 spdx_AI_EnergyUnitType_kilowattHour / const.\
 spdx_AI_EnergyUnitType_megajoule / const.\
                         spdx_AI_EnergyUnitType_other / BlankNodeOrIRI
 ai_EnergyUnitType_props = { ~SHACLClass, ~AnyObject }
-ai_SafetyRiskAssessmentType = { label.type: const.\
-ai_SafetyRiskAssessmentType, ?label.@id: BlankNodeOrIRI, ~\
+ai_SafetyRiskAssessmentType = { label.type =&gt; const.\
+ai_SafetyRiskAssessmentType, ?label.@id =&gt; BlankNodeOrIRI, ~\
                                   ai_SafetyRiskAssessmentType_props }
 ai_SafetyRiskAssessmentType_derived = ai_SafetyRiskAssessmentType / \
 const.spdx_AI_SafetyRiskAssessmentType_high / const.\
@@ -2006,30 +2011,30 @@ spdx_AI_SafetyRiskAssessmentType_low / const.\
 spdx_AI_SafetyRiskAssessmentType_medium / const.\
             spdx_AI_SafetyRiskAssessmentType_serious / BlankNodeOrIRI
 ai_SafetyRiskAssessmentType_props = { ~SHACLClass, ~AnyObject }
-ai_AIPackage = { label.type: const.ai_AIPackage, label.spdxId: IRI, \
-                                                ~ai_AIPackage_props }
+ai_AIPackage = { label.type =&gt; const.ai_AIPackage, label.spdxId =&gt; \
+                                           IRI, ~ai_AIPackage_props }
 ai_AIPackage_derived = ai_AIPackage / BlankNodeOrIRI
 ai_AIPackage_props = { ~software_Package_props, ?label.\
-ai_autonomyType: prop_ai_AIPackage_ai_autonomyType, ?label.ai_domain\
-: [ * prop_ai_AIPackage_ai_domain ], ?label.ai_energyConsumption: \
-prop_ai_AIPackage_ai_energyConsumption, ?label.ai_hyperparameter: [ \
-* prop_ai_AIPackage_ai_hyperparameter ], ?label.\
-ai_informationAboutApplication: \
+ai_autonomyType =&gt; prop_ai_AIPackage_ai_autonomyType, ?label.\
+ai_domain =&gt; [ * prop_ai_AIPackage_ai_domain ], ?label.\
+ai_energyConsumption =&gt; prop_ai_AIPackage_ai_energyConsumption, ?\
+label.ai_hyperparameter =&gt; [ * prop_ai_AIPackage_ai_hyperparameter ]\
+, ?label.ai_informationAboutApplication =&gt; \
 prop_ai_AIPackage_ai_informationAboutApplication, ?label.\
-ai_informationAboutTraining: \
-prop_ai_AIPackage_ai_informationAboutTraining, ?label.ai_limitation\
-: prop_ai_AIPackage_ai_limitation, ?label.ai_metric: [ * \
-prop_ai_AIPackage_ai_metric ], ?label.ai_metricDecisionThreshold: [ \
-* prop_ai_AIPackage_ai_metricDecisionThreshold ], ?label.\
-ai_modelDataPreprocessing: [ * \
+ai_informationAboutTraining =&gt; \
+prop_ai_AIPackage_ai_informationAboutTraining, ?label.ai_limitation \
+=&gt; prop_ai_AIPackage_ai_limitation, ?label.ai_metric =&gt; [ * \
+prop_ai_AIPackage_ai_metric ], ?label.ai_metricDecisionThreshold =&gt; \
+[ * prop_ai_AIPackage_ai_metricDecisionThreshold ], ?label.\
+ai_modelDataPreprocessing =&gt; [ * \
 prop_ai_AIPackage_ai_modelDataPreprocessing ], ?label.\
-ai_modelExplainability: [ * \
+ai_modelExplainability =&gt; [ * \
 prop_ai_AIPackage_ai_modelExplainability ], ?label.\
-ai_safetyRiskAssessment: prop_ai_AIPackage_ai_safetyRiskAssessment, \
-?label.ai_standardCompliance: [ * \
-prop_ai_AIPackage_ai_standardCompliance ], ?label.ai_typeOfModel: [ \
-* prop_ai_AIPackage_ai_typeOfModel ], ?label.\
-ai_useSensitivePersonalInformation: \
+ai_safetyRiskAssessment =&gt; prop_ai_AIPackage_ai_safetyRiskAssessment\
+, ?label.ai_standardCompliance =&gt; [ * \
+prop_ai_AIPackage_ai_standardCompliance ], ?label.ai_typeOfModel =&gt; \
+[ * prop_ai_AIPackage_ai_typeOfModel ], ?label.\
+ai_useSensitivePersonalInformation =&gt; \
                prop_ai_AIPackage_ai_useSensitivePersonalInformation }
 prop_ai_AIPackage_ai_autonomyType = enum.no / enum.noAssertion / \
                                                              enum.yes
@@ -2053,20 +2058,21 @@ prop_ai_AIPackage_ai_useSensitivePersonalInformation = enum.no / \
 
 ; Build Profile
 
-build_Build = { label.type: const.build_Build, label.spdxId: IRI, ~\
-                                                  build_Build_props }
+build_Build = { label.type =&gt; const.build_Build, label.spdxId =&gt; IRI\
+                                               , ~build_Build_props }
 build_Build_derived = build_Build / BlankNodeOrIRI
-build_Build_props = { ~Element_props, ?label.build_buildEndTime: \
-prop_build_Build_build_buildEndTime, ?label.build_buildId: \
-prop_build_Build_build_buildId, ?label.build_buildStartTime: \
-prop_build_Build_build_buildStartTime, label.build_buildType: \
-prop_build_Build_build_buildType, ?label.build_configSourceDigest: \
-[ * prop_build_Build_build_configSourceDigest ], ?label.\
-build_configSourceEntrypoint: [ * \
+build_Build_props = { ~Element_props, ?label.build_buildEndTime =&gt; \
+prop_build_Build_build_buildEndTime, ?label.build_buildId =&gt; \
+prop_build_Build_build_buildId, ?label.build_buildStartTime =&gt; \
+prop_build_Build_build_buildStartTime, label.build_buildType =&gt; \
+prop_build_Build_build_buildType, ?label.build_configSourceDigest =\
+&gt; [ * prop_build_Build_build_configSourceDigest ], ?label.\
+build_configSourceEntrypoint =&gt; [ * \
 prop_build_Build_build_configSourceEntrypoint ], ?label.\
-build_configSourceUri: [ * prop_build_Build_build_configSourceUri ]\
-, ?label.build_environment: [ * prop_build_Build_build_environment ]\
-   , ?label.build_parameter: [ * prop_build_Build_build_parameter ] }
+build_configSourceUri =&gt; [ * prop_build_Build_build_configSourceUri \
+], ?label.build_environment =&gt; [ * \
+prop_build_Build_build_environment ], ?label.build_parameter =&gt; [ * \
+                                 prop_build_Build_build_parameter ] }
 prop_build_Build_build_buildEndTime = tstr .regexp "^[0-9]{4}-[0-1][\
 0-9]-[0-3][0-9]T[0-2][0-9]:[0-6][0-9]:[0-6][0-9](Z|[+-][0-9]{2}:[0-9\
 ]{2})$" / tstr .regexp "^\\d\\d\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\\
@@ -2085,50 +2091,51 @@ prop_build_Build_build_parameter = DictionaryEntry_derived
 
 ; Extension Profile
 
-extension_CdxPropertyEntry = { label.type: const.\
-extension_CdxPropertyEntry, ?label.@id: BlankNodeOrIRI, ~\
+extension_CdxPropertyEntry = { label.type =&gt; const.\
+extension_CdxPropertyEntry, ?label.@id =&gt; BlankNodeOrIRI, ~\
                                    extension_CdxPropertyEntry_props }
 extension_CdxPropertyEntry_derived = extension_CdxPropertyEntry / \
                                                        BlankNodeOrIRI
 extension_CdxPropertyEntry_props = { ~SHACLClass, label.\
-extension_cdxPropName: \
+extension_cdxPropName =&gt; \
 prop_extension_CdxPropertyEntry_extension_cdxPropName, ?label.\
-extension_cdxPropValue: \
+extension_cdxPropValue =&gt; \
              prop_extension_CdxPropertyEntry_extension_cdxPropValue }
 prop_extension_CdxPropertyEntry_extension_cdxPropName = tstr
 prop_extension_CdxPropertyEntry_extension_cdxPropValue = tstr
-extension_Extension = { label.type: { ~IRI,  }, ?label.@id: \
+extension_Extension = { label.type =&gt; { ~IRI,  }, ?label.@id =&gt; \
                          BlankNodeOrIRI, ~extension_Extension_props }
 extension_Extension_derived = extension_CdxPropertiesExtension / \
                            extension_Extension_props / BlankNodeOrIRI
 extension_Extension_props = { ~SHACLClass, ~AnyObject }
-extension_CdxPropertiesExtension = { label.type: const.\
-extension_CdxPropertiesExtension, ?label.@id: BlankNodeOrIRI, ~\
+extension_CdxPropertiesExtension = { label.type =&gt; const.\
+extension_CdxPropertiesExtension, ?label.@id =&gt; BlankNodeOrIRI, ~\
                              extension_CdxPropertiesExtension_props }
 extension_CdxPropertiesExtension_derived = \
                     extension_CdxPropertiesExtension / BlankNodeOrIRI
 extension_CdxPropertiesExtension_props = { ~\
-extension_Extension_props, label.extension_cdxProperty: [ + \
+extension_Extension_props, label.extension_cdxProperty =&gt; [ + \
       prop_extension_CdxPropertiesExtension_extension_cdxProperty ] }
 prop_extension_CdxPropertiesExtension_extension_cdxProperty = \
                                    extension_CdxPropertyEntry_derived
 
 ; Core Profile
 
-AnnotationType = { label.type: const.AnnotationType, ?label.@id: \
-                              BlankNodeOrIRI, ~AnnotationType_props }
+AnnotationType = { label.type =&gt; const.AnnotationType, ?label.@id =\
+                            &gt; BlankNodeOrIRI, ~AnnotationType_props }
 AnnotationType_derived = AnnotationType / const.\
 spdx_Core_AnnotationType_other / const.\
                      spdx_Core_AnnotationType_review / BlankNodeOrIRI
 AnnotationType_props = { ~SHACLClass, ~AnyObject }
-CreationInfo = { label.type: const.CreationInfo, ?label.@id: \
+CreationInfo = { label.type =&gt; const.CreationInfo, ?label.@id =&gt; \
                                 BlankNodeOrIRI, ~CreationInfo_props }
 CreationInfo_derived = CreationInfo / BlankNodeOrIRI
-CreationInfo_props = { ~SHACLClass, ?label.comment: \
-prop_CreationInfo_comment, label.created: prop_CreationInfo_created\
-, label.createdBy: [ + prop_CreationInfo_createdBy ], ?label.\
-createdUsing: [ * prop_CreationInfo_createdUsing ], label.\
-                         specVersion: prop_CreationInfo_specVersion }
+CreationInfo_props = { ~SHACLClass, ?label.comment =&gt; \
+prop_CreationInfo_comment, label.created =&gt; \
+prop_CreationInfo_created, label.createdBy =&gt; [ + \
+prop_CreationInfo_createdBy ], ?label.createdUsing =&gt; [ * \
+prop_CreationInfo_createdUsing ], label.specVersion =&gt; \
+                                      prop_CreationInfo_specVersion }
 prop_CreationInfo_comment = tstr
 prop_CreationInfo_created = tstr .regexp "^[0-9]{4}-[0-1][0-9]-[0-3]\
 [0-9]T[0-2][0-9]:[0-6][0-9]:[0-6][0-9](Z|[+-][0-9]{2}:[0-9]{2})$" / \
@@ -2139,11 +2146,12 @@ prop_CreationInfo_specVersion = tstr .regexp "^(0|[1-9]\\d*)\\.(0|[1\
 -9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-\
 ]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a\
                                    -zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$"
-DictionaryEntry = { label.type: const.DictionaryEntry, ?label.@id: \
-                             BlankNodeOrIRI, ~DictionaryEntry_props }
+DictionaryEntry = { label.type =&gt; const.DictionaryEntry, ?label.@id \
+                          =&gt; BlankNodeOrIRI, ~DictionaryEntry_props }
 DictionaryEntry_derived = DictionaryEntry / BlankNodeOrIRI
-DictionaryEntry_props = { ~SHACLClass, label.key: \
- prop_DictionaryEntry_key, ?label.value: prop_DictionaryEntry_value }
+DictionaryEntry_props = { ~SHACLClass, label.key =&gt; \
+prop_DictionaryEntry_key, ?label.value =&gt; \
+                                         prop_DictionaryEntry_value }
 prop_DictionaryEntry_key = tstr
 prop_DictionaryEntry_value = tstr
 Element_derived = ai_AIPackage / build_Build / Agent / Annotation / \
@@ -2175,13 +2183,14 @@ software_Package / software_Sbom / software_Snippet / const.\
 NoAssertionElement / const.NoneElement / const.SpdxOrganization / \
 const.expandedlicensing_NoAssertionLicense / const.\
                        expandedlicensing_NoneLicense / BlankNodeOrIRI
-Element_props = { ~SHACLClass, ?label.comment: prop_Element_comment\
-, label.creationInfo: prop_Element_creationInfo, ?label.description\
-: prop_Element_description, ?label.extension: [ * \
-prop_Element_extension ], ?label.externalIdentifier: [ * \
-prop_Element_externalIdentifier ], ?label.externalRef: [ * \
-prop_Element_externalRef ], ?label.name: prop_Element_name, ?label.\
-summary: prop_Element_summary, ?label.verifiedUsing: [ * \
+Element_props = { ~SHACLClass, ?label.comment =&gt; \
+prop_Element_comment, label.creationInfo =&gt; \
+prop_Element_creationInfo, ?label.description =&gt; \
+prop_Element_description, ?label.extension =&gt; [ * \
+prop_Element_extension ], ?label.externalIdentifier =&gt; [ * \
+prop_Element_externalIdentifier ], ?label.externalRef =&gt; [ * \
+prop_Element_externalRef ], ?label.name =&gt; prop_Element_name, ?label\
+.summary =&gt; prop_Element_summary, ?label.verifiedUsing =&gt; [ * \
                                        prop_Element_verifiedUsing ] }
 prop_Element_comment = tstr
 prop_Element_creationInfo = CreationInfo_derived
@@ -2194,24 +2203,24 @@ prop_Element_summary = tstr
 prop_Element_verifiedUsing = IntegrityMethod_derived
 ElementCollection_derived = Bom / Bundle / SpdxDocument / \
                                        software_Sbom / BlankNodeOrIRI
-ElementCollection_props = { ~Element_props, ?label.element: [ * \
-prop_ElementCollection_element ], ?label.profileConformance: [ * \
-prop_ElementCollection_profileConformance ], ?label.rootElement: [ \
-                             * prop_ElementCollection_rootElement ] }
+ElementCollection_props = { ~Element_props, ?label.element =&gt; [ * \
+prop_ElementCollection_element ], ?label.profileConformance =&gt; [ * \
+prop_ElementCollection_profileConformance ], ?label.rootElement =&gt; \
+                           [ * prop_ElementCollection_rootElement ] }
 prop_ElementCollection_element = Element_derived
 prop_ElementCollection_profileConformance = enum.ai / enum.build / \
 enum.core / enum.dataset / enum.expandedLicensing / enum.extension \
    / enum.lite / enum.security / enum.simpleLicensing / enum.software
 prop_ElementCollection_rootElement = Element_derived
-ExternalIdentifier = { label.type: const.ExternalIdentifier, ?label.\
-                     @id: BlankNodeOrIRI, ~ExternalIdentifier_props }
+ExternalIdentifier = { label.type =&gt; const.ExternalIdentifier, ?\
+             label.@id =&gt; BlankNodeOrIRI, ~ExternalIdentifier_props }
 ExternalIdentifier_derived = ExternalIdentifier / BlankNodeOrIRI
-ExternalIdentifier_props = { ~SHACLClass, ?label.comment: \
-prop_ExternalIdentifier_comment, label.externalIdentifierType: \
-prop_ExternalIdentifier_externalIdentifierType, label.identifier: \
-prop_ExternalIdentifier_identifier, ?label.identifierLocator: [ * \
-prop_ExternalIdentifier_identifierLocator ], ?label.issuingAuthority\
-                         : prop_ExternalIdentifier_issuingAuthority }
+ExternalIdentifier_props = { ~SHACLClass, ?label.comment =&gt; \
+prop_ExternalIdentifier_comment, label.externalIdentifierType =&gt; \
+prop_ExternalIdentifier_externalIdentifierType, label.identifier =&gt; \
+prop_ExternalIdentifier_identifier, ?label.identifierLocator =&gt; [ * \
+prop_ExternalIdentifier_identifierLocator ], ?label.\
+       issuingAuthority =&gt; prop_ExternalIdentifier_issuingAuthority }
 prop_ExternalIdentifier_comment = tstr
 prop_ExternalIdentifier_externalIdentifierType = enum.cpe22 / enum.\
 cpe23 / enum.cve / enum.email / enum.gitoid / enum.other / enum.\
@@ -2220,8 +2229,9 @@ packageUrl / enum.securityOther / enum.swhid / enum.swid / enum.\
 prop_ExternalIdentifier_identifier = tstr
 prop_ExternalIdentifier_identifierLocator = anyURI
 prop_ExternalIdentifier_issuingAuthority = tstr
-ExternalIdentifierType = { label.type: const.ExternalIdentifierType\
-        , ?label.@id: BlankNodeOrIRI, ~ExternalIdentifierType_props }
+ExternalIdentifierType = { label.type =&gt; const.\
+ExternalIdentifierType, ?label.@id =&gt; BlankNodeOrIRI, ~\
+                                       ExternalIdentifierType_props }
 ExternalIdentifierType_derived = ExternalIdentifierType / const.\
 spdx_Core_ExternalIdentifierType_cpe22 / const.\
 spdx_Core_ExternalIdentifierType_cpe23 / const.\
@@ -2235,25 +2245,25 @@ spdx_Core_ExternalIdentifierType_swhid / const.\
 spdx_Core_ExternalIdentifierType_swid / const.\
           spdx_Core_ExternalIdentifierType_urlScheme / BlankNodeOrIRI
 ExternalIdentifierType_props = { ~SHACLClass, ~AnyObject }
-ExternalMap = { label.type: const.ExternalMap, ?label.@id: \
+ExternalMap = { label.type =&gt; const.ExternalMap, ?label.@id =&gt; \
                                  BlankNodeOrIRI, ~ExternalMap_props }
 ExternalMap_derived = ExternalMap / BlankNodeOrIRI
-ExternalMap_props = { ~SHACLClass, ?label.definingArtifact: \
-prop_ExternalMap_definingArtifact, label.externalSpdxId: \
-prop_ExternalMap_externalSpdxId, ?label.locationHint: \
-prop_ExternalMap_locationHint, ?label.verifiedUsing: [ * \
+ExternalMap_props = { ~SHACLClass, ?label.definingArtifact =&gt; \
+prop_ExternalMap_definingArtifact, label.externalSpdxId =&gt; \
+prop_ExternalMap_externalSpdxId, ?label.locationHint =&gt; \
+prop_ExternalMap_locationHint, ?label.verifiedUsing =&gt; [ * \
                                    prop_ExternalMap_verifiedUsing ] }
 prop_ExternalMap_definingArtifact = Artifact_derived
 prop_ExternalMap_externalSpdxId = anyURI
 prop_ExternalMap_locationHint = anyURI
 prop_ExternalMap_verifiedUsing = IntegrityMethod_derived
-ExternalRef = { label.type: const.ExternalRef, ?label.@id: \
+ExternalRef = { label.type =&gt; const.ExternalRef, ?label.@id =&gt; \
                                  BlankNodeOrIRI, ~ExternalRef_props }
 ExternalRef_derived = ExternalRef / BlankNodeOrIRI
-ExternalRef_props = { ~SHACLClass, ?label.comment: \
-prop_ExternalRef_comment, ?label.contentType: \
-prop_ExternalRef_contentType, ?label.externalRefType: \
-prop_ExternalRef_externalRefType, ?label.locator: [ * \
+ExternalRef_props = { ~SHACLClass, ?label.comment =&gt; \
+prop_ExternalRef_comment, ?label.contentType =&gt; \
+prop_ExternalRef_contentType, ?label.externalRefType =&gt; \
+prop_ExternalRef_externalRefType, ?label.locator =&gt; [ * \
                                          prop_ExternalRef_locator ] }
 prop_ExternalRef_comment = tstr
 prop_ExternalRef_contentType = tstr .regexp "^[^\\/]+\\/[^\\/]+$"
@@ -2275,8 +2285,8 @@ sourceArtifact / enum.staticAnalysisReport / enum.support / enum.\
 vcs / enum.vulnerabilityDisclosureReport / enum.\
                                 vulnerabilityExploitabilityAssessment
 prop_ExternalRef_locator = tstr
-ExternalRefType = { label.type: const.ExternalRefType, ?label.@id: \
-                             BlankNodeOrIRI, ~ExternalRefType_props }
+ExternalRefType = { label.type =&gt; const.ExternalRefType, ?label.@id \
+                          =&gt; BlankNodeOrIRI, ~ExternalRefType_props }
 ExternalRefType_derived = ExternalRefType / const.\
 spdx_Core_ExternalRefType_altDownloadLocation / const.\
 spdx_Core_ExternalRefType_altWebPage / const.\
@@ -2326,7 +2336,7 @@ spdx_Core_ExternalRefType_vulnerabilityDisclosureReport / const.\
 spdx_Core_ExternalRefType_vulnerabilityExploitabilityAssessment / \
                                                        BlankNodeOrIRI
 ExternalRefType_props = { ~SHACLClass, ~AnyObject }
-HashAlgorithm = { label.type: const.HashAlgorithm, ?label.@id: \
+HashAlgorithm = { label.type =&gt; const.HashAlgorithm, ?label.@id =&gt; \
                                BlankNodeOrIRI, ~HashAlgorithm_props }
 HashAlgorithm_derived = HashAlgorithm / const.\
 spdx_Core_HashAlgorithm_adler32 / const.\
@@ -2349,18 +2359,18 @@ spdx_Core_HashAlgorithm_sha3_384 / const.\
 spdx_Core_HashAlgorithm_sha3_512 / const.\
                       spdx_Core_HashAlgorithm_sha512 / BlankNodeOrIRI
 HashAlgorithm_props = { ~SHACLClass, ~AnyObject }
-IndividualElement = { label.type: const.IndividualElement, label.\
-                              spdxId: IRI, ~IndividualElement_props }
+IndividualElement = { label.type =&gt; const.IndividualElement, label.\
+                            spdxId =&gt; IRI, ~IndividualElement_props }
 IndividualElement_derived = IndividualElement / const.\
               NoAssertionElement / const.NoneElement / BlankNodeOrIRI
 IndividualElement_props = { ~Element_props, ~AnyObject }
 IntegrityMethod_derived = Hash / PackageVerificationCode / \
                           software_ContentIdentifier / BlankNodeOrIRI
-IntegrityMethod_props = { ~SHACLClass, ?label.comment: \
+IntegrityMethod_props = { ~SHACLClass, ?label.comment =&gt; \
                                        prop_IntegrityMethod_comment }
 prop_IntegrityMethod_comment = tstr
-LifecycleScopeType = { label.type: const.LifecycleScopeType, ?label.\
-                     @id: BlankNodeOrIRI, ~LifecycleScopeType_props }
+LifecycleScopeType = { label.type =&gt; const.LifecycleScopeType, ?\
+             label.@id =&gt; BlankNodeOrIRI, ~LifecycleScopeType_props }
 LifecycleScopeType_derived = LifecycleScopeType / const.\
 spdx_Core_LifecycleScopeType_build / const.\
 spdx_Core_LifecycleScopeType_design / const.\
@@ -2369,22 +2379,23 @@ spdx_Core_LifecycleScopeType_other / const.\
 spdx_Core_LifecycleScopeType_runtime / const.\
                    spdx_Core_LifecycleScopeType_test / BlankNodeOrIRI
 LifecycleScopeType_props = { ~SHACLClass, ~AnyObject }
-NamespaceMap = { label.type: const.NamespaceMap, ?label.@id: \
+NamespaceMap = { label.type =&gt; const.NamespaceMap, ?label.@id =&gt; \
                                 BlankNodeOrIRI, ~NamespaceMap_props }
 NamespaceMap_derived = NamespaceMap / BlankNodeOrIRI
-NamespaceMap_props = { ~SHACLClass, label.namespace: \
-prop_NamespaceMap_namespace, label.prefix: prop_NamespaceMap_prefix }
+NamespaceMap_props = { ~SHACLClass, label.namespace =&gt; \
+prop_NamespaceMap_namespace, label.prefix =&gt; \
+                                           prop_NamespaceMap_prefix }
 prop_NamespaceMap_namespace = anyURI
 prop_NamespaceMap_prefix = tstr
-PackageVerificationCode = { label.type: const.\
-PackageVerificationCode, ?label.@id: BlankNodeOrIRI, ~\
+PackageVerificationCode = { label.type =&gt; const.\
+PackageVerificationCode, ?label.@id =&gt; BlankNodeOrIRI, ~\
                                       PackageVerificationCode_props }
 PackageVerificationCode_derived = PackageVerificationCode / \
                                                        BlankNodeOrIRI
 PackageVerificationCode_props = { ~IntegrityMethod_props, label.\
-algorithm: prop_PackageVerificationCode_algorithm, label.hashValue: \
-prop_PackageVerificationCode_hashValue, ?label.\
-packageVerificationCodeExcludedFile: [ * \
+algorithm =&gt; prop_PackageVerificationCode_algorithm, label.\
+hashValue =&gt; prop_PackageVerificationCode_hashValue, ?label.\
+packageVerificationCodeExcludedFile =&gt; [ * \
  prop_PackageVerificationCode_packageVerificationCodeExcludedFile ] }
 prop_PackageVerificationCode_algorithm = enum.adler32 / enum.\
 blake2b256 / enum.blake2b384 / enum.blake2b512 / enum.blake3 / enum.\
@@ -2395,23 +2406,23 @@ sha224 / enum.sha256 / enum.sha384 / enum.sha3_224 / enum.sha3_256 \
 prop_PackageVerificationCode_hashValue = tstr
 prop_PackageVerificationCode_packageVerificationCodeExcludedFile = \
                                                                  tstr
-PositiveIntegerRange = { label.type: const.PositiveIntegerRange, ?\
-             label.@id: BlankNodeOrIRI, ~PositiveIntegerRange_props }
+PositiveIntegerRange = { label.type =&gt; const.PositiveIntegerRange, ?\
+           label.@id =&gt; BlankNodeOrIRI, ~PositiveIntegerRange_props }
 PositiveIntegerRange_derived = PositiveIntegerRange / BlankNodeOrIRI
-PositiveIntegerRange_props = { ~SHACLClass, label.beginIntegerRange\
-: prop_PositiveIntegerRange_beginIntegerRange, label.endIntegerRange\
-                        : prop_PositiveIntegerRange_endIntegerRange }
+PositiveIntegerRange_props = { ~SHACLClass, label.beginIntegerRange \
+=&gt; prop_PositiveIntegerRange_beginIntegerRange, label.\
+       endIntegerRange =&gt; prop_PositiveIntegerRange_endIntegerRange }
 prop_PositiveIntegerRange_beginIntegerRange = uint .ge 1
 prop_PositiveIntegerRange_endIntegerRange = uint .ge 1
-PresenceType = { label.type: const.PresenceType, ?label.@id: \
+PresenceType = { label.type =&gt; const.PresenceType, ?label.@id =&gt; \
                                 BlankNodeOrIRI, ~PresenceType_props }
 PresenceType_derived = PresenceType / const.\
 spdx_Core_PresenceType_no / const.\
 spdx_Core_PresenceType_noAssertion / const.\
                           spdx_Core_PresenceType_yes / BlankNodeOrIRI
 PresenceType_props = { ~SHACLClass, ~AnyObject }
-ProfileIdentifierType = { label.type: const.ProfileIdentifierType, ?\
-            label.@id: BlankNodeOrIRI, ~ProfileIdentifierType_props }
+ProfileIdentifierType = { label.type =&gt; const.ProfileIdentifierType\
+       , ?label.@id =&gt; BlankNodeOrIRI, ~ProfileIdentifierType_props }
 ProfileIdentifierType_derived = ProfileIdentifierType / const.\
 spdx_Core_ProfileIdentifierType_ai / const.\
 spdx_Core_ProfileIdentifierType_build / const.\
@@ -2424,8 +2435,8 @@ spdx_Core_ProfileIdentifierType_security / const.\
 spdx_Core_ProfileIdentifierType_simpleLicensing / const.\
             spdx_Core_ProfileIdentifierType_software / BlankNodeOrIRI
 ProfileIdentifierType_props = { ~SHACLClass, ~AnyObject }
-Relationship = { label.type: const.Relationship, label.spdxId: IRI, \
-                                                ~Relationship_props }
+Relationship = { label.type =&gt; const.Relationship, label.spdxId =&gt; \
+                                           IRI, ~Relationship_props }
 Relationship_derived = LifecycleScopedRelationship / \
 security_CvssV2VulnAssessmentRelationship / \
 security_CvssV3VulnAssessmentRelationship / \
@@ -2438,11 +2449,11 @@ security_VexFixedVulnAssessmentRelationship / \
 security_VexNotAffectedVulnAssessmentRelationship / \
 security_VexUnderInvestigationVulnAssessmentRelationship / \
                                         Relationship / BlankNodeOrIRI
-Relationship_props = { ~Element_props, ?label.completeness: \
-prop_Relationship_completeness, ?label.endTime: \
-prop_Relationship_endTime, label.from: prop_Relationship_from_, \
-label.relationshipType: prop_Relationship_relationshipType, ?label.\
-startTime: prop_Relationship_startTime, label.to: [ + \
+Relationship_props = { ~Element_props, ?label.completeness =&gt; \
+prop_Relationship_completeness, ?label.endTime =&gt; \
+prop_Relationship_endTime, label.from =&gt; prop_Relationship_from_, \
+label.relationshipType =&gt; prop_Relationship_relationshipType, ?label\
+.startTime =&gt; prop_Relationship_startTime, label.to =&gt; [ + \
                                              prop_Relationship_to ] }
 prop_Relationship_completeness = enum.complete / enum.incomplete / \
                                                      enum.noAssertion
@@ -2474,16 +2485,16 @@ prop_Relationship_startTime = tstr .regexp "^[0-9]{4}-[0-1][0-9]-[0-\
 3][0-9]T[0-2][0-9]:[0-6][0-9]:[0-6][0-9](Z|[+-][0-9]{2}:[0-9]{2})$" \
   / tstr .regexp "^\\d\\d\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ$"
 prop_Relationship_to = Element_derived
-RelationshipCompleteness = { label.type: const.\
-RelationshipCompleteness, ?label.@id: BlankNodeOrIRI, ~\
+RelationshipCompleteness = { label.type =&gt; const.\
+RelationshipCompleteness, ?label.@id =&gt; BlankNodeOrIRI, ~\
                                      RelationshipCompleteness_props }
 RelationshipCompleteness_derived = RelationshipCompleteness / const.\
 spdx_Core_RelationshipCompleteness_complete / const.\
 spdx_Core_RelationshipCompleteness_incomplete / const.\
       spdx_Core_RelationshipCompleteness_noAssertion / BlankNodeOrIRI
 RelationshipCompleteness_props = { ~SHACLClass, ~AnyObject }
-RelationshipType = { label.type: const.RelationshipType, ?label.@id\
-                          : BlankNodeOrIRI, ~RelationshipType_props }
+RelationshipType = { label.type =&gt; const.RelationshipType, ?label.@\
+                      id =&gt; BlankNodeOrIRI, ~RelationshipType_props }
 RelationshipType_derived = RelationshipType / const.\
 spdx_Core_RelationshipType_affects / const.\
 spdx_Core_RelationshipType_amendedBy / const.\
@@ -2545,18 +2556,18 @@ spdx_Core_RelationshipType_trainedOn / const.\
 spdx_Core_RelationshipType_underInvestigationFor / const.\
                  spdx_Core_RelationshipType_usesTool / BlankNodeOrIRI
 RelationshipType_props = { ~SHACLClass, ~AnyObject }
-SpdxDocument = { label.type: const.SpdxDocument, label.spdxId: IRI, \
-                                                ~SpdxDocument_props }
+SpdxDocument = { label.type =&gt; const.SpdxDocument, label.spdxId =&gt; \
+                                           IRI, ~SpdxDocument_props }
 SpdxDocument_derived = SpdxDocument / BlankNodeOrIRI
-SpdxDocument_props = { ~ElementCollection_props, ?label.dataLicense\
-: prop_SpdxDocument_dataLicense, ?label.import: [ * \
-prop_SpdxDocument_import_ ], ?label.namespaceMap: [ * \
+SpdxDocument_props = { ~ElementCollection_props, ?label.dataLicense \
+=&gt; prop_SpdxDocument_dataLicense, ?label.import =&gt; [ * \
+prop_SpdxDocument_import_ ], ?label.namespaceMap =&gt; [ * \
                                    prop_SpdxDocument_namespaceMap ] }
 prop_SpdxDocument_dataLicense = \
                                simplelicensing_AnyLicenseInfo_derived
 prop_SpdxDocument_import_ = ExternalMap_derived
 prop_SpdxDocument_namespaceMap = NamespaceMap_derived
-SupportType = { label.type: const.SupportType, ?label.@id: \
+SupportType = { label.type =&gt; const.SupportType, ?label.@id =&gt; \
                                  BlankNodeOrIRI, ~SupportType_props }
 SupportType_derived = SupportType / const.\
 spdx_Core_SupportType_deployed / const.\
@@ -2567,20 +2578,21 @@ spdx_Core_SupportType_noAssertion / const.\
 spdx_Core_SupportType_noSupport / const.\
                        spdx_Core_SupportType_support / BlankNodeOrIRI
 SupportType_props = { ~SHACLClass, ~AnyObject }
-Tool = { label.type: const.Tool, label.spdxId: IRI, ~Tool_props }
+Tool = { label.type =&gt; const.Tool, label.spdxId =&gt; IRI, ~Tool_props }
 Tool_derived = Tool / BlankNodeOrIRI
 Tool_props = { ~Element_props, ~AnyObject }
-Agent = { label.type: const.Agent, label.spdxId: IRI, ~Agent_props }
+Agent = { label.type =&gt; const.Agent, label.spdxId =&gt; IRI, ~\
+                                                        Agent_props }
 Agent_derived = Organization / Person / SoftwareAgent / Agent / \
                               const.SpdxOrganization / BlankNodeOrIRI
 Agent_props = { ~Element_props, ~AnyObject }
-Annotation = { label.type: const.Annotation, label.spdxId: IRI, ~\
-                                                   Annotation_props }
+Annotation = { label.type =&gt; const.Annotation, label.spdxId =&gt; IRI, \
+                                                  ~Annotation_props }
 Annotation_derived = Annotation / BlankNodeOrIRI
-Annotation_props = { ~Element_props, label.annotationType: \
-prop_Annotation_annotationType, ?label.contentType: \
-prop_Annotation_contentType, ?label.statement: \
-  prop_Annotation_statement, label.subject: prop_Annotation_subject }
+Annotation_props = { ~Element_props, label.annotationType =&gt; \
+prop_Annotation_annotationType, ?label.contentType =&gt; \
+prop_Annotation_contentType, ?label.statement =&gt; \
+prop_Annotation_statement, label.subject =&gt; prop_Annotation_subject }
 prop_Annotation_annotationType = enum.other / enum.review
 prop_Annotation_contentType = tstr .regexp "^[^\\/]+\\/[^\\/]+$"
 prop_Annotation_statement = tstr
@@ -2588,13 +2600,13 @@ prop_Annotation_subject = Element_derived
 Artifact_derived = ai_AIPackage / dataset_DatasetPackage / \
 security_Vulnerability / software_File / software_Package / \
                                     software_Snippet / BlankNodeOrIRI
-Artifact_props = { ~Element_props, ?label.builtTime: \
-prop_Artifact_builtTime, ?label.originatedBy: [ * \
-prop_Artifact_originatedBy ], ?label.releaseTime: \
-prop_Artifact_releaseTime, ?label.standardName: [ * \
-prop_Artifact_standardName ], ?label.suppliedBy: \
-prop_Artifact_suppliedBy, ?label.supportLevel: [ * \
-prop_Artifact_supportLevel ], ?label.validUntilTime: \
+Artifact_props = { ~Element_props, ?label.builtTime =&gt; \
+prop_Artifact_builtTime, ?label.originatedBy =&gt; [ * \
+prop_Artifact_originatedBy ], ?label.releaseTime =&gt; \
+prop_Artifact_releaseTime, ?label.standardName =&gt; [ * \
+prop_Artifact_standardName ], ?label.suppliedBy =&gt; \
+prop_Artifact_suppliedBy, ?label.supportLevel =&gt; [ * \
+prop_Artifact_supportLevel ], ?label.validUntilTime =&gt; \
                                        prop_Artifact_validUntilTime }
 prop_Artifact_builtTime = tstr .regexp "^[0-9]{4}-[0-1][0-9]-[0-3][0\
 -9]T[0-2][0-9]:[0-6][0-9]:[0-6][0-9](Z|[+-][0-9]{2}:[0-9]{2})$" / \
@@ -2611,17 +2623,17 @@ prop_Artifact_supportLevel = enum.deployed / enum.development / enum\
 prop_Artifact_validUntilTime = tstr .regexp "^[0-9]{4}-[0-1][0-9]-[0\
 -3][0-9]T[0-2][0-9]:[0-6][0-9]:[0-6][0-9](Z|[+-][0-9]{2}:[0-9]{2})$\
 " / tstr .regexp "^\\d\\d\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ$"
-Bundle = { label.type: const.Bundle, label.spdxId: IRI, ~\
+Bundle = { label.type =&gt; const.Bundle, label.spdxId =&gt; IRI, ~\
                                                        Bundle_props }
 Bundle_derived = Bom / software_Sbom / Bundle / BlankNodeOrIRI
-Bundle_props = { ~ElementCollection_props, ?label.context: \
+Bundle_props = { ~ElementCollection_props, ?label.context =&gt; \
                                                 prop_Bundle_context }
 prop_Bundle_context = tstr
-Hash = { label.type: const.Hash, ?label.@id: BlankNodeOrIRI, ~\
+Hash = { label.type =&gt; const.Hash, ?label.@id =&gt; BlankNodeOrIRI, ~\
                                                          Hash_props }
 Hash_derived = Hash / BlankNodeOrIRI
-Hash_props = { ~IntegrityMethod_props, label.algorithm: \
-          prop_Hash_algorithm, label.hashValue: prop_Hash_hashValue }
+Hash_props = { ~IntegrityMethod_props, label.algorithm =&gt; \
+        prop_Hash_algorithm, label.hashValue =&gt; prop_Hash_hashValue }
 prop_Hash_algorithm = enum.adler32 / enum.blake2b256 / enum.\
 blake2b384 / enum.blake2b512 / enum.blake3 / enum.crystalsDilithium \
 / enum.crystalsKyber / enum.falcon / enum.md2 / enum.md4 / enum.md5 \
@@ -2629,36 +2641,36 @@ blake2b384 / enum.blake2b512 / enum.blake3 / enum.crystalsDilithium \
 enum.sha384 / enum.sha3_224 / enum.sha3_256 / enum.sha3_384 / enum.\
                                                sha3_512 / enum.sha512
 prop_Hash_hashValue = tstr
-LifecycleScopedRelationship = { label.type: const.\
-LifecycleScopedRelationship, label.spdxId: IRI, ~\
+LifecycleScopedRelationship = { label.type =&gt; const.\
+LifecycleScopedRelationship, label.spdxId =&gt; IRI, ~\
                                   LifecycleScopedRelationship_props }
 LifecycleScopedRelationship_derived = LifecycleScopedRelationship / \
                                                        BlankNodeOrIRI
 LifecycleScopedRelationship_props = { ~Relationship_props, ?label.\
-                      scope: prop_LifecycleScopedRelationship_scope }
+                    scope =&gt; prop_LifecycleScopedRelationship_scope }
 prop_LifecycleScopedRelationship_scope = enum.build / enum.design / \
              enum.development / enum.other / enum.runtime / enum.test
-Organization = { label.type: const.Organization, label.spdxId: IRI, \
-                                                ~Organization_props }
+Organization = { label.type =&gt; const.Organization, label.spdxId =&gt; \
+                                           IRI, ~Organization_props }
 Organization_derived = Organization / const.SpdxOrganization / \
                                                        BlankNodeOrIRI
 Organization_props = { ~Agent_props, ~AnyObject }
-Person = { label.type: const.Person, label.spdxId: IRI, ~\
+Person = { label.type =&gt; const.Person, label.spdxId =&gt; IRI, ~\
                                                        Person_props }
 Person_derived = Person / BlankNodeOrIRI
 Person_props = { ~Agent_props, ~AnyObject }
-SoftwareAgent = { label.type: const.SoftwareAgent, label.spdxId: IRI\
-                                             , ~SoftwareAgent_props }
+SoftwareAgent = { label.type =&gt; const.SoftwareAgent, label.spdxId =\
+                                        &gt; IRI, ~SoftwareAgent_props }
 SoftwareAgent_derived = SoftwareAgent / BlankNodeOrIRI
 SoftwareAgent_props = { ~Agent_props, ~AnyObject }
-Bom = { label.type: const.Bom, label.spdxId: IRI, ~Bom_props }
+Bom = { label.type =&gt; const.Bom, label.spdxId =&gt; IRI, ~Bom_props }
 Bom_derived = software_Sbom / Bom / BlankNodeOrIRI
 Bom_props = { ~Bundle_props, ~AnyObject }
 IRI = tstr .regexp "^(?!_:).+:.+"
 BlankNode = tstr .regexp "^_:.+"
 BlankNodeOrIRI = IRI / BlankNode
 anyURI = tstr
-SHACLClass = { label.type: IRI / enum.ai_EnergyConsumption / enum.\
+SHACLClass = { label.type =&gt; IRI / enum.ai_EnergyConsumption / enum.\
 ai_EnergyConsumptionDescription / enum.ai_EnergyUnitType / enum.\
 ai_SafetyRiskAssessmentType / enum.AnnotationType / enum.\
 CreationInfo / enum.DictionaryEntry / enum.ExternalIdentifier / enum\
