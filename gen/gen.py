@@ -160,8 +160,8 @@ def drop_optional_dupes(seq):
     optional = {}
     pos = 0
     for part in parts:
-        if ": " in part:
-            label, _ = part.split(": ")
+        if " => " in part:
+            label, _ = part.split(" => ")
             if label.startswith("?"):
                 optional[label[1:]] = pos
             else:
@@ -396,7 +396,7 @@ class ObjectType:
                 optionality = "?" if prop_name not in schema.get("required", []) else ""
                 interned_prop_name = LABELS.get(prop_name)
                 parts.append(
-                    f"{optionality}{interned_prop_name}: {type_class.cddl(prop_schema)}"
+                    f"{optionality}{interned_prop_name} => {type_class.cddl(prop_schema)}"
                 )
             if not parts and schema.get("unevaluatedProperties", True):
                 return "~AnyObject" if unwrap else "AnyObject"
@@ -408,7 +408,7 @@ class ObjectType:
             parts = []
             for prop_name in schema["required"]:
                 interned_prop_name = LABELS.get(prop_name)
-                parts.append(f"{interned_prop_name}: any")
+                parts.append(f"{interned_prop_name} => any")
             inner = ", ".join(parts)
             return inner if unwrap else f"{{ {inner} }}"
 
