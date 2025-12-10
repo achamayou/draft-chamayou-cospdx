@@ -154,23 +154,25 @@ ENUMS = ContiguousInternedEntries("enum", 1000)
 CONSTS = ContiguousInternedEntries("const", 2000)
 
 
-def drop_optional_dupes(seq):
+def drop_weaker_constraints(seq):
     parts = seq.split(", ")
     defined = set()
-    optional = {}
+    weaker = {}
     pos = 0
     for part in parts:
         if " => " in part:
-            label, _ = part.split(" => ")
+            label, value = part.split(" => ")
             if label.startswith("?"):
-                optional[label[1:]] = pos
+                weaker[label[1:]] = pos
+            elif value == "any":
+                weaker[label] = pos
             else:
                 defined.add(label)
         pos += 1
-    dropped_optionals = {
-        label: position for label, position in optional.items() if label in defined
+    dropped_weaker = {
+        label: position for label, position in weaker.items() if label in defined
     }
-    kept = [part for i, part in enumerate(parts) if i not in dropped_optionals.values()]
+    kept = [part for i, part in enumerate(parts) if i not in dropped_weaker.values()]
     return ", ".join(kept)
 
 
@@ -300,7 +302,7 @@ class IfThenElseType:
         if else_schema:
             assert schema["else"].keys() == {"const"}
             assert schema["else"]["const"].startswith("Not a")
-        return f"{{ {drop_optional_dupes(', '.join(parts))} }}"
+        return f"{{ {drop_weaker_constraints(', '.join(parts))} }}"
 
 
 class EnumType:
@@ -453,7 +455,7 @@ class IfThenElseObjectType:
             )
         second_part.append(else_class.cddl(schema["else"], unwrap=True))
 
-        return f"{{ {', '.join(first_part)} }} / {{ {', '.join(second_part)} }}"
+        return f"{{ {drop_weaker_constraints(', '.join(first_part))} }} / {{ {drop_weaker_constraints(', '.join(second_part))} }}"
 
 
 def find_type(schema):

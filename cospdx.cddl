@@ -1,6 +1,6 @@
 ; https://raw.githubusercontent.com/achamayou/draft-chamayou-cospdx/refs/heads/main/cospdx.cddl
 ; Entry Point
-SPDX_Document = { label.@graph => any, label.@graph => [ * AnyClass ] } / { ~AnyClass }
+SPDX_Document = { label.@graph => [ * AnyClass ] } / { ~AnyClass }
 
 ; Software Profile
 
