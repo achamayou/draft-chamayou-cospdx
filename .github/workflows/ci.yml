@@ -21,7 +21,7 @@ jobs:
           ruby-version: '3.2'
 
       - name: Install cddl gem
-        run: gem install cddl
+        run: gem install cddlc
 
       - name: Validate CDDL
         run: cddlc cospdx.cddl
