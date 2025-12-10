@@ -5,8 +5,8 @@
 Network Working Group                                        A. Chamayou
 Internet-Draft                                                 Microsoft
 Intended status: Standards Track                             H. Birkholz
-Expires: 12 June 2026                                     Fraunhofer SIT
-                                                         9 December 2025
+Expires: 13 June 2026                                     Fraunhofer SIT
+                                                        10 December 2025
 
 
             A Deterministic Compact (CBOR) Encoding for SPDX
@@ -46,7 +46,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 12 June 2026.
+   This Internet-Draft will expire on 13 June 2026.
 
 Copyright Notice
 
@@ -352,8 +352,8 @@ Table of Contents
    .security_vectorString: \
    prop_security_CvssV2VulnAssessmentRelationship_security_vectorStrin\
                                                                      g }
-   prop_security_CvssV2VulnAssessmentRelationship_security_score = int \
-                         / float / tstr .regexp "^-?[0-9]+(\\.[0-9]*)?$"
+   prop_security_CvssV2VulnAssessmentRelationship_security_score = \
+                           float / tstr .regexp "^-?[0-9]+(\\.[0-9]*)?$"
    prop_security_CvssV2VulnAssessmentRelationship_security_vectorStrin\
                                                                 g = tstr
    security_CvssV3VulnAssessmentRelationship = { label.type: const.\
@@ -369,8 +369,8 @@ Table of Contents
    label.security_vectorString: \
    prop_security_CvssV3VulnAssessmentRelationship_security_vectorStrin\
                                                                      g }
-   prop_security_CvssV3VulnAssessmentRelationship_security_score = int \
-                         / float / tstr .regexp "^-?[0-9]+(\\.[0-9]*)?$"
+   prop_security_CvssV3VulnAssessmentRelationship_security_score = \
+                           float / tstr .regexp "^-?[0-9]+(\\.[0-9]*)?$"
    prop_security_CvssV3VulnAssessmentRelationship_security_severity = \
           enum.critical / enum.high / enum.low / enum.medium / enum.none
    prop_security_CvssV3VulnAssessmentRelationship_security_vectorStrin\
@@ -388,8 +388,8 @@ Table of Contents
    label.security_vectorString: \
    prop_security_CvssV4VulnAssessmentRelationship_security_vectorStrin\
                                                                      g }
-   prop_security_CvssV4VulnAssessmentRelationship_security_score = int \
-                         / float / tstr .regexp "^-?[0-9]+(\\.[0-9]*)?$"
+   prop_security_CvssV4VulnAssessmentRelationship_security_score = \
+                           float / tstr .regexp "^-?[0-9]+(\\.[0-9]*)?$"
    prop_security_CvssV4VulnAssessmentRelationship_security_severity = \
           enum.critical / enum.high / enum.low / enum.medium / enum.none
    prop_security_CvssV4VulnAssessmentRelationship_security_vectorStrin\
@@ -405,9 +405,9 @@ Table of Contents
    label.security_probability: \
      prop_security_EpssVulnAssessmentRelationship_security_probability }
    prop_security_EpssVulnAssessmentRelationship_security_percentile = \
-                     int / float / tstr .regexp "^-?[0-9]+(\\.[0-9]*)?$"
+                           float / tstr .regexp "^-?[0-9]+(\\.[0-9]*)?$"
    prop_security_EpssVulnAssessmentRelationship_security_probability = \
-                     int / float / tstr .regexp "^-?[0-9]+(\\.[0-9]*)?$"
+                           float / tstr .regexp "^-?[0-9]+(\\.[0-9]*)?$"
    security_ExploitCatalogVulnAssessmentRelationship = { label.type: \
    const.security_ExploitCatalogVulnAssessmentRelationship, label.\
    spdxId: IRI, ~\
@@ -884,8 +884,8 @@ Table of Contents
    ai_energyQuantity: \
    prop_ai_EnergyConsumptionDescription_ai_energyQuantity, label.\
      ai_energyUnit: prop_ai_EnergyConsumptionDescription_ai_energyUnit }
-   prop_ai_EnergyConsumptionDescription_ai_energyQuantity = int / \
-                           float / tstr .regexp "^-?[0-9]+(\\.[0-9]*)?$"
+   prop_ai_EnergyConsumptionDescription_ai_energyQuantity = float / \
+                                   tstr .regexp "^-?[0-9]+(\\.[0-9]*)?$"
    prop_ai_EnergyConsumptionDescription_ai_energyUnit = enum.\
                               kilowattHour / enum.megajoule / enum.other
    ai_EnergyUnitType = { label.type: const.ai_EnergyUnitType, ?label.@\
