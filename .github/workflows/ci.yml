@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    paths:
+      - 'cospdx.cddl'
+  pull_request:
+    paths:
+      - 'cospdx.cddl'
+
+jobs:
+  validate-cddl:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+
+      - name: Install cddl gem
+        run: gem install cddl
+
+      - name: Validate CDDL
+        run: cddlc cospdx.cddl
