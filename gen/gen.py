@@ -197,10 +197,10 @@ class NumberType:
     def cddl(schema):
         assert "maximum" not in schema
         if "minimum" not in schema:
-            return "int / float"
+            return "float"
 
         if schema.get("minimum") >= 0:
-            return f"uint .ge {schema['minimum']} / float .ge {schema['minimum']}"
+            return f"float .ge {schema['minimum']}"
 
 
 class IntegerType:
