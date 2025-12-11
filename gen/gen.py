@@ -4,6 +4,7 @@ import json
 import sys
 import pathlib
 
+
 def traverse(schema):
     for key, value in schema.items():
         if isinstance(value, dict):
@@ -146,8 +147,7 @@ class ContiguousInternedLabels(ContiguousInternedEntries):
 
 
 LABELS = ContiguousInternedLabels("label", 0)
-ENUMS = ContiguousInternedEntries("enum", 1000)
-CONSTS = ContiguousInternedEntries("const", 2000)
+CONSTS = ContiguousInternedEntries("const", 1000)
 
 
 def drop_weaker_constraints(seq):
@@ -311,7 +311,7 @@ class EnumType:
         parts = []
         for enum_value in schema["enum"]:
             if isinstance(enum_value, str):
-                parts.append(ENUMS.get(enum_value))
+                parts.append(CONSTS.get(enum_value))
             else:
                 parts.append(str(enum_value))
         return " / ".join(parts)
@@ -518,10 +518,10 @@ class Grouping:
 
 if __name__ == "__main__":
     # Default to checked-in 3.0.1 schema if no path is provided
-    input_path = pathlib.Path(__file__).parent / "spdx-json-schema.json"
+    schema_path = pathlib.Path(__file__).parent / "spdx-json-schema.json"
     if len(sys.argv) == 2:
-        input_path = pathlib.Path(sys.argv[1])
-    schema = json.loads(input_path.read_text())
+        schema_path = pathlib.Path(sys.argv[1])
+    schema = json.loads(schema_path.read_text())
     unmapped = []
     toplevel = {key: value for key, value in schema.items() if not key.startswith("$")}
     print(
@@ -550,9 +550,6 @@ if __name__ == "__main__":
     print()
     print(f"; {LABELS.description()}")
     print(LABELS.definitions(grouping))
-    print()
-    print(f"; {ENUMS.description()}")
-    print(ENUMS.definitions())
     print()
     print(f"; {CONSTS.description()}")
     print(CONSTS.definitions())
