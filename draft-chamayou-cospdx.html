@@ -1050,7 +1050,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Chamayou &amp; Birkholz</td>
-<td class="center">Expires 13 June 2026</td>
+<td class="center">Expires 14 June 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1063,12 +1063,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-chamayou-cospdx-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-12-10" class="published">10 December 2025</time>
+<time datetime="2025-12-11" class="published">11 December 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-06-13">13 June 2026</time></dd>
+<dd class="expires"><time datetime="2026-06-14">14 June 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1116,7 +1116,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 13 June 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 14 June 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1218,7 +1218,7 @@ prop_software_ContentIdentifier_software_contentIdentifierType, \
 label.software_contentIdentifierValue =&gt; \
     prop_software_ContentIdentifier_software_contentIdentifierValue }
 prop_software_ContentIdentifier_software_contentIdentifierType = \
-                                             enum.gitoid / enum.swhid
+                                           const.gitoid / const.swhid
 prop_software_ContentIdentifier_software_contentIdentifierValue = \
                                                                anyURI
 software_ContentIdentifierType = { label.type =&gt; const.\
@@ -1293,28 +1293,28 @@ software_copyrightText =&gt; \
 prop_software_SoftwareArtifact_software_copyrightText, ?label.\
 software_primaryPurpose =&gt; \
              prop_software_SoftwareArtifact_software_primaryPurpose }
-prop_software_SoftwareArtifact_software_additionalPurpose = enum.\
-application / enum.archive / enum.bom / enum.configuration / enum.\
-container / enum.data / enum.device / enum.deviceDriver / enum.\
-diskImage / enum.documentation / enum.evidence / enum.executable / \
-enum.file / enum.filesystemImage / enum.firmware / enum.framework / \
-enum.install / enum.library / enum.manifest / enum.model / enum.\
-module / enum.operatingSystem / enum.other / enum.patch / enum.\
-platform / enum.requirement / enum.source / enum.specification / \
-                                                            enum.test
+prop_software_SoftwareArtifact_software_additionalPurpose = const.\
+application / const.archive / const.bom / const.configuration / \
+const.container / const.data / const.device / const.deviceDriver / \
+const.diskImage / const.documentation / const.evidence / const.\
+executable / const.file / const.filesystemImage / const.firmware / \
+const.framework / const.install / const.library / const.manifest / \
+const.model / const.module / const.operatingSystem / const.other / \
+const.patch / const.platform / const.requirement / const.source / \
+                                     const.specification / const.test
 prop_software_SoftwareArtifact_software_attributionText = tstr
 prop_software_SoftwareArtifact_software_contentIdentifier = \
                                    software_ContentIdentifier_derived
 prop_software_SoftwareArtifact_software_copyrightText = tstr
-prop_software_SoftwareArtifact_software_primaryPurpose = enum.\
-application / enum.archive / enum.bom / enum.configuration / enum.\
-container / enum.data / enum.device / enum.deviceDriver / enum.\
-diskImage / enum.documentation / enum.evidence / enum.executable / \
-enum.file / enum.filesystemImage / enum.firmware / enum.framework / \
-enum.install / enum.library / enum.manifest / enum.model / enum.\
-module / enum.operatingSystem / enum.other / enum.patch / enum.\
-platform / enum.requirement / enum.source / enum.specification / \
-                                                            enum.test
+prop_software_SoftwareArtifact_software_primaryPurpose = const.\
+application / const.archive / const.bom / const.configuration / \
+const.container / const.data / const.device / const.deviceDriver / \
+const.diskImage / const.documentation / const.evidence / const.\
+executable / const.file / const.filesystemImage / const.firmware / \
+const.framework / const.install / const.library / const.manifest / \
+const.model / const.module / const.operatingSystem / const.other / \
+const.patch / const.platform / const.requirement / const.source / \
+                                     const.specification / const.test
 software_File = { label.type =&gt; const.software_File, label.spdxId =\
                                         &gt; IRI, ~software_File_props }
 software_File_derived = software_File / BlankNodeOrIRI
@@ -1322,7 +1322,7 @@ software_File_props = { ~software_SoftwareArtifact_props, ?label.\
 contentType =&gt; prop_software_File_contentType, ?label.\
           software_fileKind =&gt; prop_software_File_software_fileKind }
 prop_software_File_contentType = tstr .regexp "^[^\\/]+\\/[^\\/]+$"
-prop_software_File_software_fileKind = enum.directory / enum.file
+prop_software_File_software_fileKind = const.directory / const.file
 software_Package = { label.type =&gt; const.software_Package, label.\
                              spdxId =&gt; IRI, ~software_Package_props }
 software_Package_derived = ai_AIPackage / dataset_DatasetPackage / \
@@ -1345,8 +1345,8 @@ software_Sbom = { label.type =&gt; const.software_Sbom, label.spdxId =\
 software_Sbom_derived = software_Sbom / BlankNodeOrIRI
 software_Sbom_props = { ~Bom_props, ?label.software_sbomType =&gt; [ * \
                              prop_software_Sbom_software_sbomType ] }
-prop_software_Sbom_software_sbomType = enum.analyzed / enum.build / \
-             enum.deployed / enum.design / enum.runtime / enum.source
+prop_software_Sbom_software_sbomType = const.analyzed / const.build \
+       / const.deployed / const.design / const.runtime / const.source
 software_Snippet = { label.type =&gt; const.software_Snippet, label.\
                              spdxId =&gt; IRI, ~software_Snippet_props }
 software_Snippet_derived = software_Snippet / BlankNodeOrIRI
@@ -1473,7 +1473,7 @@ prop_security_CvssV3VulnAssessmentRelationship_security_vectorStrin\
 prop_security_CvssV3VulnAssessmentRelationship_security_score = \
                         float / tstr .regexp "^-?[0-9]+(\\.[0-9]*)?$"
 prop_security_CvssV3VulnAssessmentRelationship_security_severity = \
-       enum.critical / enum.high / enum.low / enum.medium / enum.none
+  const.critical / const.high / const.low / const.medium / const.none
 prop_security_CvssV3VulnAssessmentRelationship_security_vectorStrin\
                                                              g = tstr
 security_CvssV4VulnAssessmentRelationship = { label.type =&gt; const.\
@@ -1492,7 +1492,7 @@ prop_security_CvssV4VulnAssessmentRelationship_security_vectorStrin\
 prop_security_CvssV4VulnAssessmentRelationship_security_score = \
                         float / tstr .regexp "^-?[0-9]+(\\.[0-9]*)?$"
 prop_security_CvssV4VulnAssessmentRelationship_security_severity = \
-       enum.critical / enum.high / enum.low / enum.medium / enum.none
+  const.critical / const.high / const.low / const.medium / const.none
 prop_security_CvssV4VulnAssessmentRelationship_security_vectorStrin\
                                                              g = tstr
 security_EpssVulnAssessmentRelationship = { label.type =&gt; const.\
@@ -1526,7 +1526,7 @@ oited, label.security_locator =&gt; \
 prop_security_ExploitCatalogVulnAssessmentRelationship_security_loca\
                                                                 tor }
 prop_security_ExploitCatalogVulnAssessmentRelationship_security_cata\
-                                      logType = enum.kev / enum.other
+                                    logType = const.kev / const.other
 prop_security_ExploitCatalogVulnAssessmentRelationship_security_expl\
                                                          oited = bool
 prop_security_ExploitCatalogVulnAssessmentRelationship_security_loca\
@@ -1541,7 +1541,7 @@ security_VulnAssessmentRelationship_props, label.\
 security_decisionType =&gt; \
  prop_security_SsvcVulnAssessmentRelationship_security_decisionType }
 prop_security_SsvcVulnAssessmentRelationship_security_decisionType \
-               = enum.act / enum.attend / enum.track / enum.trackStar
+           = const.act / const.attend / const.track / const.trackStar
 security_VexVulnAssessmentRelationship_derived = \
 security_VexAffectedVulnAssessmentRelationship / \
 security_VexFixedVulnAssessmentRelationship / \
@@ -1629,10 +1629,10 @@ ctStatementTime = tstr .regexp "^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2\
 ][0-9]:[0-6][0-9]:[0-6][0-9](Z|[+-][0-9]{2}:[0-9]{2})$" / tstr .\
           regexp "^\\d\\d\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ$"
 prop_security_VexNotAffectedVulnAssessmentRelationship_security_just\
-ificationType = enum.componentNotPresent / enum.\
-inlineMitigationsAlreadyExist / enum.\
-vulnerableCodeCannotBeControlledByAdversary / enum.\
-       vulnerableCodeNotInExecutePath / enum.vulnerableCodeNotPresent
+ificationType = const.componentNotPresent / const.\
+inlineMitigationsAlreadyExist / const.\
+vulnerableCodeCannotBeControlledByAdversary / const.\
+      vulnerableCodeNotInExecutePath / const.vulnerableCodeNotPresent
 security_VexUnderInvestigationVulnAssessmentRelationship = { label.\
 type =&gt; const.\
 security_VexUnderInvestigationVulnAssessmentRelationship, label.\
@@ -1943,22 +1943,23 @@ dataset_knownBias =&gt; [ * \
 prop_dataset_DatasetPackage_dataset_knownBias ], ?label.\
  dataset_sensor =&gt; [ * prop_dataset_DatasetPackage_dataset_sensor ] }
 prop_dataset_DatasetPackage_dataset_anonymizationMethodUsed = tstr
-prop_dataset_DatasetPackage_dataset_confidentialityLevel = enum.\
-                           amber / enum.clear / enum.green / enum.red
+prop_dataset_DatasetPackage_dataset_confidentialityLevel = const.\
+                        amber / const.clear / const.green / const.red
 prop_dataset_DatasetPackage_dataset_dataCollectionProcess = tstr
 prop_dataset_DatasetPackage_dataset_dataPreprocessing = tstr
-prop_dataset_DatasetPackage_dataset_datasetAvailability = enum.\
-clickthrough / enum.directDownload / enum.query / enum.registration \
-                                                / enum.scrapingScript
+prop_dataset_DatasetPackage_dataset_datasetAvailability = const.\
+clickthrough / const.directDownload / const.query / const.\
+                                  registration / const.scrapingScript
 prop_dataset_DatasetPackage_dataset_datasetNoise = tstr
 prop_dataset_DatasetPackage_dataset_datasetSize = uint
-prop_dataset_DatasetPackage_dataset_datasetType = enum.audio / enum.\
-categorical / enum.graph / enum.image / enum.noAssertion / enum.\
-numeric / enum.other / enum.sensor / enum.structured / enum.\
-syntactic / enum.text / enum.timeseries / enum.timestamp / enum.video
+prop_dataset_DatasetPackage_dataset_datasetType = const.audio / \
+const.categorical / const.graph / const.image / const.noAssertion / \
+const.numeric / const.other / const.sensor / const.structured / \
+const.syntactic / const.text / const.timeseries / const.timestamp / \
+                                                          const.video
 prop_dataset_DatasetPackage_dataset_datasetUpdateMechanism = tstr
 prop_dataset_DatasetPackage_dataset_hasSensitivePersonalInformation \
-                              = enum.no / enum.noAssertion / enum.yes
+                           = const.no / const.noAssertion / const.yes
 prop_dataset_DatasetPackage_dataset_intendedUse = tstr
 prop_dataset_DatasetPackage_dataset_knownBias = tstr
 prop_dataset_DatasetPackage_dataset_sensor = DictionaryEntry_derived
@@ -1992,8 +1993,8 @@ prop_ai_EnergyConsumptionDescription_ai_energyQuantity, label.\
 ai_energyUnit =&gt; prop_ai_EnergyConsumptionDescription_ai_energyUnit }
 prop_ai_EnergyConsumptionDescription_ai_energyQuantity = float / \
                                 tstr .regexp "^-?[0-9]+(\\.[0-9]*)?$"
-prop_ai_EnergyConsumptionDescription_ai_energyUnit = enum.\
-                           kilowattHour / enum.megajoule / enum.other
+prop_ai_EnergyConsumptionDescription_ai_energyUnit = const.\
+                         kilowattHour / const.megajoule / const.other
 ai_EnergyUnitType = { label.type =&gt; const.ai_EnergyUnitType, ?label.\
                     @id =&gt; BlankNodeOrIRI, ~ai_EnergyUnitType_props }
 ai_EnergyUnitType_derived = ai_EnergyUnitType / const.\
@@ -2035,8 +2036,8 @@ prop_ai_AIPackage_ai_standardCompliance ], ?label.ai_typeOfModel =&gt; \
 [ * prop_ai_AIPackage_ai_typeOfModel ], ?label.\
 ai_useSensitivePersonalInformation =&gt; \
                prop_ai_AIPackage_ai_useSensitivePersonalInformation }
-prop_ai_AIPackage_ai_autonomyType = enum.no / enum.noAssertion / \
-                                                             enum.yes
+prop_ai_AIPackage_ai_autonomyType = const.no / const.noAssertion / \
+                                                            const.yes
 prop_ai_AIPackage_ai_domain = tstr
 prop_ai_AIPackage_ai_energyConsumption = ai_EnergyConsumption_derived
 prop_ai_AIPackage_ai_hyperparameter = DictionaryEntry_derived
@@ -2048,12 +2049,12 @@ prop_ai_AIPackage_ai_metricDecisionThreshold = \
                                               DictionaryEntry_derived
 prop_ai_AIPackage_ai_modelDataPreprocessing = tstr
 prop_ai_AIPackage_ai_modelExplainability = tstr
-prop_ai_AIPackage_ai_safetyRiskAssessment = enum.high / enum.low / \
-                                           enum.medium / enum.serious
+prop_ai_AIPackage_ai_safetyRiskAssessment = const.high / const.low \
+                                       / const.medium / const.serious
 prop_ai_AIPackage_ai_standardCompliance = tstr
 prop_ai_AIPackage_ai_typeOfModel = tstr
-prop_ai_AIPackage_ai_useSensitivePersonalInformation = enum.no / \
-                                          enum.noAssertion / enum.yes
+prop_ai_AIPackage_ai_useSensitivePersonalInformation = const.no / \
+                                        const.noAssertion / const.yes
 
 ; Build Profile
 
@@ -2207,9 +2208,10 @@ prop_ElementCollection_element ], ?label.profileConformance =&gt; [ * \
 prop_ElementCollection_profileConformance ], ?label.rootElement =&gt; \
                            [ * prop_ElementCollection_rootElement ] }
 prop_ElementCollection_element = Element_derived
-prop_ElementCollection_profileConformance = enum.ai / enum.build / \
-enum.core / enum.dataset / enum.expandedLicensing / enum.extension \
-   / enum.lite / enum.security / enum.simpleLicensing / enum.software
+prop_ElementCollection_profileConformance = const.ai / const.build \
+/ const.core / const.dataset / const.expandedLicensing / const.\
+extension / const.lite / const.security / const.simpleLicensing / \
+                                                       const.software
 prop_ElementCollection_rootElement = Element_derived
 ExternalIdentifier = { label.type =&gt; const.ExternalIdentifier, ?\
              label.@id =&gt; BlankNodeOrIRI, ~ExternalIdentifier_props }
@@ -2221,10 +2223,10 @@ prop_ExternalIdentifier_identifier, ?label.identifierLocator =&gt; [ * \
 prop_ExternalIdentifier_identifierLocator ], ?label.\
        issuingAuthority =&gt; prop_ExternalIdentifier_issuingAuthority }
 prop_ExternalIdentifier_comment = tstr
-prop_ExternalIdentifier_externalIdentifierType = enum.cpe22 / enum.\
-cpe23 / enum.cve / enum.email / enum.gitoid / enum.other / enum.\
-packageUrl / enum.securityOther / enum.swhid / enum.swid / enum.\
-                                                            urlScheme
+prop_ExternalIdentifier_externalIdentifierType = const.cpe22 / const\
+.cpe23 / const.cve / const.email / const.gitoid / const.other / \
+const.packageUrl / const.securityOther / const.swhid / const.swid / \
+                                                      const.urlScheme
 prop_ExternalIdentifier_identifier = tstr
 prop_ExternalIdentifier_identifierLocator = anyURI
 prop_ExternalIdentifier_issuingAuthority = tstr
@@ -2266,22 +2268,23 @@ prop_ExternalRef_externalRefType, ?label.locator =&gt; [ * \
                                          prop_ExternalRef_locator ] }
 prop_ExternalRef_comment = tstr
 prop_ExternalRef_contentType = tstr .regexp "^[^\\/]+\\/[^\\/]+$"
-prop_ExternalRef_externalRefType = enum.altDownloadLocation / enum.\
-altWebPage / enum.binaryArtifact / enum.bower / enum.buildMeta / \
-enum.buildSystem / enum.certificationReport / enum.chat / enum.\
-componentAnalysisReport / enum.cwe / enum.documentation / enum.\
-dynamicAnalysisReport / enum.eolNotice / enum.\
-exportControlAssessment / enum.funding / enum.issueTracker / enum.\
-license / enum.mailingList / enum.mavenCentral / enum.metrics / enum\
-.npm / enum.nuget / enum.other / enum.privacyAssessment / enum.\
-productMetadata / enum.purchaseOrder / enum.qualityAssessmentReport \
-/ enum.releaseHistory / enum.releaseNotes / enum.riskAssessment / \
-enum.runtimeAnalysisReport / enum.secureSoftwareAttestation / enum.\
-securityAdversaryModel / enum.securityAdvisory / enum.securityFix / \
-enum.securityOther / enum.securityPenTestReport / enum.\
-securityPolicy / enum.securityThreatModel / enum.socialMedia / enum.\
-sourceArtifact / enum.staticAnalysisReport / enum.support / enum.\
-vcs / enum.vulnerabilityDisclosureReport / enum.\
+prop_ExternalRef_externalRefType = const.altDownloadLocation / const\
+.altWebPage / const.binaryArtifact / const.bower / const.buildMeta \
+/ const.buildSystem / const.certificationReport / const.chat / const\
+.componentAnalysisReport / const.cwe / const.documentation / const.\
+dynamicAnalysisReport / const.eolNotice / const.\
+exportControlAssessment / const.funding / const.issueTracker / const\
+.license / const.mailingList / const.mavenCentral / const.metrics / \
+const.npm / const.nuget / const.other / const.privacyAssessment / \
+const.productMetadata / const.purchaseOrder / const.\
+qualityAssessmentReport / const.releaseHistory / const.releaseNotes \
+/ const.riskAssessment / const.runtimeAnalysisReport / const.\
+secureSoftwareAttestation / const.securityAdversaryModel / const.\
+securityAdvisory / const.securityFix / const.securityOther / const.\
+securityPenTestReport / const.securityPolicy / const.\
+securityThreatModel / const.socialMedia / const.sourceArtifact / \
+const.staticAnalysisReport / const.support / const.vcs / const.\
+vulnerabilityDisclosureReport / const.\
                                 vulnerabilityExploitabilityAssessment
 prop_ExternalRef_locator = tstr
 ExternalRefType = { label.type =&gt; const.ExternalRefType, ?label.@id \
@@ -2396,12 +2399,12 @@ algorithm =&gt; prop_PackageVerificationCode_algorithm, label.\
 hashValue =&gt; prop_PackageVerificationCode_hashValue, ?label.\
 packageVerificationCodeExcludedFile =&gt; [ * \
  prop_PackageVerificationCode_packageVerificationCodeExcludedFile ] }
-prop_PackageVerificationCode_algorithm = enum.adler32 / enum.\
-blake2b256 / enum.blake2b384 / enum.blake2b512 / enum.blake3 / enum.\
-crystalsDilithium / enum.crystalsKyber / enum.falcon / enum.md2 / \
-enum.md4 / enum.md5 / enum.md6 / enum.other / enum.sha1 / enum.\
-sha224 / enum.sha256 / enum.sha384 / enum.sha3_224 / enum.sha3_256 \
-                        / enum.sha3_384 / enum.sha3_512 / enum.sha512
+prop_PackageVerificationCode_algorithm = const.adler32 / const.\
+blake2b256 / const.blake2b384 / const.blake2b512 / const.blake3 / \
+const.crystalsDilithium / const.crystalsKyber / const.falcon / const\
+.md2 / const.md4 / const.md5 / const.md6 / const.other / const.sha1 \
+/ const.sha224 / const.sha256 / const.sha384 / const.sha3_224 / \
+      const.sha3_256 / const.sha3_384 / const.sha3_512 / const.sha512
 prop_PackageVerificationCode_hashValue = tstr
 prop_PackageVerificationCode_packageVerificationCodeExcludedFile = \
                                                                  tstr
@@ -2454,32 +2457,32 @@ prop_Relationship_endTime, label.from =&gt; prop_Relationship_from_, \
 label.relationshipType =&gt; prop_Relationship_relationshipType, ?label\
 .startTime =&gt; prop_Relationship_startTime, label.to =&gt; [ + \
                                              prop_Relationship_to ] }
-prop_Relationship_completeness = enum.complete / enum.incomplete / \
-                                                     enum.noAssertion
+prop_Relationship_completeness = const.complete / const.incomplete \
+                                                  / const.noAssertion
 prop_Relationship_endTime = tstr .regexp "^[0-9]{4}-[0-1][0-9]-[0-3]\
 [0-9]T[0-2][0-9]:[0-6][0-9]:[0-6][0-9](Z|[+-][0-9]{2}:[0-9]{2})$" / \
     tstr .regexp "^\\d\\d\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ$"
 prop_Relationship_from_ = Element_derived
-prop_Relationship_relationshipType = enum.affects / enum.amendedBy \
-/ enum.ancestorOf / enum.availableFrom / enum.configures / enum.\
-contains / enum.coordinatedBy / enum.copiedTo / enum.delegatedTo / \
-enum.dependsOn / enum.descendantOf / enum.describes / enum.\
-doesNotAffect / enum.expandsTo / enum.exploitCreatedBy / enum.\
-fixedBy / enum.fixedIn / enum.foundBy / enum.generates / enum.\
-hasAddedFile / enum.hasAssessmentFor / enum.\
-hasAssociatedVulnerability / enum.hasConcludedLicense / enum.\
-hasDataFile / enum.hasDeclaredLicense / enum.hasDeletedFile / enum.\
-hasDependencyManifest / enum.hasDistributionArtifact / enum.\
-hasDocumentation / enum.hasDynamicLink / enum.hasEvidence / enum.\
-hasExample / enum.hasHost / enum.hasInput / enum.hasMetadata / enum.\
-hasOptionalComponent / enum.hasOptionalDependency / enum.hasOutput \
-/ enum.hasPrerequisite / enum.hasProvidedDependency / enum.\
-hasRequirement / enum.hasSpecification / enum.hasStaticLink / enum.\
-hasTest / enum.hasTestCase / enum.hasVariant / enum.invokedBy / enum\
-.modifiedBy / enum.other / enum.packagedBy / enum.patchedBy / enum.\
-publishedBy / enum.reportedBy / enum.republishedBy / enum.\
-serializedInArtifact / enum.testedOn / enum.trainedOn / enum.\
-                                underInvestigationFor / enum.usesTool
+prop_Relationship_relationshipType = const.affects / const.\
+amendedBy / const.ancestorOf / const.availableFrom / const.\
+configures / const.contains / const.coordinatedBy / const.copiedTo \
+/ const.delegatedTo / const.dependsOn / const.descendantOf / const.\
+describes / const.doesNotAffect / const.expandsTo / const.\
+exploitCreatedBy / const.fixedBy / const.fixedIn / const.foundBy / \
+const.generates / const.hasAddedFile / const.hasAssessmentFor / \
+const.hasAssociatedVulnerability / const.hasConcludedLicense / const\
+.hasDataFile / const.hasDeclaredLicense / const.hasDeletedFile / \
+const.hasDependencyManifest / const.hasDistributionArtifact / const.\
+hasDocumentation / const.hasDynamicLink / const.hasEvidence / const.\
+hasExample / const.hasHost / const.hasInput / const.hasMetadata / \
+const.hasOptionalComponent / const.hasOptionalDependency / const.\
+hasOutput / const.hasPrerequisite / const.hasProvidedDependency / \
+const.hasRequirement / const.hasSpecification / const.hasStaticLink \
+/ const.hasTest / const.hasTestCase / const.hasVariant / const.\
+invokedBy / const.modifiedBy / const.other / const.packagedBy / \
+const.patchedBy / const.publishedBy / const.reportedBy / const.\
+republishedBy / const.serializedInArtifact / const.testedOn / const.\
+             trainedOn / const.underInvestigationFor / const.usesTool
 prop_Relationship_startTime = tstr .regexp "^[0-9]{4}-[0-1][0-9]-[0-\
 3][0-9]T[0-2][0-9]:[0-6][0-9]:[0-6][0-9](Z|[+-][0-9]{2}:[0-9]{2})$" \
   / tstr .regexp "^\\d\\d\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ$"
@@ -2592,7 +2595,7 @@ Annotation_props = { ~Element_props, label.annotationType =&gt; \
 prop_Annotation_annotationType, ?label.contentType =&gt; \
 prop_Annotation_contentType, ?label.statement =&gt; \
 prop_Annotation_statement, label.subject =&gt; prop_Annotation_subject }
-prop_Annotation_annotationType = enum.other / enum.review
+prop_Annotation_annotationType = const.other / const.review
 prop_Annotation_contentType = tstr .regexp "^[^\\/]+\\/[^\\/]+$"
 prop_Annotation_statement = tstr
 prop_Annotation_subject = Element_derived
@@ -2616,9 +2619,9 @@ prop_Artifact_releaseTime = tstr .regexp "^[0-9]{4}-[0-1][0-9]-[0-3]\
     tstr .regexp "^\\d\\d\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ$"
 prop_Artifact_standardName = tstr
 prop_Artifact_suppliedBy = Agent_derived
-prop_Artifact_supportLevel = enum.deployed / enum.development / enum\
-.endOfSupport / enum.limitedSupport / enum.noAssertion / enum.\
-                                             noSupport / enum.support
+prop_Artifact_supportLevel = const.deployed / const.development / \
+const.endOfSupport / const.limitedSupport / const.noAssertion / \
+                                      const.noSupport / const.support
 prop_Artifact_validUntilTime = tstr .regexp "^[0-9]{4}-[0-1][0-9]-[0\
 -3][0-9]T[0-2][0-9]:[0-6][0-9]:[0-6][0-9](Z|[+-][0-9]{2}:[0-9]{2})$\
 " / tstr .regexp "^\\d\\d\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ$"
@@ -2633,12 +2636,12 @@ Hash = { label.type =&gt; const.Hash, ?label.@id =&gt; BlankNodeOrIRI, ~\
 Hash_derived = Hash / BlankNodeOrIRI
 Hash_props = { ~IntegrityMethod_props, label.algorithm =&gt; \
         prop_Hash_algorithm, label.hashValue =&gt; prop_Hash_hashValue }
-prop_Hash_algorithm = enum.adler32 / enum.blake2b256 / enum.\
-blake2b384 / enum.blake2b512 / enum.blake3 / enum.crystalsDilithium \
-/ enum.crystalsKyber / enum.falcon / enum.md2 / enum.md4 / enum.md5 \
-/ enum.md6 / enum.other / enum.sha1 / enum.sha224 / enum.sha256 / \
-enum.sha384 / enum.sha3_224 / enum.sha3_256 / enum.sha3_384 / enum.\
-                                               sha3_512 / enum.sha512
+prop_Hash_algorithm = const.adler32 / const.blake2b256 / const.\
+blake2b384 / const.blake2b512 / const.blake3 / const.\
+crystalsDilithium / const.crystalsKyber / const.falcon / const.md2 \
+/ const.md4 / const.md5 / const.md6 / const.other / const.sha1 / \
+const.sha224 / const.sha256 / const.sha384 / const.sha3_224 / const.\
+            sha3_256 / const.sha3_384 / const.sha3_512 / const.sha512
 prop_Hash_hashValue = tstr
 LifecycleScopedRelationship = { label.type =&gt; const.\
 LifecycleScopedRelationship, label.spdxId =&gt; IRI, ~\
@@ -2647,8 +2650,8 @@ LifecycleScopedRelationship_derived = LifecycleScopedRelationship / \
                                                        BlankNodeOrIRI
 LifecycleScopedRelationship_props = { ~Relationship_props, ?label.\
                     scope =&gt; prop_LifecycleScopedRelationship_scope }
-prop_LifecycleScopedRelationship_scope = enum.build / enum.design / \
-             enum.development / enum.other / enum.runtime / enum.test
+prop_LifecycleScopedRelationship_scope = const.build / const.design \
+       / const.development / const.other / const.runtime / const.test
 Organization = { label.type =&gt; const.Organization, label.spdxId =&gt; \
                                            IRI, ~Organization_props }
 Organization_derived = Organization / const.SpdxOrganization / \
@@ -2669,52 +2672,53 @@ IRI = tstr .regexp "^(?!_:).+:.+"
 BlankNode = tstr .regexp "^_:.+"
 BlankNodeOrIRI = IRI / BlankNode
 anyURI = tstr
-SHACLClass = { label.type =&gt; IRI / enum.ai_EnergyConsumption / enum.\
-ai_EnergyConsumptionDescription / enum.ai_EnergyUnitType / enum.\
-ai_SafetyRiskAssessmentType / enum.AnnotationType / enum.\
-CreationInfo / enum.DictionaryEntry / enum.ExternalIdentifier / enum\
-.ExternalIdentifierType / enum.ExternalMap / enum.ExternalRef / enum\
-.ExternalRefType / enum.HashAlgorithm / enum.IndividualElement / \
-enum.LifecycleScopeType / enum.NamespaceMap / enum.\
-PackageVerificationCode / enum.PositiveIntegerRange / enum.\
-PresenceType / enum.ProfileIdentifierType / enum.Relationship / enum\
-.RelationshipCompleteness / enum.RelationshipType / enum.\
-SpdxDocument / enum.SupportType / enum.Tool / enum.\
-dataset_ConfidentialityLevelType / enum.\
-dataset_DatasetAvailabilityType / enum.dataset_DatasetType / enum.\
-expandedlicensing_ListedLicenseException / enum.\
-extension_CdxPropertyEntry / enum.security_CvssSeverityType / enum.\
-security_ExploitCatalogType / enum.security_SsvcDecisionType / enum.\
-security_VexJustificationType / enum.\
-simplelicensing_LicenseExpression / enum.\
-simplelicensing_SimpleLicensingText / enum.\
-software_ContentIdentifier / enum.software_ContentIdentifierType / \
-enum.software_FileKindType / enum.software_SbomType / enum.\
-software_SoftwarePurpose / enum.build_Build / enum.Agent / enum.\
-Annotation / enum.Bundle / enum.Hash / enum.\
-LifecycleScopedRelationship / enum.Organization / enum.Person / enum\
-.SoftwareAgent / enum.expandedlicensing_ConjunctiveLicenseSet / enum\
-.expandedlicensing_CustomLicenseAddition / enum.\
-expandedlicensing_DisjunctiveLicenseSet / enum.\
-expandedlicensing_IndividualLicensingInfo / enum.\
-expandedlicensing_ListedLicense / enum.\
-expandedlicensing_OrLaterOperator / enum.\
-expandedlicensing_WithAdditionOperator / enum.\
-extension_CdxPropertiesExtension / enum.\
-security_CvssV2VulnAssessmentRelationship / enum.\
-security_CvssV3VulnAssessmentRelationship / enum.\
-security_CvssV4VulnAssessmentRelationship / enum.\
-security_EpssVulnAssessmentRelationship / enum.\
-security_ExploitCatalogVulnAssessmentRelationship / enum.\
-security_SsvcVulnAssessmentRelationship / enum.\
-security_Vulnerability / enum.Bom / enum.\
-expandedlicensing_CustomLicense / enum.\
-security_VexAffectedVulnAssessmentRelationship / enum.\
-security_VexFixedVulnAssessmentRelationship / enum.\
-security_VexNotAffectedVulnAssessmentRelationship / enum.\
-security_VexUnderInvestigationVulnAssessmentRelationship / enum.\
-software_File / enum.software_Package / enum.software_Sbom / enum.\
- software_Snippet / enum.ai_AIPackage / enum.dataset_DatasetPackage }
+SHACLClass = { label.type =&gt; IRI / const.ai_EnergyConsumption / \
+const.ai_EnergyConsumptionDescription / const.ai_EnergyUnitType / \
+const.ai_SafetyRiskAssessmentType / const.AnnotationType / const.\
+CreationInfo / const.DictionaryEntry / const.ExternalIdentifier / \
+const.ExternalIdentifierType / const.ExternalMap / const.\
+ExternalRef / const.ExternalRefType / const.HashAlgorithm / const.\
+IndividualElement / const.LifecycleScopeType / const.NamespaceMap / \
+const.PackageVerificationCode / const.PositiveIntegerRange / const.\
+PresenceType / const.ProfileIdentifierType / const.Relationship / \
+const.RelationshipCompleteness / const.RelationshipType / const.\
+SpdxDocument / const.SupportType / const.Tool / const.\
+dataset_ConfidentialityLevelType / const.\
+dataset_DatasetAvailabilityType / const.dataset_DatasetType / const.\
+expandedlicensing_ListedLicenseException / const.\
+extension_CdxPropertyEntry / const.security_CvssSeverityType / const\
+.security_ExploitCatalogType / const.security_SsvcDecisionType / \
+const.security_VexJustificationType / const.\
+simplelicensing_LicenseExpression / const.\
+simplelicensing_SimpleLicensingText / const.\
+software_ContentIdentifier / const.software_ContentIdentifierType / \
+const.software_FileKindType / const.software_SbomType / const.\
+software_SoftwarePurpose / const.build_Build / const.Agent / const.\
+Annotation / const.Bundle / const.Hash / const.\
+LifecycleScopedRelationship / const.Organization / const.Person / \
+const.SoftwareAgent / const.expandedlicensing_ConjunctiveLicenseSet \
+/ const.expandedlicensing_CustomLicenseAddition / const.\
+expandedlicensing_DisjunctiveLicenseSet / const.\
+expandedlicensing_IndividualLicensingInfo / const.\
+expandedlicensing_ListedLicense / const.\
+expandedlicensing_OrLaterOperator / const.\
+expandedlicensing_WithAdditionOperator / const.\
+extension_CdxPropertiesExtension / const.\
+security_CvssV2VulnAssessmentRelationship / const.\
+security_CvssV3VulnAssessmentRelationship / const.\
+security_CvssV4VulnAssessmentRelationship / const.\
+security_EpssVulnAssessmentRelationship / const.\
+security_ExploitCatalogVulnAssessmentRelationship / const.\
+security_SsvcVulnAssessmentRelationship / const.\
+security_Vulnerability / const.Bom / const.\
+expandedlicensing_CustomLicense / const.\
+security_VexAffectedVulnAssessmentRelationship / const.\
+security_VexFixedVulnAssessmentRelationship / const.\
+security_VexNotAffectedVulnAssessmentRelationship / const.\
+security_VexUnderInvestigationVulnAssessmentRelationship / const.\
+software_File / const.software_Package / const.software_Sbom / const\
+.software_Snippet / const.ai_AIPackage / const.\
+                                             dataset_DatasetPackage }
 AnyClass = ai_EnergyConsumption / ai_EnergyConsumptionDescription / \
 ai_EnergyUnitType / ai_SafetyRiskAssessmentType / AnnotationType / \
 CreationInfo / DictionaryEntry / ExternalIdentifier / \
@@ -3236,658 +3240,578 @@ label.context = 162
                                                                scope/
 label.scope = 163
 
-; Value mapping for enum entries (1000-1303)
-enum.gitoid = 1001
-enum.swhid = 1002
-enum.application = 1003
-enum.archive = 1004
-enum.bom = 1005
-enum.configuration = 1006
-enum.container = 1007
-enum.data = 1008
-enum.device = 1009
-enum.deviceDriver = 1010
-enum.diskImage = 1011
-enum.documentation = 1012
-enum.evidence = 1013
-enum.executable = 1014
-enum.file = 1015
-enum.filesystemImage = 1016
-enum.firmware = 1017
-enum.framework = 1018
-enum.install = 1019
-enum.library = 1020
-enum.manifest = 1021
-enum.model = 1022
-enum.module = 1023
-enum.operatingSystem = 1024
-enum.other = 1025
-enum.patch = 1026
-enum.platform = 1027
-enum.requirement = 1028
-enum.source = 1029
-enum.specification = 1030
-enum.test = 1031
-enum.directory = 1032
-enum.analyzed = 1033
-enum.build = 1034
-enum.deployed = 1035
-enum.design = 1036
-enum.runtime = 1037
-enum.critical = 1038
-enum.high = 1039
-enum.low = 1040
-enum.medium = 1041
-enum.none = 1042
-enum.kev = 1043
-enum.act = 1044
-enum.attend = 1045
-enum.track = 1046
-enum.trackStar = 1047
-enum.componentNotPresent = 1048
-enum.inlineMitigationsAlreadyExist = 1049
-enum.vulnerableCodeCannotBeControlledByAdversary = 1050
-enum.vulnerableCodeNotInExecutePath = 1051
-enum.vulnerableCodeNotPresent = 1052
-enum.amber = 1053
-enum.clear = 1054
-enum.green = 1055
-enum.red = 1056
-enum.clickthrough = 1057
-enum.directDownload = 1058
-enum.query = 1059
-enum.registration = 1060
-enum.scrapingScript = 1061
-enum.audio = 1062
-enum.categorical = 1063
-enum.graph = 1064
-enum.image = 1065
-enum.noAssertion = 1066
-enum.numeric = 1067
-enum.sensor = 1068
-enum.structured = 1069
-enum.syntactic = 1070
-enum.text = 1071
-enum.timeseries = 1072
-enum.timestamp = 1073
-enum.video = 1074
-enum.no = 1075
-enum.yes = 1076
-enum.kilowattHour = 1077
-enum.megajoule = 1078
-enum.serious = 1079
-enum.ai = 1080
-enum.core = 1081
-enum.dataset = 1082
-enum.expandedLicensing = 1083
-enum.extension = 1084
-enum.lite = 1085
-enum.security = 1086
-enum.simpleLicensing = 1087
-enum.software = 1088
-enum.cpe22 = 1089
-enum.cpe23 = 1090
-enum.cve = 1091
-enum.email = 1092
-enum.packageUrl = 1093
-enum.securityOther = 1094
-enum.swid = 1095
-enum.urlScheme = 1096
-enum.altDownloadLocation = 1097
-enum.altWebPage = 1098
-enum.binaryArtifact = 1099
-enum.bower = 1100
-enum.buildMeta = 1101
-enum.buildSystem = 1102
-enum.certificationReport = 1103
-enum.chat = 1104
-enum.componentAnalysisReport = 1105
-enum.cwe = 1106
-enum.dynamicAnalysisReport = 1107
-enum.eolNotice = 1108
-enum.exportControlAssessment = 1109
-enum.funding = 1110
-enum.issueTracker = 1111
-enum.license = 1112
-enum.mailingList = 1113
-enum.mavenCentral = 1114
-enum.metrics = 1115
-enum.npm = 1116
-enum.nuget = 1117
-enum.privacyAssessment = 1118
-enum.productMetadata = 1119
-enum.purchaseOrder = 1120
-enum.qualityAssessmentReport = 1121
-enum.releaseHistory = 1122
-enum.releaseNotes = 1123
-enum.riskAssessment = 1124
-enum.runtimeAnalysisReport = 1125
-enum.secureSoftwareAttestation = 1126
-enum.securityAdversaryModel = 1127
-enum.securityAdvisory = 1128
-enum.securityFix = 1129
-enum.securityPenTestReport = 1130
-enum.securityPolicy = 1131
-enum.securityThreatModel = 1132
-enum.socialMedia = 1133
-enum.sourceArtifact = 1134
-enum.staticAnalysisReport = 1135
-enum.support = 1136
-enum.vcs = 1137
-enum.vulnerabilityDisclosureReport = 1138
-enum.vulnerabilityExploitabilityAssessment = 1139
-enum.adler32 = 1140
-enum.blake2b256 = 1141
-enum.blake2b384 = 1142
-enum.blake2b512 = 1143
-enum.blake3 = 1144
-enum.crystalsDilithium = 1145
-enum.crystalsKyber = 1146
-enum.falcon = 1147
-enum.md2 = 1148
-enum.md4 = 1149
-enum.md5 = 1150
-enum.md6 = 1151
-enum.sha1 = 1152
-enum.sha224 = 1153
-enum.sha256 = 1154
-enum.sha384 = 1155
-enum.sha3_224 = 1156
-enum.sha3_256 = 1157
-enum.sha3_384 = 1158
-enum.sha3_512 = 1159
-enum.sha512 = 1160
-enum.complete = 1161
-enum.incomplete = 1162
-enum.affects = 1163
-enum.amendedBy = 1164
-enum.ancestorOf = 1165
-enum.availableFrom = 1166
-enum.configures = 1167
-enum.contains = 1168
-enum.coordinatedBy = 1169
-enum.copiedTo = 1170
-enum.delegatedTo = 1171
-enum.dependsOn = 1172
-enum.descendantOf = 1173
-enum.describes = 1174
-enum.doesNotAffect = 1175
-enum.expandsTo = 1176
-enum.exploitCreatedBy = 1177
-enum.fixedBy = 1178
-enum.fixedIn = 1179
-enum.foundBy = 1180
-enum.generates = 1181
-enum.hasAddedFile = 1182
-enum.hasAssessmentFor = 1183
-enum.hasAssociatedVulnerability = 1184
-enum.hasConcludedLicense = 1185
-enum.hasDataFile = 1186
-enum.hasDeclaredLicense = 1187
-enum.hasDeletedFile = 1188
-enum.hasDependencyManifest = 1189
-enum.hasDistributionArtifact = 1190
-enum.hasDocumentation = 1191
-enum.hasDynamicLink = 1192
-enum.hasEvidence = 1193
-enum.hasExample = 1194
-enum.hasHost = 1195
-enum.hasInput = 1196
-enum.hasMetadata = 1197
-enum.hasOptionalComponent = 1198
-enum.hasOptionalDependency = 1199
-enum.hasOutput = 1200
-enum.hasPrerequisite = 1201
-enum.hasProvidedDependency = 1202
-enum.hasRequirement = 1203
-enum.hasSpecification = 1204
-enum.hasStaticLink = 1205
-enum.hasTest = 1206
-enum.hasTestCase = 1207
-enum.hasVariant = 1208
-enum.invokedBy = 1209
-enum.modifiedBy = 1210
-enum.packagedBy = 1211
-enum.patchedBy = 1212
-enum.publishedBy = 1213
-enum.reportedBy = 1214
-enum.republishedBy = 1215
-enum.serializedInArtifact = 1216
-enum.testedOn = 1217
-enum.trainedOn = 1218
-enum.underInvestigationFor = 1219
-enum.usesTool = 1220
-enum.review = 1221
-enum.development = 1222
-enum.endOfSupport = 1223
-enum.limitedSupport = 1224
-enum.noSupport = 1225
-enum.ai_EnergyConsumption = 1226
-enum.ai_EnergyConsumptionDescription = 1227
-enum.ai_EnergyUnitType = 1228
-enum.ai_SafetyRiskAssessmentType = 1229
-enum.AnnotationType = 1230
-enum.CreationInfo = 1231
-enum.DictionaryEntry = 1232
-enum.ExternalIdentifier = 1233
-enum.ExternalIdentifierType = 1234
-enum.ExternalMap = 1235
-enum.ExternalRef = 1236
-enum.ExternalRefType = 1237
-enum.HashAlgorithm = 1238
-enum.IndividualElement = 1239
-enum.LifecycleScopeType = 1240
-enum.NamespaceMap = 1241
-enum.PackageVerificationCode = 1242
-enum.PositiveIntegerRange = 1243
-enum.PresenceType = 1244
-enum.ProfileIdentifierType = 1245
-enum.Relationship = 1246
-enum.RelationshipCompleteness = 1247
-enum.RelationshipType = 1248
-enum.SpdxDocument = 1249
-enum.SupportType = 1250
-enum.Tool = 1251
-enum.dataset_ConfidentialityLevelType = 1252
-enum.dataset_DatasetAvailabilityType = 1253
-enum.dataset_DatasetType = 1254
-enum.expandedlicensing_ListedLicenseException = 1255
-enum.extension_CdxPropertyEntry = 1256
-enum.security_CvssSeverityType = 1257
-enum.security_ExploitCatalogType = 1258
-enum.security_SsvcDecisionType = 1259
-enum.security_VexJustificationType = 1260
-enum.simplelicensing_LicenseExpression = 1261
-enum.simplelicensing_SimpleLicensingText = 1262
-enum.software_ContentIdentifier = 1263
-enum.software_ContentIdentifierType = 1264
-enum.software_FileKindType = 1265
-enum.software_SbomType = 1266
-enum.software_SoftwarePurpose = 1267
-enum.build_Build = 1268
-enum.Agent = 1269
-enum.Annotation = 1270
-enum.Bundle = 1271
-enum.Hash = 1272
-enum.LifecycleScopedRelationship = 1273
-enum.Organization = 1274
-enum.Person = 1275
-enum.SoftwareAgent = 1276
-enum.expandedlicensing_ConjunctiveLicenseSet = 1277
-enum.expandedlicensing_CustomLicenseAddition = 1278
-enum.expandedlicensing_DisjunctiveLicenseSet = 1279
-enum.expandedlicensing_IndividualLicensingInfo = 1280
-enum.expandedlicensing_ListedLicense = 1281
-enum.expandedlicensing_OrLaterOperator = 1282
-enum.expandedlicensing_WithAdditionOperator = 1283
-enum.extension_CdxPropertiesExtension = 1284
-enum.security_CvssV2VulnAssessmentRelationship = 1285
-enum.security_CvssV3VulnAssessmentRelationship = 1286
-enum.security_CvssV4VulnAssessmentRelationship = 1287
-enum.security_EpssVulnAssessmentRelationship = 1288
-enum.security_ExploitCatalogVulnAssessmentRelationship = 1289
-enum.security_SsvcVulnAssessmentRelationship = 1290
-enum.security_Vulnerability = 1291
-enum.Bom = 1292
-enum.expandedlicensing_CustomLicense = 1293
-enum.security_VexAffectedVulnAssessmentRelationship = 1294
-enum.security_VexFixedVulnAssessmentRelationship = 1295
-enum.security_VexNotAffectedVulnAssessmentRelationship = 1296
-enum.security_VexUnderInvestigationVulnAssessmentRelationship = 1297
-enum.software_File = 1298
-enum.software_Package = 1299
-enum.software_Sbom = 1300
-enum.software_Snippet = 1301
-enum.ai_AIPackage = 1302
-enum.dataset_DatasetPackage = 1303
-
-; Value mapping for const entries (2000-2337)
-const.software_ContentIdentifier = 2001
-const.software_ContentIdentifierType = 2002
-const.spdx_Software_ContentIdentifierType_gitoid = 2003
-const.spdx_Software_ContentIdentifierType_swhid = 2004
-const.software_FileKindType = 2005
-const.spdx_Software_FileKindType_directory = 2006
-const.spdx_Software_FileKindType_file = 2007
-const.software_SbomType = 2008
-const.spdx_Software_SbomType_analyzed = 2009
-const.spdx_Software_SbomType_build = 2010
-const.spdx_Software_SbomType_deployed = 2011
-const.spdx_Software_SbomType_design = 2012
-const.spdx_Software_SbomType_runtime = 2013
-const.spdx_Software_SbomType_source = 2014
-const.software_SoftwarePurpose = 2015
-const.spdx_Software_SoftwarePurpose_application = 2016
-const.spdx_Software_SoftwarePurpose_archive = 2017
-const.spdx_Software_SoftwarePurpose_bom = 2018
-const.spdx_Software_SoftwarePurpose_configuration = 2019
-const.spdx_Software_SoftwarePurpose_container = 2020
-const.spdx_Software_SoftwarePurpose_data = 2021
-const.spdx_Software_SoftwarePurpose_device = 2022
-const.spdx_Software_SoftwarePurpose_deviceDriver = 2023
-const.spdx_Software_SoftwarePurpose_diskImage = 2024
-const.spdx_Software_SoftwarePurpose_documentation = 2025
-const.spdx_Software_SoftwarePurpose_evidence = 2026
-const.spdx_Software_SoftwarePurpose_executable = 2027
-const.spdx_Software_SoftwarePurpose_file = 2028
-const.spdx_Software_SoftwarePurpose_filesystemImage = 2029
-const.spdx_Software_SoftwarePurpose_firmware = 2030
-const.spdx_Software_SoftwarePurpose_framework = 2031
-const.spdx_Software_SoftwarePurpose_install = 2032
-const.spdx_Software_SoftwarePurpose_library = 2033
-const.spdx_Software_SoftwarePurpose_manifest = 2034
-const.spdx_Software_SoftwarePurpose_model = 2035
-const.spdx_Software_SoftwarePurpose_module = 2036
-const.spdx_Software_SoftwarePurpose_operatingSystem = 2037
-const.spdx_Software_SoftwarePurpose_other = 2038
-const.spdx_Software_SoftwarePurpose_patch = 2039
-const.spdx_Software_SoftwarePurpose_platform = 2040
-const.spdx_Software_SoftwarePurpose_requirement = 2041
-const.spdx_Software_SoftwarePurpose_source = 2042
-const.spdx_Software_SoftwarePurpose_specification = 2043
-const.spdx_Software_SoftwarePurpose_test = 2044
-const.software_File = 2045
-const.software_Package = 2046
-const.software_Sbom = 2047
-const.software_Snippet = 2048
-const.security_CvssSeverityType = 2049
-const.spdx_Security_CvssSeverityType_critical = 2050
-const.spdx_Security_CvssSeverityType_high = 2051
-const.spdx_Security_CvssSeverityType_low = 2052
-const.spdx_Security_CvssSeverityType_medium = 2053
-const.spdx_Security_CvssSeverityType_none = 2054
-const.security_ExploitCatalogType = 2055
-const.spdx_Security_ExploitCatalogType_kev = 2056
-const.spdx_Security_ExploitCatalogType_other = 2057
-const.security_SsvcDecisionType = 2058
-const.spdx_Security_SsvcDecisionType_act = 2059
-const.spdx_Security_SsvcDecisionType_attend = 2060
-const.spdx_Security_SsvcDecisionType_track = 2061
-const.spdx_Security_SsvcDecisionType_trackStar = 2062
-const.security_VexJustificationType = 2063
-const.spdx_Security_VexJustificationType_componentNotPresent = 2064
+; Value mapping for const entries (1000-1562)
+const.software_ContentIdentifier = 1001
+const.gitoid = 1002
+const.swhid = 1003
+const.software_ContentIdentifierType = 1004
+const.spdx_Software_ContentIdentifierType_gitoid = 1005
+const.spdx_Software_ContentIdentifierType_swhid = 1006
+const.software_FileKindType = 1007
+const.spdx_Software_FileKindType_directory = 1008
+const.spdx_Software_FileKindType_file = 1009
+const.software_SbomType = 1010
+const.spdx_Software_SbomType_analyzed = 1011
+const.spdx_Software_SbomType_build = 1012
+const.spdx_Software_SbomType_deployed = 1013
+const.spdx_Software_SbomType_design = 1014
+const.spdx_Software_SbomType_runtime = 1015
+const.spdx_Software_SbomType_source = 1016
+const.software_SoftwarePurpose = 1017
+const.spdx_Software_SoftwarePurpose_application = 1018
+const.spdx_Software_SoftwarePurpose_archive = 1019
+const.spdx_Software_SoftwarePurpose_bom = 1020
+const.spdx_Software_SoftwarePurpose_configuration = 1021
+const.spdx_Software_SoftwarePurpose_container = 1022
+const.spdx_Software_SoftwarePurpose_data = 1023
+const.spdx_Software_SoftwarePurpose_device = 1024
+const.spdx_Software_SoftwarePurpose_deviceDriver = 1025
+const.spdx_Software_SoftwarePurpose_diskImage = 1026
+const.spdx_Software_SoftwarePurpose_documentation = 1027
+const.spdx_Software_SoftwarePurpose_evidence = 1028
+const.spdx_Software_SoftwarePurpose_executable = 1029
+const.spdx_Software_SoftwarePurpose_file = 1030
+const.spdx_Software_SoftwarePurpose_filesystemImage = 1031
+const.spdx_Software_SoftwarePurpose_firmware = 1032
+const.spdx_Software_SoftwarePurpose_framework = 1033
+const.spdx_Software_SoftwarePurpose_install = 1034
+const.spdx_Software_SoftwarePurpose_library = 1035
+const.spdx_Software_SoftwarePurpose_manifest = 1036
+const.spdx_Software_SoftwarePurpose_model = 1037
+const.spdx_Software_SoftwarePurpose_module = 1038
+const.spdx_Software_SoftwarePurpose_operatingSystem = 1039
+const.spdx_Software_SoftwarePurpose_other = 1040
+const.spdx_Software_SoftwarePurpose_patch = 1041
+const.spdx_Software_SoftwarePurpose_platform = 1042
+const.spdx_Software_SoftwarePurpose_requirement = 1043
+const.spdx_Software_SoftwarePurpose_source = 1044
+const.spdx_Software_SoftwarePurpose_specification = 1045
+const.spdx_Software_SoftwarePurpose_test = 1046
+const.application = 1047
+const.archive = 1048
+const.bom = 1049
+const.configuration = 1050
+const.container = 1051
+const.data = 1052
+const.device = 1053
+const.deviceDriver = 1054
+const.diskImage = 1055
+const.documentation = 1056
+const.evidence = 1057
+const.executable = 1058
+const.file = 1059
+const.filesystemImage = 1060
+const.firmware = 1061
+const.framework = 1062
+const.install = 1063
+const.library = 1064
+const.manifest = 1065
+const.model = 1066
+const.module = 1067
+const.operatingSystem = 1068
+const.other = 1069
+const.patch = 1070
+const.platform = 1071
+const.requirement = 1072
+const.source = 1073
+const.specification = 1074
+const.test = 1075
+const.software_File = 1076
+const.directory = 1077
+const.software_Package = 1078
+const.software_Sbom = 1079
+const.analyzed = 1080
+const.build = 1081
+const.deployed = 1082
+const.design = 1083
+const.runtime = 1084
+const.software_Snippet = 1085
+const.security_CvssSeverityType = 1086
+const.spdx_Security_CvssSeverityType_critical = 1087
+const.spdx_Security_CvssSeverityType_high = 1088
+const.spdx_Security_CvssSeverityType_low = 1089
+const.spdx_Security_CvssSeverityType_medium = 1090
+const.spdx_Security_CvssSeverityType_none = 1091
+const.security_ExploitCatalogType = 1092
+const.spdx_Security_ExploitCatalogType_kev = 1093
+const.spdx_Security_ExploitCatalogType_other = 1094
+const.security_SsvcDecisionType = 1095
+const.spdx_Security_SsvcDecisionType_act = 1096
+const.spdx_Security_SsvcDecisionType_attend = 1097
+const.spdx_Security_SsvcDecisionType_track = 1098
+const.spdx_Security_SsvcDecisionType_trackStar = 1099
+const.security_VexJustificationType = 1100
+const.spdx_Security_VexJustificationType_componentNotPresent = 1101
 const.\
 spdx_Security_VexJustificationType_inlineMitigationsAlreadyExist = \
-                                                                 2065
+                                                                 1102
 const.\
 spdx_Security_VexJustificationType_vulnerableCodeCannotBeControlledB\
-                                                    yAdversary = 2066
+                                                    yAdversary = 1103
 const.\
 spdx_Security_VexJustificationType_vulnerableCodeNotInExecutePath = \
-                                                                 2067
+                                                                 1104
 const.spdx_Security_VexJustificationType_vulnerableCodeNotPresent = \
-                                                                 2068
-const.security_CvssV2VulnAssessmentRelationship = 2069
-const.security_CvssV3VulnAssessmentRelationship = 2070
-const.security_CvssV4VulnAssessmentRelationship = 2071
-const.security_EpssVulnAssessmentRelationship = 2072
-const.security_ExploitCatalogVulnAssessmentRelationship = 2073
-const.security_SsvcVulnAssessmentRelationship = 2074
-const.security_Vulnerability = 2075
-const.security_VexAffectedVulnAssessmentRelationship = 2076
-const.security_VexFixedVulnAssessmentRelationship = 2077
-const.security_VexNotAffectedVulnAssessmentRelationship = 2078
-const.security_VexUnderInvestigationVulnAssessmentRelationship = 2079
-const.expandedlicensing_NoAssertionLicense = 2080
-const.expandedlicensing_NoneLicense = 2081
-const.simplelicensing_LicenseExpression = 2082
-const.simplelicensing_SimpleLicensingText = 2083
-const.expandedlicensing_ListedLicenseException = 2084
-const.expandedlicensing_ConjunctiveLicenseSet = 2085
-const.expandedlicensing_CustomLicenseAddition = 2086
-const.expandedlicensing_DisjunctiveLicenseSet = 2087
-const.expandedlicensing_IndividualLicensingInfo = 2088
-const.expandedlicensing_ListedLicense = 2089
-const.expandedlicensing_OrLaterOperator = 2090
-const.expandedlicensing_WithAdditionOperator = 2091
-const.expandedlicensing_CustomLicense = 2092
-const.dataset_ConfidentialityLevelType = 2093
-const.spdx_Dataset_ConfidentialityLevelType_amber = 2094
-const.spdx_Dataset_ConfidentialityLevelType_clear = 2095
-const.spdx_Dataset_ConfidentialityLevelType_green = 2096
-const.spdx_Dataset_ConfidentialityLevelType_red = 2097
-const.dataset_DatasetAvailabilityType = 2098
-const.spdx_Dataset_DatasetAvailabilityType_clickthrough = 2099
-const.spdx_Dataset_DatasetAvailabilityType_directDownload = 2100
-const.spdx_Dataset_DatasetAvailabilityType_query = 2101
-const.spdx_Dataset_DatasetAvailabilityType_registration = 2102
-const.spdx_Dataset_DatasetAvailabilityType_scrapingScript = 2103
-const.dataset_DatasetType = 2104
-const.spdx_Dataset_DatasetType_audio = 2105
-const.spdx_Dataset_DatasetType_categorical = 2106
-const.spdx_Dataset_DatasetType_graph = 2107
-const.spdx_Dataset_DatasetType_image = 2108
-const.spdx_Dataset_DatasetType_noAssertion = 2109
-const.spdx_Dataset_DatasetType_numeric = 2110
-const.spdx_Dataset_DatasetType_other = 2111
-const.spdx_Dataset_DatasetType_sensor = 2112
-const.spdx_Dataset_DatasetType_structured = 2113
-const.spdx_Dataset_DatasetType_syntactic = 2114
-const.spdx_Dataset_DatasetType_text = 2115
-const.spdx_Dataset_DatasetType_timeseries = 2116
-const.spdx_Dataset_DatasetType_timestamp = 2117
-const.spdx_Dataset_DatasetType_video = 2118
-const.dataset_DatasetPackage = 2119
-const.ai_EnergyConsumption = 2120
-const.ai_EnergyConsumptionDescription = 2121
-const.ai_EnergyUnitType = 2122
-const.spdx_AI_EnergyUnitType_kilowattHour = 2123
-const.spdx_AI_EnergyUnitType_megajoule = 2124
-const.spdx_AI_EnergyUnitType_other = 2125
-const.ai_SafetyRiskAssessmentType = 2126
-const.spdx_AI_SafetyRiskAssessmentType_high = 2127
-const.spdx_AI_SafetyRiskAssessmentType_low = 2128
-const.spdx_AI_SafetyRiskAssessmentType_medium = 2129
-const.spdx_AI_SafetyRiskAssessmentType_serious = 2130
-const.ai_AIPackage = 2131
-const.build_Build = 2132
-const.extension_CdxPropertyEntry = 2133
-const.extension_CdxPropertiesExtension = 2134
-const.AnnotationType = 2135
-const.spdx_Core_AnnotationType_other = 2136
-const.spdx_Core_AnnotationType_review = 2137
-const.CreationInfo = 2138
-const.DictionaryEntry = 2139
-const.NoAssertionElement = 2140
-const.NoneElement = 2141
-const.SpdxOrganization = 2142
-const.ExternalIdentifier = 2143
-const.ExternalIdentifierType = 2144
-const.spdx_Core_ExternalIdentifierType_cpe22 = 2145
-const.spdx_Core_ExternalIdentifierType_cpe23 = 2146
-const.spdx_Core_ExternalIdentifierType_cve = 2147
-const.spdx_Core_ExternalIdentifierType_email = 2148
-const.spdx_Core_ExternalIdentifierType_gitoid = 2149
-const.spdx_Core_ExternalIdentifierType_other = 2150
-const.spdx_Core_ExternalIdentifierType_packageUrl = 2151
-const.spdx_Core_ExternalIdentifierType_securityOther = 2152
-const.spdx_Core_ExternalIdentifierType_swhid = 2153
-const.spdx_Core_ExternalIdentifierType_swid = 2154
-const.spdx_Core_ExternalIdentifierType_urlScheme = 2155
-const.ExternalMap = 2156
-const.ExternalRef = 2157
-const.ExternalRefType = 2158
-const.spdx_Core_ExternalRefType_altDownloadLocation = 2159
-const.spdx_Core_ExternalRefType_altWebPage = 2160
-const.spdx_Core_ExternalRefType_binaryArtifact = 2161
-const.spdx_Core_ExternalRefType_bower = 2162
-const.spdx_Core_ExternalRefType_buildMeta = 2163
-const.spdx_Core_ExternalRefType_buildSystem = 2164
-const.spdx_Core_ExternalRefType_certificationReport = 2165
-const.spdx_Core_ExternalRefType_chat = 2166
-const.spdx_Core_ExternalRefType_componentAnalysisReport = 2167
-const.spdx_Core_ExternalRefType_cwe = 2168
-const.spdx_Core_ExternalRefType_documentation = 2169
-const.spdx_Core_ExternalRefType_dynamicAnalysisReport = 2170
-const.spdx_Core_ExternalRefType_eolNotice = 2171
-const.spdx_Core_ExternalRefType_exportControlAssessment = 2172
-const.spdx_Core_ExternalRefType_funding = 2173
-const.spdx_Core_ExternalRefType_issueTracker = 2174
-const.spdx_Core_ExternalRefType_license = 2175
-const.spdx_Core_ExternalRefType_mailingList = 2176
-const.spdx_Core_ExternalRefType_mavenCentral = 2177
-const.spdx_Core_ExternalRefType_metrics = 2178
-const.spdx_Core_ExternalRefType_npm = 2179
-const.spdx_Core_ExternalRefType_nuget = 2180
-const.spdx_Core_ExternalRefType_other = 2181
-const.spdx_Core_ExternalRefType_privacyAssessment = 2182
-const.spdx_Core_ExternalRefType_productMetadata = 2183
-const.spdx_Core_ExternalRefType_purchaseOrder = 2184
-const.spdx_Core_ExternalRefType_qualityAssessmentReport = 2185
-const.spdx_Core_ExternalRefType_releaseHistory = 2186
-const.spdx_Core_ExternalRefType_releaseNotes = 2187
-const.spdx_Core_ExternalRefType_riskAssessment = 2188
-const.spdx_Core_ExternalRefType_runtimeAnalysisReport = 2189
-const.spdx_Core_ExternalRefType_secureSoftwareAttestation = 2190
-const.spdx_Core_ExternalRefType_securityAdversaryModel = 2191
-const.spdx_Core_ExternalRefType_securityAdvisory = 2192
-const.spdx_Core_ExternalRefType_securityFix = 2193
-const.spdx_Core_ExternalRefType_securityOther = 2194
-const.spdx_Core_ExternalRefType_securityPenTestReport = 2195
-const.spdx_Core_ExternalRefType_securityPolicy = 2196
-const.spdx_Core_ExternalRefType_securityThreatModel = 2197
-const.spdx_Core_ExternalRefType_socialMedia = 2198
-const.spdx_Core_ExternalRefType_sourceArtifact = 2199
-const.spdx_Core_ExternalRefType_staticAnalysisReport = 2200
-const.spdx_Core_ExternalRefType_support = 2201
-const.spdx_Core_ExternalRefType_vcs = 2202
-const.spdx_Core_ExternalRefType_vulnerabilityDisclosureReport = 2203
+                                                                 1105
+const.security_CvssV2VulnAssessmentRelationship = 1106
+const.security_CvssV3VulnAssessmentRelationship = 1107
+const.critical = 1108
+const.high = 1109
+const.low = 1110
+const.medium = 1111
+const.none = 1112
+const.security_CvssV4VulnAssessmentRelationship = 1113
+const.security_EpssVulnAssessmentRelationship = 1114
+const.security_ExploitCatalogVulnAssessmentRelationship = 1115
+const.kev = 1116
+const.security_SsvcVulnAssessmentRelationship = 1117
+const.act = 1118
+const.attend = 1119
+const.track = 1120
+const.trackStar = 1121
+const.security_Vulnerability = 1122
+const.security_VexAffectedVulnAssessmentRelationship = 1123
+const.security_VexFixedVulnAssessmentRelationship = 1124
+const.security_VexNotAffectedVulnAssessmentRelationship = 1125
+const.componentNotPresent = 1126
+const.inlineMitigationsAlreadyExist = 1127
+const.vulnerableCodeCannotBeControlledByAdversary = 1128
+const.vulnerableCodeNotInExecutePath = 1129
+const.vulnerableCodeNotPresent = 1130
+const.security_VexUnderInvestigationVulnAssessmentRelationship = 1131
+const.expandedlicensing_NoAssertionLicense = 1132
+const.expandedlicensing_NoneLicense = 1133
+const.simplelicensing_LicenseExpression = 1134
+const.simplelicensing_SimpleLicensingText = 1135
+const.expandedlicensing_ListedLicenseException = 1136
+const.expandedlicensing_ConjunctiveLicenseSet = 1137
+const.expandedlicensing_CustomLicenseAddition = 1138
+const.expandedlicensing_DisjunctiveLicenseSet = 1139
+const.expandedlicensing_IndividualLicensingInfo = 1140
+const.expandedlicensing_ListedLicense = 1141
+const.expandedlicensing_OrLaterOperator = 1142
+const.expandedlicensing_WithAdditionOperator = 1143
+const.expandedlicensing_CustomLicense = 1144
+const.dataset_ConfidentialityLevelType = 1145
+const.spdx_Dataset_ConfidentialityLevelType_amber = 1146
+const.spdx_Dataset_ConfidentialityLevelType_clear = 1147
+const.spdx_Dataset_ConfidentialityLevelType_green = 1148
+const.spdx_Dataset_ConfidentialityLevelType_red = 1149
+const.dataset_DatasetAvailabilityType = 1150
+const.spdx_Dataset_DatasetAvailabilityType_clickthrough = 1151
+const.spdx_Dataset_DatasetAvailabilityType_directDownload = 1152
+const.spdx_Dataset_DatasetAvailabilityType_query = 1153
+const.spdx_Dataset_DatasetAvailabilityType_registration = 1154
+const.spdx_Dataset_DatasetAvailabilityType_scrapingScript = 1155
+const.dataset_DatasetType = 1156
+const.spdx_Dataset_DatasetType_audio = 1157
+const.spdx_Dataset_DatasetType_categorical = 1158
+const.spdx_Dataset_DatasetType_graph = 1159
+const.spdx_Dataset_DatasetType_image = 1160
+const.spdx_Dataset_DatasetType_noAssertion = 1161
+const.spdx_Dataset_DatasetType_numeric = 1162
+const.spdx_Dataset_DatasetType_other = 1163
+const.spdx_Dataset_DatasetType_sensor = 1164
+const.spdx_Dataset_DatasetType_structured = 1165
+const.spdx_Dataset_DatasetType_syntactic = 1166
+const.spdx_Dataset_DatasetType_text = 1167
+const.spdx_Dataset_DatasetType_timeseries = 1168
+const.spdx_Dataset_DatasetType_timestamp = 1169
+const.spdx_Dataset_DatasetType_video = 1170
+const.dataset_DatasetPackage = 1171
+const.amber = 1172
+const.clear = 1173
+const.green = 1174
+const.red = 1175
+const.clickthrough = 1176
+const.directDownload = 1177
+const.query = 1178
+const.registration = 1179
+const.scrapingScript = 1180
+const.audio = 1181
+const.categorical = 1182
+const.graph = 1183
+const.image = 1184
+const.noAssertion = 1185
+const.numeric = 1186
+const.sensor = 1187
+const.structured = 1188
+const.syntactic = 1189
+const.text = 1190
+const.timeseries = 1191
+const.timestamp = 1192
+const.video = 1193
+const.no = 1194
+const.yes = 1195
+const.ai_EnergyConsumption = 1196
+const.ai_EnergyConsumptionDescription = 1197
+const.kilowattHour = 1198
+const.megajoule = 1199
+const.ai_EnergyUnitType = 1200
+const.spdx_AI_EnergyUnitType_kilowattHour = 1201
+const.spdx_AI_EnergyUnitType_megajoule = 1202
+const.spdx_AI_EnergyUnitType_other = 1203
+const.ai_SafetyRiskAssessmentType = 1204
+const.spdx_AI_SafetyRiskAssessmentType_high = 1205
+const.spdx_AI_SafetyRiskAssessmentType_low = 1206
+const.spdx_AI_SafetyRiskAssessmentType_medium = 1207
+const.spdx_AI_SafetyRiskAssessmentType_serious = 1208
+const.ai_AIPackage = 1209
+const.serious = 1210
+const.build_Build = 1211
+const.extension_CdxPropertyEntry = 1212
+const.extension_CdxPropertiesExtension = 1213
+const.AnnotationType = 1214
+const.spdx_Core_AnnotationType_other = 1215
+const.spdx_Core_AnnotationType_review = 1216
+const.CreationInfo = 1217
+const.DictionaryEntry = 1218
+const.NoAssertionElement = 1219
+const.NoneElement = 1220
+const.SpdxOrganization = 1221
+const.ai = 1222
+const.core = 1223
+const.dataset = 1224
+const.expandedLicensing = 1225
+const.extension = 1226
+const.lite = 1227
+const.security = 1228
+const.simpleLicensing = 1229
+const.software = 1230
+const.ExternalIdentifier = 1231
+const.cpe22 = 1232
+const.cpe23 = 1233
+const.cve = 1234
+const.email = 1235
+const.packageUrl = 1236
+const.securityOther = 1237
+const.swid = 1238
+const.urlScheme = 1239
+const.ExternalIdentifierType = 1240
+const.spdx_Core_ExternalIdentifierType_cpe22 = 1241
+const.spdx_Core_ExternalIdentifierType_cpe23 = 1242
+const.spdx_Core_ExternalIdentifierType_cve = 1243
+const.spdx_Core_ExternalIdentifierType_email = 1244
+const.spdx_Core_ExternalIdentifierType_gitoid = 1245
+const.spdx_Core_ExternalIdentifierType_other = 1246
+const.spdx_Core_ExternalIdentifierType_packageUrl = 1247
+const.spdx_Core_ExternalIdentifierType_securityOther = 1248
+const.spdx_Core_ExternalIdentifierType_swhid = 1249
+const.spdx_Core_ExternalIdentifierType_swid = 1250
+const.spdx_Core_ExternalIdentifierType_urlScheme = 1251
+const.ExternalMap = 1252
+const.ExternalRef = 1253
+const.altDownloadLocation = 1254
+const.altWebPage = 1255
+const.binaryArtifact = 1256
+const.bower = 1257
+const.buildMeta = 1258
+const.buildSystem = 1259
+const.certificationReport = 1260
+const.chat = 1261
+const.componentAnalysisReport = 1262
+const.cwe = 1263
+const.dynamicAnalysisReport = 1264
+const.eolNotice = 1265
+const.exportControlAssessment = 1266
+const.funding = 1267
+const.issueTracker = 1268
+const.license = 1269
+const.mailingList = 1270
+const.mavenCentral = 1271
+const.metrics = 1272
+const.npm = 1273
+const.nuget = 1274
+const.privacyAssessment = 1275
+const.productMetadata = 1276
+const.purchaseOrder = 1277
+const.qualityAssessmentReport = 1278
+const.releaseHistory = 1279
+const.releaseNotes = 1280
+const.riskAssessment = 1281
+const.runtimeAnalysisReport = 1282
+const.secureSoftwareAttestation = 1283
+const.securityAdversaryModel = 1284
+const.securityAdvisory = 1285
+const.securityFix = 1286
+const.securityPenTestReport = 1287
+const.securityPolicy = 1288
+const.securityThreatModel = 1289
+const.socialMedia = 1290
+const.sourceArtifact = 1291
+const.staticAnalysisReport = 1292
+const.support = 1293
+const.vcs = 1294
+const.vulnerabilityDisclosureReport = 1295
+const.vulnerabilityExploitabilityAssessment = 1296
+const.ExternalRefType = 1297
+const.spdx_Core_ExternalRefType_altDownloadLocation = 1298
+const.spdx_Core_ExternalRefType_altWebPage = 1299
+const.spdx_Core_ExternalRefType_binaryArtifact = 1300
+const.spdx_Core_ExternalRefType_bower = 1301
+const.spdx_Core_ExternalRefType_buildMeta = 1302
+const.spdx_Core_ExternalRefType_buildSystem = 1303
+const.spdx_Core_ExternalRefType_certificationReport = 1304
+const.spdx_Core_ExternalRefType_chat = 1305
+const.spdx_Core_ExternalRefType_componentAnalysisReport = 1306
+const.spdx_Core_ExternalRefType_cwe = 1307
+const.spdx_Core_ExternalRefType_documentation = 1308
+const.spdx_Core_ExternalRefType_dynamicAnalysisReport = 1309
+const.spdx_Core_ExternalRefType_eolNotice = 1310
+const.spdx_Core_ExternalRefType_exportControlAssessment = 1311
+const.spdx_Core_ExternalRefType_funding = 1312
+const.spdx_Core_ExternalRefType_issueTracker = 1313
+const.spdx_Core_ExternalRefType_license = 1314
+const.spdx_Core_ExternalRefType_mailingList = 1315
+const.spdx_Core_ExternalRefType_mavenCentral = 1316
+const.spdx_Core_ExternalRefType_metrics = 1317
+const.spdx_Core_ExternalRefType_npm = 1318
+const.spdx_Core_ExternalRefType_nuget = 1319
+const.spdx_Core_ExternalRefType_other = 1320
+const.spdx_Core_ExternalRefType_privacyAssessment = 1321
+const.spdx_Core_ExternalRefType_productMetadata = 1322
+const.spdx_Core_ExternalRefType_purchaseOrder = 1323
+const.spdx_Core_ExternalRefType_qualityAssessmentReport = 1324
+const.spdx_Core_ExternalRefType_releaseHistory = 1325
+const.spdx_Core_ExternalRefType_releaseNotes = 1326
+const.spdx_Core_ExternalRefType_riskAssessment = 1327
+const.spdx_Core_ExternalRefType_runtimeAnalysisReport = 1328
+const.spdx_Core_ExternalRefType_secureSoftwareAttestation = 1329
+const.spdx_Core_ExternalRefType_securityAdversaryModel = 1330
+const.spdx_Core_ExternalRefType_securityAdvisory = 1331
+const.spdx_Core_ExternalRefType_securityFix = 1332
+const.spdx_Core_ExternalRefType_securityOther = 1333
+const.spdx_Core_ExternalRefType_securityPenTestReport = 1334
+const.spdx_Core_ExternalRefType_securityPolicy = 1335
+const.spdx_Core_ExternalRefType_securityThreatModel = 1336
+const.spdx_Core_ExternalRefType_socialMedia = 1337
+const.spdx_Core_ExternalRefType_sourceArtifact = 1338
+const.spdx_Core_ExternalRefType_staticAnalysisReport = 1339
+const.spdx_Core_ExternalRefType_support = 1340
+const.spdx_Core_ExternalRefType_vcs = 1341
+const.spdx_Core_ExternalRefType_vulnerabilityDisclosureReport = 1342
 const.\
 spdx_Core_ExternalRefType_vulnerabilityExploitabilityAssessment = \
-                                                                 2204
-const.HashAlgorithm = 2205
-const.spdx_Core_HashAlgorithm_adler32 = 2206
-const.spdx_Core_HashAlgorithm_blake2b256 = 2207
-const.spdx_Core_HashAlgorithm_blake2b384 = 2208
-const.spdx_Core_HashAlgorithm_blake2b512 = 2209
-const.spdx_Core_HashAlgorithm_blake3 = 2210
-const.spdx_Core_HashAlgorithm_crystalsDilithium = 2211
-const.spdx_Core_HashAlgorithm_crystalsKyber = 2212
-const.spdx_Core_HashAlgorithm_falcon = 2213
-const.spdx_Core_HashAlgorithm_md2 = 2214
-const.spdx_Core_HashAlgorithm_md4 = 2215
-const.spdx_Core_HashAlgorithm_md5 = 2216
-const.spdx_Core_HashAlgorithm_md6 = 2217
-const.spdx_Core_HashAlgorithm_other = 2218
-const.spdx_Core_HashAlgorithm_sha1 = 2219
-const.spdx_Core_HashAlgorithm_sha224 = 2220
-const.spdx_Core_HashAlgorithm_sha256 = 2221
-const.spdx_Core_HashAlgorithm_sha384 = 2222
-const.spdx_Core_HashAlgorithm_sha3_224 = 2223
-const.spdx_Core_HashAlgorithm_sha3_256 = 2224
-const.spdx_Core_HashAlgorithm_sha3_384 = 2225
-const.spdx_Core_HashAlgorithm_sha3_512 = 2226
-const.spdx_Core_HashAlgorithm_sha512 = 2227
-const.IndividualElement = 2228
-const.LifecycleScopeType = 2229
-const.spdx_Core_LifecycleScopeType_build = 2230
-const.spdx_Core_LifecycleScopeType_design = 2231
-const.spdx_Core_LifecycleScopeType_development = 2232
-const.spdx_Core_LifecycleScopeType_other = 2233
-const.spdx_Core_LifecycleScopeType_runtime = 2234
-const.spdx_Core_LifecycleScopeType_test = 2235
-const.NamespaceMap = 2236
-const.PackageVerificationCode = 2237
-const.PositiveIntegerRange = 2238
-const.PresenceType = 2239
-const.spdx_Core_PresenceType_no = 2240
-const.spdx_Core_PresenceType_noAssertion = 2241
-const.spdx_Core_PresenceType_yes = 2242
-const.ProfileIdentifierType = 2243
-const.spdx_Core_ProfileIdentifierType_ai = 2244
-const.spdx_Core_ProfileIdentifierType_build = 2245
-const.spdx_Core_ProfileIdentifierType_core = 2246
-const.spdx_Core_ProfileIdentifierType_dataset = 2247
-const.spdx_Core_ProfileIdentifierType_expandedLicensing = 2248
-const.spdx_Core_ProfileIdentifierType_extension = 2249
-const.spdx_Core_ProfileIdentifierType_lite = 2250
-const.spdx_Core_ProfileIdentifierType_security = 2251
-const.spdx_Core_ProfileIdentifierType_simpleLicensing = 2252
-const.spdx_Core_ProfileIdentifierType_software = 2253
-const.Relationship = 2254
-const.RelationshipCompleteness = 2255
-const.spdx_Core_RelationshipCompleteness_complete = 2256
-const.spdx_Core_RelationshipCompleteness_incomplete = 2257
-const.spdx_Core_RelationshipCompleteness_noAssertion = 2258
-const.RelationshipType = 2259
-const.spdx_Core_RelationshipType_affects = 2260
-const.spdx_Core_RelationshipType_amendedBy = 2261
-const.spdx_Core_RelationshipType_ancestorOf = 2262
-const.spdx_Core_RelationshipType_availableFrom = 2263
-const.spdx_Core_RelationshipType_configures = 2264
-const.spdx_Core_RelationshipType_contains = 2265
-const.spdx_Core_RelationshipType_coordinatedBy = 2266
-const.spdx_Core_RelationshipType_copiedTo = 2267
-const.spdx_Core_RelationshipType_delegatedTo = 2268
-const.spdx_Core_RelationshipType_dependsOn = 2269
-const.spdx_Core_RelationshipType_descendantOf = 2270
-const.spdx_Core_RelationshipType_describes = 2271
-const.spdx_Core_RelationshipType_doesNotAffect = 2272
-const.spdx_Core_RelationshipType_expandsTo = 2273
-const.spdx_Core_RelationshipType_exploitCreatedBy = 2274
-const.spdx_Core_RelationshipType_fixedBy = 2275
-const.spdx_Core_RelationshipType_fixedIn = 2276
-const.spdx_Core_RelationshipType_foundBy = 2277
-const.spdx_Core_RelationshipType_generates = 2278
-const.spdx_Core_RelationshipType_hasAddedFile = 2279
-const.spdx_Core_RelationshipType_hasAssessmentFor = 2280
-const.spdx_Core_RelationshipType_hasAssociatedVulnerability = 2281
-const.spdx_Core_RelationshipType_hasConcludedLicense = 2282
-const.spdx_Core_RelationshipType_hasDataFile = 2283
-const.spdx_Core_RelationshipType_hasDeclaredLicense = 2284
-const.spdx_Core_RelationshipType_hasDeletedFile = 2285
-const.spdx_Core_RelationshipType_hasDependencyManifest = 2286
-const.spdx_Core_RelationshipType_hasDistributionArtifact = 2287
-const.spdx_Core_RelationshipType_hasDocumentation = 2288
-const.spdx_Core_RelationshipType_hasDynamicLink = 2289
-const.spdx_Core_RelationshipType_hasEvidence = 2290
-const.spdx_Core_RelationshipType_hasExample = 2291
-const.spdx_Core_RelationshipType_hasHost = 2292
-const.spdx_Core_RelationshipType_hasInput = 2293
-const.spdx_Core_RelationshipType_hasMetadata = 2294
-const.spdx_Core_RelationshipType_hasOptionalComponent = 2295
-const.spdx_Core_RelationshipType_hasOptionalDependency = 2296
-const.spdx_Core_RelationshipType_hasOutput = 2297
-const.spdx_Core_RelationshipType_hasPrerequisite = 2298
-const.spdx_Core_RelationshipType_hasProvidedDependency = 2299
-const.spdx_Core_RelationshipType_hasRequirement = 2300
-const.spdx_Core_RelationshipType_hasSpecification = 2301
-const.spdx_Core_RelationshipType_hasStaticLink = 2302
-const.spdx_Core_RelationshipType_hasTest = 2303
-const.spdx_Core_RelationshipType_hasTestCase = 2304
-const.spdx_Core_RelationshipType_hasVariant = 2305
-const.spdx_Core_RelationshipType_invokedBy = 2306
-const.spdx_Core_RelationshipType_modifiedBy = 2307
-const.spdx_Core_RelationshipType_other = 2308
-const.spdx_Core_RelationshipType_packagedBy = 2309
-const.spdx_Core_RelationshipType_patchedBy = 2310
-const.spdx_Core_RelationshipType_publishedBy = 2311
-const.spdx_Core_RelationshipType_reportedBy = 2312
-const.spdx_Core_RelationshipType_republishedBy = 2313
-const.spdx_Core_RelationshipType_serializedInArtifact = 2314
-const.spdx_Core_RelationshipType_testedOn = 2315
-const.spdx_Core_RelationshipType_trainedOn = 2316
-const.spdx_Core_RelationshipType_underInvestigationFor = 2317
-const.spdx_Core_RelationshipType_usesTool = 2318
-const.SpdxDocument = 2319
-const.SupportType = 2320
-const.spdx_Core_SupportType_deployed = 2321
-const.spdx_Core_SupportType_development = 2322
-const.spdx_Core_SupportType_endOfSupport = 2323
-const.spdx_Core_SupportType_limitedSupport = 2324
-const.spdx_Core_SupportType_noAssertion = 2325
-const.spdx_Core_SupportType_noSupport = 2326
-const.spdx_Core_SupportType_support = 2327
-const.Tool = 2328
-const.Agent = 2329
-const.Annotation = 2330
-const.Bundle = 2331
-const.Hash = 2332
-const.LifecycleScopedRelationship = 2333
-const.Organization = 2334
-const.Person = 2335
-const.SoftwareAgent = 2336
-const.Bom = 2337
+                                                                 1343
+const.HashAlgorithm = 1344
+const.spdx_Core_HashAlgorithm_adler32 = 1345
+const.spdx_Core_HashAlgorithm_blake2b256 = 1346
+const.spdx_Core_HashAlgorithm_blake2b384 = 1347
+const.spdx_Core_HashAlgorithm_blake2b512 = 1348
+const.spdx_Core_HashAlgorithm_blake3 = 1349
+const.spdx_Core_HashAlgorithm_crystalsDilithium = 1350
+const.spdx_Core_HashAlgorithm_crystalsKyber = 1351
+const.spdx_Core_HashAlgorithm_falcon = 1352
+const.spdx_Core_HashAlgorithm_md2 = 1353
+const.spdx_Core_HashAlgorithm_md4 = 1354
+const.spdx_Core_HashAlgorithm_md5 = 1355
+const.spdx_Core_HashAlgorithm_md6 = 1356
+const.spdx_Core_HashAlgorithm_other = 1357
+const.spdx_Core_HashAlgorithm_sha1 = 1358
+const.spdx_Core_HashAlgorithm_sha224 = 1359
+const.spdx_Core_HashAlgorithm_sha256 = 1360
+const.spdx_Core_HashAlgorithm_sha384 = 1361
+const.spdx_Core_HashAlgorithm_sha3_224 = 1362
+const.spdx_Core_HashAlgorithm_sha3_256 = 1363
+const.spdx_Core_HashAlgorithm_sha3_384 = 1364
+const.spdx_Core_HashAlgorithm_sha3_512 = 1365
+const.spdx_Core_HashAlgorithm_sha512 = 1366
+const.IndividualElement = 1367
+const.LifecycleScopeType = 1368
+const.spdx_Core_LifecycleScopeType_build = 1369
+const.spdx_Core_LifecycleScopeType_design = 1370
+const.spdx_Core_LifecycleScopeType_development = 1371
+const.spdx_Core_LifecycleScopeType_other = 1372
+const.spdx_Core_LifecycleScopeType_runtime = 1373
+const.spdx_Core_LifecycleScopeType_test = 1374
+const.NamespaceMap = 1375
+const.PackageVerificationCode = 1376
+const.adler32 = 1377
+const.blake2b256 = 1378
+const.blake2b384 = 1379
+const.blake2b512 = 1380
+const.blake3 = 1381
+const.crystalsDilithium = 1382
+const.crystalsKyber = 1383
+const.falcon = 1384
+const.md2 = 1385
+const.md4 = 1386
+const.md5 = 1387
+const.md6 = 1388
+const.sha1 = 1389
+const.sha224 = 1390
+const.sha256 = 1391
+const.sha384 = 1392
+const.sha3_224 = 1393
+const.sha3_256 = 1394
+const.sha3_384 = 1395
+const.sha3_512 = 1396
+const.sha512 = 1397
+const.PositiveIntegerRange = 1398
+const.PresenceType = 1399
+const.spdx_Core_PresenceType_no = 1400
+const.spdx_Core_PresenceType_noAssertion = 1401
+const.spdx_Core_PresenceType_yes = 1402
+const.ProfileIdentifierType = 1403
+const.spdx_Core_ProfileIdentifierType_ai = 1404
+const.spdx_Core_ProfileIdentifierType_build = 1405
+const.spdx_Core_ProfileIdentifierType_core = 1406
+const.spdx_Core_ProfileIdentifierType_dataset = 1407
+const.spdx_Core_ProfileIdentifierType_expandedLicensing = 1408
+const.spdx_Core_ProfileIdentifierType_extension = 1409
+const.spdx_Core_ProfileIdentifierType_lite = 1410
+const.spdx_Core_ProfileIdentifierType_security = 1411
+const.spdx_Core_ProfileIdentifierType_simpleLicensing = 1412
+const.spdx_Core_ProfileIdentifierType_software = 1413
+const.Relationship = 1414
+const.complete = 1415
+const.incomplete = 1416
+const.affects = 1417
+const.amendedBy = 1418
+const.ancestorOf = 1419
+const.availableFrom = 1420
+const.configures = 1421
+const.contains = 1422
+const.coordinatedBy = 1423
+const.copiedTo = 1424
+const.delegatedTo = 1425
+const.dependsOn = 1426
+const.descendantOf = 1427
+const.describes = 1428
+const.doesNotAffect = 1429
+const.expandsTo = 1430
+const.exploitCreatedBy = 1431
+const.fixedBy = 1432
+const.fixedIn = 1433
+const.foundBy = 1434
+const.generates = 1435
+const.hasAddedFile = 1436
+const.hasAssessmentFor = 1437
+const.hasAssociatedVulnerability = 1438
+const.hasConcludedLicense = 1439
+const.hasDataFile = 1440
+const.hasDeclaredLicense = 1441
+const.hasDeletedFile = 1442
+const.hasDependencyManifest = 1443
+const.hasDistributionArtifact = 1444
+const.hasDocumentation = 1445
+const.hasDynamicLink = 1446
+const.hasEvidence = 1447
+const.hasExample = 1448
+const.hasHost = 1449
+const.hasInput = 1450
+const.hasMetadata = 1451
+const.hasOptionalComponent = 1452
+const.hasOptionalDependency = 1453
+const.hasOutput = 1454
+const.hasPrerequisite = 1455
+const.hasProvidedDependency = 1456
+const.hasRequirement = 1457
+const.hasSpecification = 1458
+const.hasStaticLink = 1459
+const.hasTest = 1460
+const.hasTestCase = 1461
+const.hasVariant = 1462
+const.invokedBy = 1463
+const.modifiedBy = 1464
+const.packagedBy = 1465
+const.patchedBy = 1466
+const.publishedBy = 1467
+const.reportedBy = 1468
+const.republishedBy = 1469
+const.serializedInArtifact = 1470
+const.testedOn = 1471
+const.trainedOn = 1472
+const.underInvestigationFor = 1473
+const.usesTool = 1474
+const.RelationshipCompleteness = 1475
+const.spdx_Core_RelationshipCompleteness_complete = 1476
+const.spdx_Core_RelationshipCompleteness_incomplete = 1477
+const.spdx_Core_RelationshipCompleteness_noAssertion = 1478
+const.RelationshipType = 1479
+const.spdx_Core_RelationshipType_affects = 1480
+const.spdx_Core_RelationshipType_amendedBy = 1481
+const.spdx_Core_RelationshipType_ancestorOf = 1482
+const.spdx_Core_RelationshipType_availableFrom = 1483
+const.spdx_Core_RelationshipType_configures = 1484
+const.spdx_Core_RelationshipType_contains = 1485
+const.spdx_Core_RelationshipType_coordinatedBy = 1486
+const.spdx_Core_RelationshipType_copiedTo = 1487
+const.spdx_Core_RelationshipType_delegatedTo = 1488
+const.spdx_Core_RelationshipType_dependsOn = 1489
+const.spdx_Core_RelationshipType_descendantOf = 1490
+const.spdx_Core_RelationshipType_describes = 1491
+const.spdx_Core_RelationshipType_doesNotAffect = 1492
+const.spdx_Core_RelationshipType_expandsTo = 1493
+const.spdx_Core_RelationshipType_exploitCreatedBy = 1494
+const.spdx_Core_RelationshipType_fixedBy = 1495
+const.spdx_Core_RelationshipType_fixedIn = 1496
+const.spdx_Core_RelationshipType_foundBy = 1497
+const.spdx_Core_RelationshipType_generates = 1498
+const.spdx_Core_RelationshipType_hasAddedFile = 1499
+const.spdx_Core_RelationshipType_hasAssessmentFor = 1500
+const.spdx_Core_RelationshipType_hasAssociatedVulnerability = 1501
+const.spdx_Core_RelationshipType_hasConcludedLicense = 1502
+const.spdx_Core_RelationshipType_hasDataFile = 1503
+const.spdx_Core_RelationshipType_hasDeclaredLicense = 1504
+const.spdx_Core_RelationshipType_hasDeletedFile = 1505
+const.spdx_Core_RelationshipType_hasDependencyManifest = 1506
+const.spdx_Core_RelationshipType_hasDistributionArtifact = 1507
+const.spdx_Core_RelationshipType_hasDocumentation = 1508
+const.spdx_Core_RelationshipType_hasDynamicLink = 1509
+const.spdx_Core_RelationshipType_hasEvidence = 1510
+const.spdx_Core_RelationshipType_hasExample = 1511
+const.spdx_Core_RelationshipType_hasHost = 1512
+const.spdx_Core_RelationshipType_hasInput = 1513
+const.spdx_Core_RelationshipType_hasMetadata = 1514
+const.spdx_Core_RelationshipType_hasOptionalComponent = 1515
+const.spdx_Core_RelationshipType_hasOptionalDependency = 1516
+const.spdx_Core_RelationshipType_hasOutput = 1517
+const.spdx_Core_RelationshipType_hasPrerequisite = 1518
+const.spdx_Core_RelationshipType_hasProvidedDependency = 1519
+const.spdx_Core_RelationshipType_hasRequirement = 1520
+const.spdx_Core_RelationshipType_hasSpecification = 1521
+const.spdx_Core_RelationshipType_hasStaticLink = 1522
+const.spdx_Core_RelationshipType_hasTest = 1523
+const.spdx_Core_RelationshipType_hasTestCase = 1524
+const.spdx_Core_RelationshipType_hasVariant = 1525
+const.spdx_Core_RelationshipType_invokedBy = 1526
+const.spdx_Core_RelationshipType_modifiedBy = 1527
+const.spdx_Core_RelationshipType_other = 1528
+const.spdx_Core_RelationshipType_packagedBy = 1529
+const.spdx_Core_RelationshipType_patchedBy = 1530
+const.spdx_Core_RelationshipType_publishedBy = 1531
+const.spdx_Core_RelationshipType_reportedBy = 1532
+const.spdx_Core_RelationshipType_republishedBy = 1533
+const.spdx_Core_RelationshipType_serializedInArtifact = 1534
+const.spdx_Core_RelationshipType_testedOn = 1535
+const.spdx_Core_RelationshipType_trainedOn = 1536
+const.spdx_Core_RelationshipType_underInvestigationFor = 1537
+const.spdx_Core_RelationshipType_usesTool = 1538
+const.SpdxDocument = 1539
+const.SupportType = 1540
+const.spdx_Core_SupportType_deployed = 1541
+const.spdx_Core_SupportType_development = 1542
+const.spdx_Core_SupportType_endOfSupport = 1543
+const.spdx_Core_SupportType_limitedSupport = 1544
+const.spdx_Core_SupportType_noAssertion = 1545
+const.spdx_Core_SupportType_noSupport = 1546
+const.spdx_Core_SupportType_support = 1547
+const.Tool = 1548
+const.Agent = 1549
+const.Annotation = 1550
+const.review = 1551
+const.development = 1552
+const.endOfSupport = 1553
+const.limitedSupport = 1554
+const.noSupport = 1555
+const.Bundle = 1556
+const.Hash = 1557
+const.LifecycleScopedRelationship = 1558
+const.Organization = 1559
+const.Person = 1560
+const.SoftwareAgent = 1561
+const.Bom = 1562
 </pre><a href="#section-2-1" class="pilcrow">¶</a>
 </div>
 </section>
