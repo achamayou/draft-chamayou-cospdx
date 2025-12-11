@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-12-09T01:50:36.248387+00:00",
+  "timestamp": "2025-12-11T01:54:08.968171+00:00",
   "repo": "achamayou/draft-chamayou-cospdx",
   "labels": [
     {
@@ -49,6 +49,201 @@
       "color": "ffffff"
     }
   ],
-  "issues": [],
-  "pulls": []
+  "issues": [
+    {
+      "number": 2,
+      "id": "I_kwDOQEUIIM7dKiCd",
+      "title": "Efficient type mapping",
+      "url": "https://github.com/achamayou/draft-chamayou-cospdx/issues/2",
+      "state": "OPEN",
+      "author": "achamayou",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "- [x] Property labels to integers\n\nThere are 163 property labels in the 3.0.1 spec, and they seem to be the most frequently used values in documents, so it is natural to allocate them starting from 1. The current mapping uses the order of appearance in the json schema.\n\n- [x] Const strings to integers\n\nThere are 337 string const values defined in the spec, they are allocated from 1001 onwards.\n\n- [x] Enum strings to integers\n\nThere are 303 string enum values defined in the spec, they are allocated from 2001 onwards.\n\nProposed:\n\n- [ ] Datetime to CBOR datetime, Epoch-based/tag1: https://www.rfc-editor.org/rfc/rfc8949.html#name-epoch-based-date-time\n- [ ] *Version stay are SemVer 2.0 strings. Or wrap in a CoSWID tag but keep as a string?\n- [ ] hashValue is a string in JSON LD, and typically hex-encoded although the spec is not precise (https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/hashValue/). A bstr would be more efficient in terms of space and processing, with Tag 108 to convey that it is expected to be represented as a lower-case hex string.\n- [ ] Regular expressions, need specific translation in cases where they remain (i.e. not DateTimes).",
+      "createdAt": "2025-12-09T11:49:50Z",
+      "updatedAt": "2025-12-10T11:21:25Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "cabo",
+          "authorAssociation": "NONE",
+          "body": "For binary values given in hex such as hashvalue, we could also use tags 23 (upper case hex) or 108 (lower case hex).\n\ntag23: https://www.rfc-editor.org/rfc/rfc8949#section-3.4.5.2\ntag108: https://www.ietf.org/archive/id/draft-bormann-cbor-notable-tags-13.html#section-2.1-2.2.1\n",
+          "createdAt": "2025-12-09T22:56:43Z",
+          "updatedAt": "2025-12-09T22:56:43Z"
+        },
+        {
+          "author": "achamayou",
+          "authorAssociation": "OWNER",
+          "body": "That seems less efficient than the binary representation a bstr though?",
+          "createdAt": "2025-12-10T08:47:18Z",
+          "updatedAt": "2025-12-10T08:47:18Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "NONE",
+          "body": "The tag takes a byte (23) or two (108).  Of course, the bstr in there can be un wrapped and the tag implied by the data definition.",
+          "createdAt": "2025-12-10T08:57:25Z",
+          "updatedAt": "2025-12-10T08:57:25Z"
+        },
+        {
+          "author": "achamayou",
+          "authorAssociation": "OWNER",
+          "body": "> Of course, the bstr in there can be un wrapped and the tag implied by the data definition\n\nThat seems like the best balance of precision and efficiency.",
+          "createdAt": "2025-12-10T11:21:24Z",
+          "updatedAt": "2025-12-10T11:21:24Z"
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "id": "I_kwDOQEUIIM7dKnaj",
+      "title": "Sample converter script",
+      "url": "https://github.com/achamayou/draft-chamayou-cospdx/issues/3",
+      "state": "OPEN",
+      "author": "achamayou",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "A sample converter script that can at least handle the examples defined under https://github.com/spdx/spdx-examples/tree/master/software is necessary for illustrative purposes.",
+      "createdAt": "2025-12-09T11:56:46Z",
+      "updatedAt": "2025-12-09T11:56:46Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 4,
+      "id": "I_kwDOQEUIIM7dKoPL",
+      "title": "Spell out the CDE requirement",
+      "url": "https://github.com/achamayou/draft-chamayou-cospdx/issues/4",
+      "state": "OPEN",
+      "author": "achamayou",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Reference https://datatracker.ietf.org/doc/html/rfc8949#section-4.2.1 and https://datatracker.ietf.org/doc/draft-ietf-cbor-cde/",
+      "createdAt": "2025-12-09T11:57:49Z",
+      "updatedAt": "2025-12-10T08:46:17Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "achamayou",
+          "authorAssociation": "OWNER",
+          "body": "These types of definitions pose a problem for canonical representation:\n\n`prop_security_EpssVulnAssessmentRelationship_security_probability = int / float / tstr .regexp \"^-?[0-9]+(\\\\.[0-9]*)?$\"`\n\nDiscussed with @henkbirkholz the need to make a choice, and the consequent loss of round-trip ability between JSON and CBOR.",
+          "createdAt": "2025-12-09T20:01:33Z",
+          "updatedAt": "2025-12-09T20:01:33Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "NONE",
+          "body": "So what is the definition on the JSON side?  Can I really use text strings with decimals in them?  (But not with exponents as in `1e-2`?). JSON does not have a separate integer type, so we could do all float for these values (which are presumably 0.0..1.0).\n",
+          "createdAt": "2025-12-09T23:02:14Z",
+          "updatedAt": "2025-12-09T23:02:14Z"
+        },
+        {
+          "author": "achamayou",
+          "authorAssociation": "OWNER",
+          "body": "In this case, the definition is:\n\n```\n        \"prop_security_EpssVulnAssessmentRelationship_security_probability\": {\n                    \"anyOf\": [\n                        {\n                            \"type\": \"number\"\n                        },\n                        {\n                            \"type\": \"string\",\n                            \"pattern\": \"^-?[0-9]+(\\\\.[0-9]*)?$\"\n                        }\n                    ]\n        },\n```\n\nYes, this can be populated with text string decimals: https://spdx.github.io/spdx-spec/v3.0.1/model/Security/Classes/EpssVulnAssessmentRelationship/\n\n```\n{\n  \"type\": \"EpssVulnAssessmentRelationship\",\n  \"spdxId\": \"urn:spdx.dev:epss-CVE-2020-28498\",\n  \"relationshipType\": \"hasAssessmentFor\",\n  \"security_probability\": \"0.00105\",\n  \"security_percentile\": \"0.42356\",\n  \"from\": \"urn:spdx.dev:vuln-cve-2020-28498\",\n  \"to\": [\"urn:product-acme-application-1.3\"],\n  \"suppliedBy\": [\"urn:spdx.dev:agent-jane-doe\"],\n  \"publishedTime\": \"2023-10-05T00:00:30Z\"\n}\n```\n\nExponents are not allowed by the regexp. On second thought, the mapping of json `number` to `int / float` is a mistake and can be removed. The difficulty with float vs string remains.\n",
+          "createdAt": "2025-12-10T08:46:17Z",
+          "updatedAt": "2025-12-10T08:46:17Z"
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "id": "I_kwDOQEUIIM7ddr1C",
+      "title": "Use cut operator at least in contexts where AnyObject is an alternative",
+      "url": "https://github.com/achamayou/draft-chamayou-cospdx/issues/6",
+      "state": "OPEN",
+      "author": "achamayou",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "This it to make it clear AnyObject with labels that overlap with a named type but differently-typed values is not permitted.",
+      "createdAt": "2025-12-10T14:53:59Z",
+      "updatedAt": "2025-12-10T14:53:59Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 7,
+      "id": "I_kwDOQEUIIM7ddsx9",
+      "title": "Add socket to SHACLClass and AnyClass to indicate possible future extension in later revisions of the spec",
+      "url": "https://github.com/achamayou/draft-chamayou-cospdx/issues/7",
+      "state": "OPEN",
+      "author": "achamayou",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Needs name-based special casing in gen.py",
+      "createdAt": "2025-12-10T14:54:50Z",
+      "updatedAt": "2025-12-10T14:54:50Z",
+      "closedAt": null,
+      "comments": []
+    }
+  ],
+  "pulls": [
+    {
+      "number": 5,
+      "id": "PR_kwDOQEUIIM638f-D",
+      "title": "Change `include` to `include_fold` for CDDL schema",
+      "url": "https://github.com/achamayou/draft-chamayou-cospdx/pull/5",
+      "state": "MERGED",
+      "author": "thomas-fossati",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-12-09T15:27:42Z",
+      "updatedAt": "2025-12-09T15:30:35Z",
+      "baseRepository": "achamayou/draft-chamayou-cospdx",
+      "baseRefName": "main",
+      "baseRefOid": "1abbc40a1d8efd22682821f179942dea6d16964d",
+      "headRepository": "thomas-fossati/draft-chamayou-cospdx",
+      "headRefName": "patch-1",
+      "headRefOid": "5ae5dfb960efb7e680d9b25ca29fd71bbee5ba2d",
+      "closedAt": "2025-12-09T15:30:35Z",
+      "mergedAt": "2025-12-09T15:30:35Z",
+      "mergedBy": "henkbirkholz",
+      "mergeCommit": {
+        "oid": "21351f490c9b40f27b078d2e1e0fb42659abd2c1"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOQEUIIM7UE-nN",
+          "commit": {
+            "abbreviatedOid": "76b0375"
+          },
+          "author": "thomas-fossati",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-12-09T15:28:48Z",
+          "updatedAt": "2025-12-09T15:28:48Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "```suggestion\r\n{::include-fold cospdx.cddl}\r\n```",
+              "createdAt": "2025-12-09T15:28:48Z",
+              "updatedAt": "2025-12-09T15:28:49Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOQEUIIM7UE-xb",
+          "commit": {
+            "abbreviatedOid": "76b0375"
+          },
+          "author": "henkbirkholz",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "yes, exactly like this. Thx for the pointer.",
+          "createdAt": "2025-12-09T15:28:56Z",
+          "updatedAt": "2025-12-09T15:28:56Z",
+          "comments": []
+        }
+      ]
+    }
+  ]
 }
