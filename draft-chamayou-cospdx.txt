@@ -1540,7 +1540,8 @@ Table of Contents
    / const.md4 / const.md5 / const.md6 / const.other / const.sha1 / \
    const.sha224 / const.sha256 / const.sha384 / const.sha3_224 / const.\
                sha3_256 / const.sha3_384 / const.sha3_512 / const.sha512
-   prop_Hash_hashValue = tstr
+   prop_Hash_hashValue = bstr ; Digests are typically represented as \
+                                             hex-encoded strings in JSON
    LifecycleScopedRelationship = { label.type => const.\
    LifecycleScopedRelationship, label.spdxId => IRI, ~\
                                      LifecycleScopedRelationship_props }
