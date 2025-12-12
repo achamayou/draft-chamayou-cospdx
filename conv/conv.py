@@ -47,6 +47,12 @@ def mapped(document, schema):
     return map
 
 
+def convert(document_path, schema_path):
+    document = json.loads(document_path.read_text())
+    schema = Schema(schema_path)
+    return cbor2.dumps(mapped(document, schema))
+
+
 if __name__ == "__main__":
     if len(sys.argv) == 4:
         input_path = pathlib.Path(sys.argv[1])
@@ -55,7 +61,5 @@ if __name__ == "__main__":
     else:
         print("Usage: conv.py <spdx3.json> <output.cbor> <schema.cddl>")
         sys.exit(1)
-    document = json.loads(input_path.read_text())
-    schema = Schema(schema_path)
     with output_path.open("wb") as fd:
-        cbor2.dump(mapped(document, schema), fd)
+        fd.write(convert(input_path, schema_path))

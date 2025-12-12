@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 
+"""
+TODO:
+
+- Add cut operator at least in allOf contexts to avoid over-approximations
+- Add sockets to AnyClass and SHACLClass for future extension
+"""
+
 import json
 import sys
 import pathlib

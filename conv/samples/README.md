@@ -1,0 +1,1 @@
+Examples imported from https://github.com/spdx/spdx-examples to test converter
