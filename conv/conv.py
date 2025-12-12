@@ -70,10 +70,10 @@ def mapped(document, schema):
     return map
 
 
-def convert(document_path, schema_path):
+def convert(document_path, schema_path, string_referencing=False):
     document = json.loads(document_path.read_text())
     schema = Schema(schema_path)
-    return cbor2.dumps(mapped(document, schema))
+    return cbor2.dumps(mapped(document, schema), string_referencing=string_referencing)
 
 
 if __name__ == "__main__":
