@@ -3,7 +3,6 @@
 """
 TODO:
 
-- Convert digests to byte strings instead of hex strings
 - Convert datetimes to epoch integers
 - Experiment with id compression
 """
@@ -36,6 +35,17 @@ class Schema:
         )
 
 
+def simple_value_convert(key, value, schema):
+    if key == "hashValue":
+        return bytes.fromhex(value)
+    if isinstance(value, str):
+        if value in schema.consts:
+            return schema.consts[value]
+        elif value in schema.enums:
+            return schema.enums[value]
+    return value
+
+
 def mapped(document, schema):
     map = {}
     for key, value in document.items():
@@ -47,11 +57,7 @@ def mapped(document, schema):
                 mapped(item, schema) if isinstance(item, dict) else item
                 for item in value
             ]
-        map[schema.labels.get(key, key)] = (
-            schema.consts.get(val, schema.enums.get(val, val))
-            if isinstance(val, str)
-            else val
-        )
+        map[schema.labels.get(key, key)] = simple_value_convert(key, val, schema)
     return map
 
 

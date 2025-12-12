@@ -17,7 +17,7 @@ if __name__ == "__main__":
                     file_size = file_path.stat().st_size
                     converted_size = len(converted)
                     print(
-                        f"{str(file_path):<64}: JSON = {str(file_size):<8} bytes, CBOR = {str(converted_size):<8} bytes, Compression = {converted_size / file_size:.2f}"
+                        f"{str(file_path):<64}: JSON: {str(file_size):<8} CBOR: {str(converted_size):<8} Ratio: {converted_size / file_size:.2f}"
                     )
                 except Exception as e:
                     print(f"Error processing {file_path}: {e}")

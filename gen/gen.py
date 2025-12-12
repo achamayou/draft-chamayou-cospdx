@@ -550,7 +550,12 @@ if __name__ == "__main__":
                 if type_class is None:
                     unmapped.append((type_name, type_schema))
                 else:
-                    print(declaration(type_name, type_schema, type_class))
+                    if type_name == "prop_Hash_hashValue":
+                        print(
+                            "prop_Hash_hashValue = bstr ; Digests are usually hex-encoded strings in JSON (#6.108)"
+                        )
+                    else:
+                        print(declaration(type_name, type_schema, type_class))
             print()
 
     print("AnyObject = { * any => any }")

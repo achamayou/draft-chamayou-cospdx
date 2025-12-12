@@ -454,7 +454,7 @@ Hash = { label.type => const.Hash, ?label.@id => BlankNodeOrIRI, ~Hash_props }
 Hash_derived = Hash / BlankNodeOrIRI
 Hash_props = { ~IntegrityMethod_props, label.algorithm => prop_Hash_algorithm, label.hashValue => prop_Hash_hashValue }
 prop_Hash_algorithm = const.adler32 / const.blake2b256 / const.blake2b384 / const.blake2b512 / const.blake3 / const.crystalsDilithium / const.crystalsKyber / const.falcon / const.md2 / const.md4 / const.md5 / const.md6 / const.other / const.sha1 / const.sha224 / const.sha256 / const.sha384 / const.sha3_224 / const.sha3_256 / const.sha3_384 / const.sha3_512 / const.sha512
-prop_Hash_hashValue = tstr
+prop_Hash_hashValue = bstr ; Digests are typically represented as hex-encoded strings in JSON
 LifecycleScopedRelationship = { label.type => const.LifecycleScopedRelationship, label.spdxId => IRI, ~LifecycleScopedRelationship_props }
 LifecycleScopedRelationship_derived = LifecycleScopedRelationship / BlankNodeOrIRI
 LifecycleScopedRelationship_props = { ~Relationship_props, ?label.scope => prop_LifecycleScopedRelationship_scope }
