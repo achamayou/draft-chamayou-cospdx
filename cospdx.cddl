@@ -70,9 +70,9 @@ security_VulnAssessmentRelationship_derived = security_CvssV2VulnAssessmentRelat
 security_VulnAssessmentRelationship_props = { ~Relationship_props, ?label.suppliedBy => prop_security_VulnAssessmentRelationship_suppliedBy, ?label.security_assessedElement => prop_security_VulnAssessmentRelationship_security_assessedElement, ?label.security_modifiedTime => prop_security_VulnAssessmentRelationship_security_modifiedTime, ?label.security_publishedTime => prop_security_VulnAssessmentRelationship_security_publishedTime, ?label.security_withdrawnTime => prop_security_VulnAssessmentRelationship_security_withdrawnTime }
 prop_security_VulnAssessmentRelationship_suppliedBy = Agent_derived
 prop_security_VulnAssessmentRelationship_security_assessedElement = software_SoftwareArtifact_derived
-prop_security_VulnAssessmentRelationship_security_modifiedTime = tstr .regexp "^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-6][0-9]:[0-6][0-9](Z|[+-][0-9]{2}:[0-9]{2})$" / tstr .regexp "^\\d\\d\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ$"
-prop_security_VulnAssessmentRelationship_security_publishedTime = tstr .regexp "^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-6][0-9]:[0-6][0-9](Z|[+-][0-9]{2}:[0-9]{2})$" / tstr .regexp "^\\d\\d\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ$"
-prop_security_VulnAssessmentRelationship_security_withdrawnTime = tstr .regexp "^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-6][0-9]:[0-6][0-9](Z|[+-][0-9]{2}:[0-9]{2})$" / tstr .regexp "^\\d\\d\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ$"
+prop_security_VulnAssessmentRelationship_security_modifiedTime = #6.1(uint) ; ISO8601 UTC with second-precision strings in SPDX-JSON
+prop_security_VulnAssessmentRelationship_security_publishedTime = #6.1(uint) ; ISO8601 UTC with second-precision strings in SPDX-JSON
+prop_security_VulnAssessmentRelationship_security_withdrawnTime = #6.1(uint) ; ISO8601 UTC with second-precision strings in SPDX-JSON
 security_CvssV2VulnAssessmentRelationship = { label.type => const.security_CvssV2VulnAssessmentRelationship, label.spdxId => IRI, ~security_CvssV2VulnAssessmentRelationship_props }
 security_CvssV2VulnAssessmentRelationship_derived = security_CvssV2VulnAssessmentRelationship / BlankNodeOrIRI
 security_CvssV2VulnAssessmentRelationship_props = { ~security_VulnAssessmentRelationship_props, label.security_score => prop_security_CvssV2VulnAssessmentRelationship_security_score, label.security_vectorString => prop_security_CvssV2VulnAssessmentRelationship_security_vectorString }
@@ -112,14 +112,14 @@ prop_security_VexVulnAssessmentRelationship_security_vexVersion = tstr
 security_Vulnerability = { label.type => const.security_Vulnerability, label.spdxId => IRI, ~security_Vulnerability_props }
 security_Vulnerability_derived = security_Vulnerability / BlankNodeOrIRI
 security_Vulnerability_props = { ~Artifact_props, ?label.security_modifiedTime => prop_security_Vulnerability_security_modifiedTime, ?label.security_publishedTime => prop_security_Vulnerability_security_publishedTime, ?label.security_withdrawnTime => prop_security_Vulnerability_security_withdrawnTime }
-prop_security_Vulnerability_security_modifiedTime = tstr .regexp "^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-6][0-9]:[0-6][0-9](Z|[+-][0-9]{2}:[0-9]{2})$" / tstr .regexp "^\\d\\d\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ$"
-prop_security_Vulnerability_security_publishedTime = tstr .regexp "^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-6][0-9]:[0-6][0-9](Z|[+-][0-9]{2}:[0-9]{2})$" / tstr .regexp "^\\d\\d\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ$"
-prop_security_Vulnerability_security_withdrawnTime = tstr .regexp "^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-6][0-9]:[0-6][0-9](Z|[+-][0-9]{2}:[0-9]{2})$" / tstr .regexp "^\\d\\d\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ$"
+prop_security_Vulnerability_security_modifiedTime = #6.1(uint) ; ISO8601 UTC with second-precision strings in SPDX-JSON
+prop_security_Vulnerability_security_publishedTime = #6.1(uint) ; ISO8601 UTC with second-precision strings in SPDX-JSON
+prop_security_Vulnerability_security_withdrawnTime = #6.1(uint) ; ISO8601 UTC with second-precision strings in SPDX-JSON
 security_VexAffectedVulnAssessmentRelationship = { label.type => const.security_VexAffectedVulnAssessmentRelationship, label.spdxId => IRI, ~security_VexAffectedVulnAssessmentRelationship_props }
 security_VexAffectedVulnAssessmentRelationship_derived = security_VexAffectedVulnAssessmentRelationship / BlankNodeOrIRI
 security_VexAffectedVulnAssessmentRelationship_props = { ~security_VexVulnAssessmentRelationship_props, label.security_actionStatement => prop_security_VexAffectedVulnAssessmentRelationship_security_actionStatement, ?label.security_actionStatementTime => prop_security_VexAffectedVulnAssessmentRelationship_security_actionStatementTime }
 prop_security_VexAffectedVulnAssessmentRelationship_security_actionStatement = tstr
-prop_security_VexAffectedVulnAssessmentRelationship_security_actionStatementTime = tstr .regexp "^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-6][0-9]:[0-6][0-9](Z|[+-][0-9]{2}:[0-9]{2})$" / tstr .regexp "^\\d\\d\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ$"
+prop_security_VexAffectedVulnAssessmentRelationship_security_actionStatementTime = #6.1(uint) ; ISO8601 UTC with second-precision strings in SPDX-JSON
 security_VexFixedVulnAssessmentRelationship = { label.type => const.security_VexFixedVulnAssessmentRelationship, label.spdxId => IRI, ~security_VexFixedVulnAssessmentRelationship_props }
 security_VexFixedVulnAssessmentRelationship_derived = security_VexFixedVulnAssessmentRelationship / BlankNodeOrIRI
 security_VexFixedVulnAssessmentRelationship_props = { ~security_VexVulnAssessmentRelationship_props, ~AnyObject }
@@ -127,7 +127,7 @@ security_VexNotAffectedVulnAssessmentRelationship = { label.type => const.securi
 security_VexNotAffectedVulnAssessmentRelationship_derived = security_VexNotAffectedVulnAssessmentRelationship / BlankNodeOrIRI
 security_VexNotAffectedVulnAssessmentRelationship_props = { ~security_VexVulnAssessmentRelationship_props, ?label.security_impactStatement => prop_security_VexNotAffectedVulnAssessmentRelationship_security_impactStatement, ?label.security_impactStatementTime => prop_security_VexNotAffectedVulnAssessmentRelationship_security_impactStatementTime, ?label.security_justificationType => prop_security_VexNotAffectedVulnAssessmentRelationship_security_justificationType }
 prop_security_VexNotAffectedVulnAssessmentRelationship_security_impactStatement = tstr
-prop_security_VexNotAffectedVulnAssessmentRelationship_security_impactStatementTime = tstr .regexp "^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-6][0-9]:[0-6][0-9](Z|[+-][0-9]{2}:[0-9]{2})$" / tstr .regexp "^\\d\\d\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ$"
+prop_security_VexNotAffectedVulnAssessmentRelationship_security_impactStatementTime = #6.1(uint) ; ISO8601 UTC with second-precision strings in SPDX-JSON
 prop_security_VexNotAffectedVulnAssessmentRelationship_security_justificationType = const.componentNotPresent / const.inlineMitigationsAlreadyExist / const.vulnerableCodeCannotBeControlledByAdversary / const.vulnerableCodeNotInExecutePath / const.vulnerableCodeNotPresent
 security_VexUnderInvestigationVulnAssessmentRelationship = { label.type => const.security_VexUnderInvestigationVulnAssessmentRelationship, label.spdxId => IRI, ~security_VexUnderInvestigationVulnAssessmentRelationship_props }
 security_VexUnderInvestigationVulnAssessmentRelationship_derived = security_VexUnderInvestigationVulnAssessmentRelationship / BlankNodeOrIRI
@@ -279,9 +279,9 @@ prop_ai_AIPackage_ai_useSensitivePersonalInformation = const.no / const.noAssert
 build_Build = { label.type => const.build_Build, label.spdxId => IRI, ~build_Build_props }
 build_Build_derived = build_Build / BlankNodeOrIRI
 build_Build_props = { ~Element_props, ?label.build_buildEndTime => prop_build_Build_build_buildEndTime, ?label.build_buildId => prop_build_Build_build_buildId, ?label.build_buildStartTime => prop_build_Build_build_buildStartTime, label.build_buildType => prop_build_Build_build_buildType, ?label.build_configSourceDigest => [ * prop_build_Build_build_configSourceDigest ], ?label.build_configSourceEntrypoint => [ * prop_build_Build_build_configSourceEntrypoint ], ?label.build_configSourceUri => [ * prop_build_Build_build_configSourceUri ], ?label.build_environment => [ * prop_build_Build_build_environment ], ?label.build_parameter => [ * prop_build_Build_build_parameter ] }
-prop_build_Build_build_buildEndTime = tstr .regexp "^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-6][0-9]:[0-6][0-9](Z|[+-][0-9]{2}:[0-9]{2})$" / tstr .regexp "^\\d\\d\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ$"
+prop_build_Build_build_buildEndTime = #6.1(uint) ; ISO8601 UTC with second-precision strings in SPDX-JSON
 prop_build_Build_build_buildId = tstr
-prop_build_Build_build_buildStartTime = tstr .regexp "^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-6][0-9]:[0-6][0-9](Z|[+-][0-9]{2}:[0-9]{2})$" / tstr .regexp "^\\d\\d\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ$"
+prop_build_Build_build_buildStartTime = #6.1(uint) ; ISO8601 UTC with second-precision strings in SPDX-JSON
 prop_build_Build_build_buildType = anyURI
 prop_build_Build_build_configSourceDigest = Hash_derived
 prop_build_Build_build_configSourceEntrypoint = tstr
@@ -313,7 +313,7 @@ CreationInfo = { label.type => const.CreationInfo, ?label.@id => BlankNodeOrIRI,
 CreationInfo_derived = CreationInfo / BlankNodeOrIRI
 CreationInfo_props = { ~SHACLClass, ?label.comment => prop_CreationInfo_comment, label.created => prop_CreationInfo_created, label.createdBy => [ + prop_CreationInfo_createdBy ], ?label.createdUsing => [ * prop_CreationInfo_createdUsing ], label.specVersion => prop_CreationInfo_specVersion }
 prop_CreationInfo_comment = tstr
-prop_CreationInfo_created = tstr .regexp "^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-6][0-9]:[0-6][0-9](Z|[+-][0-9]{2}:[0-9]{2})$" / tstr .regexp "^\\d\\d\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ$"
+prop_CreationInfo_created = #6.1(uint) ; ISO8601 UTC with second-precision strings in SPDX-JSON
 prop_CreationInfo_createdBy = Agent_derived
 prop_CreationInfo_createdUsing = Tool_derived
 prop_CreationInfo_specVersion = tstr .regexp "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$"
@@ -404,10 +404,10 @@ Relationship = { label.type => const.Relationship, label.spdxId => IRI, ~Relatio
 Relationship_derived = LifecycleScopedRelationship / security_CvssV2VulnAssessmentRelationship / security_CvssV3VulnAssessmentRelationship / security_CvssV4VulnAssessmentRelationship / security_EpssVulnAssessmentRelationship / security_ExploitCatalogVulnAssessmentRelationship / security_SsvcVulnAssessmentRelationship / security_VexAffectedVulnAssessmentRelationship / security_VexFixedVulnAssessmentRelationship / security_VexNotAffectedVulnAssessmentRelationship / security_VexUnderInvestigationVulnAssessmentRelationship / Relationship / BlankNodeOrIRI
 Relationship_props = { ~Element_props, ?label.completeness => prop_Relationship_completeness, ?label.endTime => prop_Relationship_endTime, label.from => prop_Relationship_from_, label.relationshipType => prop_Relationship_relationshipType, ?label.startTime => prop_Relationship_startTime, label.to => [ + prop_Relationship_to ] }
 prop_Relationship_completeness = const.complete / const.incomplete / const.noAssertion
-prop_Relationship_endTime = tstr .regexp "^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-6][0-9]:[0-6][0-9](Z|[+-][0-9]{2}:[0-9]{2})$" / tstr .regexp "^\\d\\d\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ$"
+prop_Relationship_endTime = #6.1(uint) ; ISO8601 UTC with second-precision strings in SPDX-JSON
 prop_Relationship_from_ = Element_derived
 prop_Relationship_relationshipType = const.affects / const.amendedBy / const.ancestorOf / const.availableFrom / const.configures / const.contains / const.coordinatedBy / const.copiedTo / const.delegatedTo / const.dependsOn / const.descendantOf / const.describes / const.doesNotAffect / const.expandsTo / const.exploitCreatedBy / const.fixedBy / const.fixedIn / const.foundBy / const.generates / const.hasAddedFile / const.hasAssessmentFor / const.hasAssociatedVulnerability / const.hasConcludedLicense / const.hasDataFile / const.hasDeclaredLicense / const.hasDeletedFile / const.hasDependencyManifest / const.hasDistributionArtifact / const.hasDocumentation / const.hasDynamicLink / const.hasEvidence / const.hasExample / const.hasHost / const.hasInput / const.hasMetadata / const.hasOptionalComponent / const.hasOptionalDependency / const.hasOutput / const.hasPrerequisite / const.hasProvidedDependency / const.hasRequirement / const.hasSpecification / const.hasStaticLink / const.hasTest / const.hasTestCase / const.hasVariant / const.invokedBy / const.modifiedBy / const.other / const.packagedBy / const.patchedBy / const.publishedBy / const.reportedBy / const.republishedBy / const.serializedInArtifact / const.testedOn / const.trainedOn / const.underInvestigationFor / const.usesTool
-prop_Relationship_startTime = tstr .regexp "^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-6][0-9]:[0-6][0-9](Z|[+-][0-9]{2}:[0-9]{2})$" / tstr .regexp "^\\d\\d\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ$"
+prop_Relationship_startTime = #6.1(uint) ; ISO8601 UTC with second-precision strings in SPDX-JSON
 prop_Relationship_to = Element_derived
 RelationshipCompleteness = { label.type => const.RelationshipCompleteness, ?label.@id => BlankNodeOrIRI, ~RelationshipCompleteness_props }
 RelationshipCompleteness_derived = RelationshipCompleteness / const.spdx_Core_RelationshipCompleteness_complete / const.spdx_Core_RelationshipCompleteness_incomplete / const.spdx_Core_RelationshipCompleteness_noAssertion / BlankNodeOrIRI
@@ -439,13 +439,13 @@ prop_Annotation_statement = tstr
 prop_Annotation_subject = Element_derived
 Artifact_derived = ai_AIPackage / dataset_DatasetPackage / security_Vulnerability / software_File / software_Package / software_Snippet / BlankNodeOrIRI
 Artifact_props = { ~Element_props, ?label.builtTime => prop_Artifact_builtTime, ?label.originatedBy => [ * prop_Artifact_originatedBy ], ?label.releaseTime => prop_Artifact_releaseTime, ?label.standardName => [ * prop_Artifact_standardName ], ?label.suppliedBy => prop_Artifact_suppliedBy, ?label.supportLevel => [ * prop_Artifact_supportLevel ], ?label.validUntilTime => prop_Artifact_validUntilTime }
-prop_Artifact_builtTime = tstr .regexp "^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-6][0-9]:[0-6][0-9](Z|[+-][0-9]{2}:[0-9]{2})$" / tstr .regexp "^\\d\\d\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ$"
+prop_Artifact_builtTime = #6.1(uint) ; ISO8601 UTC with second-precision strings in SPDX-JSON
 prop_Artifact_originatedBy = Agent_derived
-prop_Artifact_releaseTime = tstr .regexp "^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-6][0-9]:[0-6][0-9](Z|[+-][0-9]{2}:[0-9]{2})$" / tstr .regexp "^\\d\\d\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ$"
+prop_Artifact_releaseTime = #6.1(uint) ; ISO8601 UTC with second-precision strings in SPDX-JSON
 prop_Artifact_standardName = tstr
 prop_Artifact_suppliedBy = Agent_derived
 prop_Artifact_supportLevel = const.deployed / const.development / const.endOfSupport / const.limitedSupport / const.noAssertion / const.noSupport / const.support
-prop_Artifact_validUntilTime = tstr .regexp "^[0-9]{4}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9]:[0-6][0-9]:[0-6][0-9](Z|[+-][0-9]{2}:[0-9]{2})$" / tstr .regexp "^\\d\\d\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ$"
+prop_Artifact_validUntilTime = #6.1(uint) ; ISO8601 UTC with second-precision strings in SPDX-JSON
 Bundle = { label.type => const.Bundle, label.spdxId => IRI, ~Bundle_props }
 Bundle_derived = Bom / software_Sbom / Bundle / BlankNodeOrIRI
 Bundle_props = { ~ElementCollection_props, ?label.context => prop_Bundle_context }
@@ -454,7 +454,7 @@ Hash = { label.type => const.Hash, ?label.@id => BlankNodeOrIRI, ~Hash_props }
 Hash_derived = Hash / BlankNodeOrIRI
 Hash_props = { ~IntegrityMethod_props, label.algorithm => prop_Hash_algorithm, label.hashValue => prop_Hash_hashValue }
 prop_Hash_algorithm = const.adler32 / const.blake2b256 / const.blake2b384 / const.blake2b512 / const.blake3 / const.crystalsDilithium / const.crystalsKyber / const.falcon / const.md2 / const.md4 / const.md5 / const.md6 / const.other / const.sha1 / const.sha224 / const.sha256 / const.sha384 / const.sha3_224 / const.sha3_256 / const.sha3_384 / const.sha3_512 / const.sha512
-prop_Hash_hashValue_wrapped = #6.108(bstr) ; Digests are typically represented as hex-encoded strings in JSON
+prop_Hash_hashValue_wrapped = #6.108(bstr) ; Strings in SPDX-JSON, usually hex-encoded
 prop_Hash_hashValue = ~prop_Hash_hashValue_wrapped
 LifecycleScopedRelationship = { label.type => const.LifecycleScopedRelationship, label.spdxId => IRI, ~LifecycleScopedRelationship_props }
 LifecycleScopedRelationship_derived = LifecycleScopedRelationship / BlankNodeOrIRI

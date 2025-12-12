@@ -552,9 +552,30 @@ if __name__ == "__main__":
                 else:
                     if type_name == "prop_Hash_hashValue":
                         print(
-                            "prop_Hash_hashValue_wrapped = #6.108(bstr) ; Digests are typically hex-encoded strings in JSON"
+                            f"{type_name}_wrapped = #6.108(bstr) ; Strings in SPDX-JSON, usually hex-encoded"
                         )
-                        print("prop_Hash_hashValue = ~prop_Hash_hashValue_wrapped")
+                        print(f"{type_name} = ~{type_name}_wrapped")
+                    elif type_name in {
+                        "prop_CreationInfo_created",
+                        "prop_Relationship_endTime",
+                        "prop_Relationship_startTime",
+                        "prop_security_VulnAssessmentRelationship_security_modifiedTime",
+                        "prop_security_VulnAssessmentRelationship_security_publishedTime",
+                        "prop_security_VulnAssessmentRelationship_security_withdrawnTime",
+                        "prop_build_Build_build_buildEndTime",
+                        "prop_build_Build_build_buildStartTime",
+                        "prop_Artifact_builtTime",
+                        "prop_Artifact_releaseTime",
+                        "prop_Artifact_validUntilTime",
+                        "prop_security_Vulnerability_security_modifiedTime",
+                        "prop_security_Vulnerability_security_publishedTime",
+                        "prop_security_Vulnerability_security_withdrawnTime",
+                        "prop_security_VexAffectedVulnAssessmentRelationship_security_actionStatementTime",
+                        "prop_security_VexNotAffectedVulnAssessmentRelationship_security_impactStatementTime",
+                    }:
+                        print(
+                            f"{type_name} = #6.1(uint) ; ISO8601 UTC with second-precision strings in SPDX-JSON"
+                        )
                     else:
                         print(declaration(type_name, type_schema, type_class))
             print()

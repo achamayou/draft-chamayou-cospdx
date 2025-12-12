@@ -3,7 +3,6 @@
 """
 TODO:
 
-- Convert datetimes to epoch integers
 - Experiment with id compression
 """
 
@@ -11,6 +10,7 @@ import json
 import sys
 import pathlib
 import cbor2
+import datetime
 
 
 class Schema:
@@ -38,6 +38,15 @@ class Schema:
 def simple_value_convert(key, value, schema):
     if key == "hashValue":
         return bytes.fromhex(value)
+    if key == "created" or key.endswith("Time"):
+        return cbor2.CBORTag(
+            1,
+            int(
+                datetime.datetime.fromisoformat(
+                    value.replace("Z", "+00:00")
+                ).timestamp()
+            ),
+        )
     if isinstance(value, str):
         if value in schema.consts:
             return schema.consts[value]
