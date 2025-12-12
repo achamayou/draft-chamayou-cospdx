@@ -1,5 +1,13 @@
 #!/usr/bin/env python3
 
+"""
+TODO:
+
+- Convert digests to byte strings instead of hex strings
+- Convert datetimes to epoch integers
+- Experiment with id compression
+"""
+
 import json
 import sys
 import pathlib
