@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-12-11T01:54:08.968171+00:00",
+  "timestamp": "2025-12-14T01:59:42.799579+00:00",
   "repo": "achamayou/draft-chamayou-cospdx",
   "labels": [
     {
@@ -60,9 +60,9 @@
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
-      "body": "- [x] Property labels to integers\n\nThere are 163 property labels in the 3.0.1 spec, and they seem to be the most frequently used values in documents, so it is natural to allocate them starting from 1. The current mapping uses the order of appearance in the json schema.\n\n- [x] Const strings to integers\n\nThere are 337 string const values defined in the spec, they are allocated from 1001 onwards.\n\n- [x] Enum strings to integers\n\nThere are 303 string enum values defined in the spec, they are allocated from 2001 onwards.\n\nProposed:\n\n- [ ] Datetime to CBOR datetime, Epoch-based/tag1: https://www.rfc-editor.org/rfc/rfc8949.html#name-epoch-based-date-time\n- [ ] *Version stay are SemVer 2.0 strings. Or wrap in a CoSWID tag but keep as a string?\n- [ ] hashValue is a string in JSON LD, and typically hex-encoded although the spec is not precise (https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/hashValue/). A bstr would be more efficient in terms of space and processing, with Tag 108 to convey that it is expected to be represented as a lower-case hex string.\n- [ ] Regular expressions, need specific translation in cases where they remain (i.e. not DateTimes).",
+      "body": "- [x] Property labels to integers\n\nThere are 163 property labels in the 3.0.1 spec, and they seem to be the most frequently used values in documents, so it is natural to allocate them starting from 1. The current mapping uses the order of appearance in the json schema.\n\n- [x] Const strings to integers\n\nThere are 337 string const values defined in the spec, they are allocated from 1001 onwards.\n\n- [x] Enum strings to integers\n\nThere are 303 string enum values defined in the spec, they are allocated from 2001 onwards.\n\n- [x] hashValue is a string in JSON LD, and typically hex-encoded although the spec is not precise (https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/hashValue/). A bstr would be more efficient in terms of space and processing, with Tag 108 to convey that it is expected to be represented as a lower-case hex string.\n\n- [x] Datetime to CBOR datetime, Epoch-based/tag1: https://www.rfc-editor.org/rfc/rfc8949.html#name-epoch-based-date-time\n\n- [x] *Version are SemVer 2.0 strings. They stay as strings because CoSWID would only make them larger.\n\n- [ ] Regular expressions, need specific translation in cases where they remain (i.e. not DateTimes).",
       "createdAt": "2025-12-09T11:49:50Z",
-      "updatedAt": "2025-12-10T11:21:25Z",
+      "updatedAt": "2025-12-12T15:35:55Z",
       "closedAt": null,
       "comments": [
         {
@@ -100,16 +100,24 @@
       "id": "I_kwDOQEUIIM7dKnaj",
       "title": "Sample converter script",
       "url": "https://github.com/achamayou/draft-chamayou-cospdx/issues/3",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "achamayou",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "A sample converter script that can at least handle the examples defined under https://github.com/spdx/spdx-examples/tree/master/software is necessary for illustrative purposes.",
       "createdAt": "2025-12-09T11:56:46Z",
-      "updatedAt": "2025-12-09T11:56:46Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2025-12-12T11:46:29Z",
+      "closedAt": "2025-12-12T11:46:29Z",
+      "comments": [
+        {
+          "author": "achamayou",
+          "authorAssociation": "OWNER",
+          "body": "Basic converter: https://github.com/achamayou/draft-chamayou-cospdx/blob/main/conv/conv.py, to be improved in sync with schema changes highlighted in #2, #4, #6 and #7.",
+          "createdAt": "2025-12-12T11:46:29Z",
+          "updatedAt": "2025-12-12T11:46:29Z"
+        }
+      ]
     },
     {
       "number": 4,
