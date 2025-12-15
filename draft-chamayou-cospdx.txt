@@ -5,8 +5,8 @@
 Network Working Group                                        A. Chamayou
 Internet-Draft                                                 Microsoft
 Intended status: Standards Track                             H. Birkholz
-Expires: 15 June 2026                                     Fraunhofer SIT
-                                                        12 December 2025
+Expires: 18 June 2026                                     Fraunhofer SIT
+                                                        15 December 2025
 
 
             A Deterministic Compact (CBOR) Encoding for SPDX
@@ -46,7 +46,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 15 June 2026.
+   This Internet-Draft will expire on 18 June 2026.
 
 Copyright Notice
 
