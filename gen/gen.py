@@ -523,6 +523,28 @@ class Grouping:
         return self.profile_map[lower]
 
 
+DATETIME_TYPES = {
+    "prop_CreationInfo_created",
+    "prop_Relationship_endTime",
+    "prop_Relationship_startTime",
+    "prop_security_VulnAssessmentRelationship_security_modifiedTime",
+    "prop_security_VulnAssessmentRelationship_security_publishedTime",
+    "prop_security_VulnAssessmentRelationship_security_withdrawnTime",
+    "prop_build_Build_build_buildEndTime",
+    "prop_build_Build_build_buildStartTime",
+    "prop_Artifact_builtTime",
+    "prop_Artifact_releaseTime",
+    "prop_Artifact_validUntilTime",
+    "prop_security_Vulnerability_security_modifiedTime",
+    "prop_security_Vulnerability_security_publishedTime",
+    "prop_security_Vulnerability_security_withdrawnTime",
+    "prop_security_VexAffectedVulnAssessmentRelationship_security_actionStatementTime",
+    "prop_security_VexNotAffectedVulnAssessmentRelationship_security_impactStatementTime",
+}
+
+DIGESTVALUE_TYPES = {"prop_Hash_hashValue"}
+EXTENSIBLE_TYPES = {"AnyClass"}
+
 if __name__ == "__main__":
     # Default to checked-in 3.0.1 schema if no path is provided
     schema_path = pathlib.Path(__file__).parent / "spdx-json-schema.json"
@@ -550,32 +572,34 @@ if __name__ == "__main__":
                 if type_class is None:
                     unmapped.append((type_name, type_schema))
                 else:
-                    if type_name == "prop_Hash_hashValue":
+                    if type_name in DIGESTVALUE_TYPES:
                         print(
                             f"{type_name}_wrapped = #6.108(bstr) ; Strings in SPDX-JSON, usually hex-encoded"
                         )
                         print(f"{type_name} = ~{type_name}_wrapped")
-                    elif type_name in {
-                        "prop_CreationInfo_created",
-                        "prop_Relationship_endTime",
-                        "prop_Relationship_startTime",
-                        "prop_security_VulnAssessmentRelationship_security_modifiedTime",
-                        "prop_security_VulnAssessmentRelationship_security_publishedTime",
-                        "prop_security_VulnAssessmentRelationship_security_withdrawnTime",
-                        "prop_build_Build_build_buildEndTime",
-                        "prop_build_Build_build_buildStartTime",
-                        "prop_Artifact_builtTime",
-                        "prop_Artifact_releaseTime",
-                        "prop_Artifact_validUntilTime",
-                        "prop_security_Vulnerability_security_modifiedTime",
-                        "prop_security_Vulnerability_security_publishedTime",
-                        "prop_security_Vulnerability_security_withdrawnTime",
-                        "prop_security_VexAffectedVulnAssessmentRelationship_security_actionStatementTime",
-                        "prop_security_VexNotAffectedVulnAssessmentRelationship_security_impactStatementTime",
-                    }:
+                    elif type_name in DATETIME_TYPES:
                         print(
                             f"{type_name} = #6.1(uint) ; ISO8601 UTC with second-precision strings in SPDX-JSON"
                         )
+                    elif type_name in EXTENSIBLE_TYPES:
+                        print(
+                            f"{type_name} = ${type_name} ; Socket for eventual post-SPDX 3.0.1 extensions"
+                        )
+                        values = type_class.cddl(type_schema).split(" / ")
+                        for value in values:
+                            print(f"${type_name} /= {value}")
+                    elif type_name == "SHACLClass":
+                        print(
+                            f"{type_name} = {{ label.type => $label.type }} ; Socket for eventual post-SPDX 3.0.1 extensions"
+                        )
+                        label_type_values = (
+                            type_class.cddl(type_schema)
+                            .split(" => ")[1]
+                            .split("}")[0]
+                            .split(" / ")
+                        )
+                        for value in label_type_values:
+                            print(f"$label.type /= {value}")
                     else:
                         print(declaration(type_name, type_schema, type_class))
             print()
