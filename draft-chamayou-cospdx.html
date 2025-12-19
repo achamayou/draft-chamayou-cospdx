@@ -1668,10 +1668,10 @@ prop_simplelicensing_LicenseExpression_simplelicensing_customIdToUr\
 prop_simplelicensing_LicenseExpression_simplelicensing_licenseExpres\
                                                           sion = tstr
 prop_simplelicensing_LicenseExpression_simplelicensing_licenseListVe\
-rsion = tstr .regexp "(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9\
-]*)(-((0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-zA-Z-]*)(\.(0|[1-9][0-9]*|\
-[0-9]*[a-zA-Z-][0-9a-zA-Z-]*))*))?(\+([0-9a-zA-Z-]+(\.[0-9a-zA-Z-]+)\
-                            *))?" ; CoSPDX representation of versions
+rsion = tstr .regexp "(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0\
+-9]*)(-((0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-zA-Z-]*)(\\.(0|[1-9][0-9\
+]*|[0-9]*[a-zA-Z-][0-9a-zA-Z-]*))*))?(\\+([0-9a-zA-Z-]+(\\.[0-9a-zA-\
+                       Z-]+)*))?" ; CoSPDX representation of versions
 simplelicensing_SimpleLicensingText = { label.type =&gt; const.\
 simplelicensing_SimpleLicensingText, label.spdxId =&gt; IRI, ~\
                           simplelicensing_SimpleLicensingText_props }
@@ -2129,10 +2129,11 @@ prop_CreationInfo_created = #6.1(uint) ; ISO8601 UTC with second-\
                                        precision strings in SPDX-JSON
 prop_CreationInfo_createdBy = Agent_derived
 prop_CreationInfo_createdUsing = Tool_derived
-prop_CreationInfo_specVersion = tstr .regexp "(0|[1-9][0-9]*)\.(0|[1\
--9][0-9]*)\.(0|[1-9][0-9]*)(-((0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-zA\
--Z-]*)(\.(0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-zA-Z-]*))*))?(\+([0-9a-\
-    zA-Z-]+(\.[0-9a-zA-Z-]+)*))?" ; CoSPDX representation of versions
+prop_CreationInfo_specVersion = tstr .regexp "(0|[1-9][0-9]*)\\.(0|[\
+1-9][0-9]*)\\.(0|[1-9][0-9]*)(-((0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-\
+zA-Z-]*)(\\.(0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-zA-Z-]*))*))?(\\+([0\
+-9a-zA-Z-]+(\\.[0-9a-zA-Z-]+)*))?" ; CoSPDX representation of \
+                                                             versions
 DictionaryEntry = { label.type =&gt; const.DictionaryEntry, ?label.@id \
                           =&gt; BlankNodeOrIRI, ~DictionaryEntry_props }
 DictionaryEntry_derived = DictionaryEntry / BlankNodeOrIRI
