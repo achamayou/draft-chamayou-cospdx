@@ -566,10 +566,10 @@ Table of Contents
    prop_simplelicensing_LicenseExpression_simplelicensing_licenseExpres\
                                                              sion = tstr
    prop_simplelicensing_LicenseExpression_simplelicensing_licenseListVe\
-   rsion = tstr .regexp "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\
-   (?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\
-   \\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z\
-                                                              -]+)*))?$"
+   rsion = tstr .regexp "(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9\
+   ]*)(-((0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-zA-Z-]*)(\.(0|[1-9][0-9]*|\
+   [0-9]*[a-zA-Z-][0-9a-zA-Z-]*))*))?(\+([0-9a-zA-Z-]+(\.[0-9a-zA-Z-]+)\
+                               *))?" ; CoSPDX representation of versions
    simplelicensing_SimpleLicensingText = { label.type => const.\
    simplelicensing_SimpleLicensingText, label.spdxId => IRI, ~\
                              simplelicensing_SimpleLicensingText_props }
@@ -1027,10 +1027,10 @@ Table of Contents
                                           precision strings in SPDX-JSON
    prop_CreationInfo_createdBy = Agent_derived
    prop_CreationInfo_createdUsing = Tool_derived
-   prop_CreationInfo_specVersion = tstr .regexp "^(0|[1-9]\\d*)\\.(0|[1\
-   -9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-\
-   ]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a\
-                                      -zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$"
+   prop_CreationInfo_specVersion = tstr .regexp "(0|[1-9][0-9]*)\.(0|[1\
+   -9][0-9]*)\.(0|[1-9][0-9]*)(-((0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-zA\
+   -Z-]*)(\.(0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-zA-Z-]*))*))?(\+([0-9a-\
+       zA-Z-]+(\.[0-9a-zA-Z-]+)*))?" ; CoSPDX representation of versions
    DictionaryEntry = { label.type => const.DictionaryEntry, ?label.@id \
                              => BlankNodeOrIRI, ~DictionaryEntry_props }
    DictionaryEntry_derived = DictionaryEntry / BlankNodeOrIRI
