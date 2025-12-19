@@ -219,7 +219,8 @@ Table of Contents
    software_File_props = { ~software_SoftwareArtifact_props, ?label.\
    contentType => prop_software_File_contentType, ?label.\
              software_fileKind => prop_software_File_software_fileKind }
-   prop_software_File_contentType = tstr .regexp "^[^\\/]+\\/[^\\/]+$"
+   prop_software_File_contentType = tstr .regexp "[^/]+/[^/]+" ; \
+                                  CoSPDX representation of content types
    prop_software_File_software_fileKind = const.directory / const.file
    software_Package = { label.type => const.software_Package, label.\
                                 spdxId => IRI, ~software_Package_props }
@@ -346,8 +347,8 @@ Table of Contents
    prop_security_CvssV2VulnAssessmentRelationship_security_vectorStrin\
                                                                      g }
    prop_security_CvssV2VulnAssessmentRelationship_security_score = \
-   tstr .regexp "-?[0-9]+(\\.[0-9]*)?" ; CoSPDX canonical \
-                                 representation of quantities as strings
+   tstr .regexp "-?[0-9]+(\\.[0-9]*)?" ; CoSPDX representation of \
+                                                              quantities
    prop_security_CvssV2VulnAssessmentRelationship_security_vectorStrin\
                                                                 g = tstr
    security_CvssV3VulnAssessmentRelationship = { label.type => const.\
@@ -364,8 +365,8 @@ Table of Contents
    prop_security_CvssV3VulnAssessmentRelationship_security_vectorStrin\
                                                                      g }
    prop_security_CvssV3VulnAssessmentRelationship_security_score = \
-   tstr .regexp "-?[0-9]+(\\.[0-9]*)?" ; CoSPDX canonical \
-                                 representation of quantities as strings
+   tstr .regexp "-?[0-9]+(\\.[0-9]*)?" ; CoSPDX representation of \
+                                                              quantities
    prop_security_CvssV3VulnAssessmentRelationship_security_severity = \
      const.critical / const.high / const.low / const.medium / const.none
    prop_security_CvssV3VulnAssessmentRelationship_security_vectorStrin\
@@ -384,8 +385,8 @@ Table of Contents
    prop_security_CvssV4VulnAssessmentRelationship_security_vectorStrin\
                                                                      g }
    prop_security_CvssV4VulnAssessmentRelationship_security_score = \
-   tstr .regexp "-?[0-9]+(\\.[0-9]*)?" ; CoSPDX canonical \
-                                 representation of quantities as strings
+   tstr .regexp "-?[0-9]+(\\.[0-9]*)?" ; CoSPDX representation of \
+                                                              quantities
    prop_security_CvssV4VulnAssessmentRelationship_security_severity = \
      const.critical / const.high / const.low / const.medium / const.none
    prop_security_CvssV4VulnAssessmentRelationship_security_vectorStrin\
@@ -402,11 +403,11 @@ Table of Contents
    label.security_probability => \
      prop_security_EpssVulnAssessmentRelationship_security_probability }
    prop_security_EpssVulnAssessmentRelationship_security_percentile = \
-   tstr .regexp "-?[0-9]+(\\.[0-9]*)?" ; CoSPDX canonical \
-                                 representation of quantities as strings
+   tstr .regexp "-?[0-9]+(\\.[0-9]*)?" ; CoSPDX representation of \
+                                                              quantities
    prop_security_EpssVulnAssessmentRelationship_security_probability = \
-   tstr .regexp "-?[0-9]+(\\.[0-9]*)?" ; CoSPDX canonical \
-                                 representation of quantities as strings
+   tstr .regexp "-?[0-9]+(\\.[0-9]*)?" ; CoSPDX representation of \
+                                                              quantities
    security_ExploitCatalogVulnAssessmentRelationship = { label.type => \
    const.security_ExploitCatalogVulnAssessmentRelationship, label.\
    spdxId => IRI, ~\
@@ -881,8 +882,7 @@ Table of Contents
    prop_ai_EnergyConsumptionDescription_ai_energyQuantity, label.\
    ai_energyUnit => prop_ai_EnergyConsumptionDescription_ai_energyUnit }
    prop_ai_EnergyConsumptionDescription_ai_energyQuantity = tstr .\
-   regexp "-?[0-9]+(\\.[0-9]*)?" ; CoSPDX canonical representation of \
-                                                   quantities as strings
+     regexp "-?[0-9]+(\\.[0-9]*)?" ; CoSPDX representation of quantities
    prop_ai_EnergyConsumptionDescription_ai_energyUnit = const.\
                             kilowattHour / const.megajoule / const.other
    ai_EnergyUnitType = { label.type => const.ai_EnergyUnitType, ?label.\
@@ -1152,7 +1152,8 @@ Table of Contents
    prop_ExternalRef_externalRefType, ?label.locator => [ * \
                                             prop_ExternalRef_locator ] }
    prop_ExternalRef_comment = tstr
-   prop_ExternalRef_contentType = tstr .regexp "^[^\\/]+\\/[^\\/]+$"
+   prop_ExternalRef_contentType = tstr .regexp "[^/]+/[^/]+" ; CoSPDX \
+                                         representation of content types
    prop_ExternalRef_externalRefType = const.altDownloadLocation / const\
    .altWebPage / const.binaryArtifact / const.bower / const.buildMeta \
    / const.buildSystem / const.certificationReport / const.chat / const\
@@ -1479,7 +1480,8 @@ Table of Contents
    prop_Annotation_contentType, ?label.statement => \
    prop_Annotation_statement, label.subject => prop_Annotation_subject }
    prop_Annotation_annotationType = const.other / const.review
-   prop_Annotation_contentType = tstr .regexp "^[^\\/]+\\/[^\\/]+$"
+   prop_Annotation_contentType = tstr .regexp "[^/]+/[^/]+" ; CoSPDX \
+                                         representation of content types
    prop_Annotation_statement = tstr
    prop_Annotation_subject = Element_derived
    Artifact_derived = ai_AIPackage / dataset_DatasetPackage / \
@@ -1551,7 +1553,8 @@ Table of Contents
    Bom_derived = software_Sbom / Bom / BlankNodeOrIRI
    Bom_props = { ~Bundle_props, ~AnyObject }
    IRI = tstr .regexp "^(?!_:).+:.+"
-   BlankNode = tstr .regexp "_:.+"
+   BlankNode = tstr .regexp "_:.+" ; CoSPDX representation of blank \
+                                                                   nodes
    BlankNodeOrIRI = IRI / BlankNode
    anyURI = tstr
    SHACLClass = { label.type => $label.type } ; Socket for eventual \
