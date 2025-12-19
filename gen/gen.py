@@ -560,7 +560,7 @@ CONTENT_TYPES = {
     "prop_Annotation_contentType",
 }
 SEMVER_TYPES = {
-    "prop_simplelicensing_LicenseExpression_simplelicensing_licenseListVersion"
+    "prop_simplelicensing_LicenseExpression_simplelicensing_licenseListVersion",
     "prop_CreationInfo_specVersion",
 }
 
