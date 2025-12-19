@@ -553,6 +553,11 @@ QUANTITY_TYPES = {
 
 DIGESTVALUE_TYPES = {"prop_Hash_hashValue"}
 EXTENSIBLE_TYPES = {"AnyClass"}
+CONTENT_TYPES = {
+    "prop_software_File_contentType",
+    "prop_ExternalRef_contentType",
+    "prop_Annotation_contentType",
+}
 
 if __name__ == "__main__":
     # Default to checked-in 3.0.1 schema if no path is provided
@@ -616,12 +621,19 @@ if __name__ == "__main__":
                         # because it avoids precision issues if the document is converted to SPDX JSON.
                         # The regexp is converted to its CDDL/XSD equivalent (https://www.rfc-editor.org/rfc/rfc8610#section-3.8.3)
                         print(
-                            f'{type_name} = tstr .regexp "-?[0-9]+(\\\\.[0-9]*)?" ; CoSPDX canonical representation of quantities as strings'
+                            f'{type_name} = tstr .regexp "-?[0-9]+(\\\\.[0-9]*)?" ; CoSPDX representation of quantities'
                         )
                     elif type_name == "BlankNode":
                         # SPDX JSON pattern is "^_:.+", but CDDL regexp are matches, and we assume that the intention is not
                         # to match any line returns.
-                        print(f'{type_name} = tstr .regexp "_:.+"')
+                        print(
+                            f'{type_name} = tstr .regexp "_:.+" ; CoSPDX representation of blank nodes'
+                        )
+                    elif type_name in CONTENT_TYPES:
+                        # SPDX JSON pattern is "^[^\\/]+\\/[^\\/]+$", but CDDL regexp are matches and the double escaping is not needed.
+                        print(
+                            f'{type_name} = tstr .regexp "[^/]+/[^/]+" ; CoSPDX representation of content types'
+                        )
                     else:
                         print(declaration(type_name, type_schema, type_class))
             print()
