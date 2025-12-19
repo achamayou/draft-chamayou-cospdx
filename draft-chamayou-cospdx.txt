@@ -5,8 +5,8 @@
 Network Working Group                                        A. Chamayou
 Internet-Draft                                                 Microsoft
 Intended status: Standards Track                             H. Birkholz
-Expires: 21 June 2026                                     Fraunhofer SIT
-                                                        18 December 2025
+Expires: 22 June 2026                                     Fraunhofer SIT
+                                                        19 December 2025
 
 
             A Deterministic Compact (CBOR) Encoding for SPDX
@@ -46,7 +46,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 21 June 2026.
+   This Internet-Draft will expire on 22 June 2026.
 
 Copyright Notice
 
@@ -346,7 +346,8 @@ Table of Contents
    prop_security_CvssV2VulnAssessmentRelationship_security_vectorStrin\
                                                                      g }
    prop_security_CvssV2VulnAssessmentRelationship_security_score = \
-                           float / tstr .regexp "^-?[0-9]+(\\.[0-9]*)?$"
+   tstr .regexp "-?[0-9]+(\\.[0-9]*)?" ; CoSPDX canonical \
+                                 representation of quantities as strings
    prop_security_CvssV2VulnAssessmentRelationship_security_vectorStrin\
                                                                 g = tstr
    security_CvssV3VulnAssessmentRelationship = { label.type => const.\
@@ -363,7 +364,8 @@ Table of Contents
    prop_security_CvssV3VulnAssessmentRelationship_security_vectorStrin\
                                                                      g }
    prop_security_CvssV3VulnAssessmentRelationship_security_score = \
-                           float / tstr .regexp "^-?[0-9]+(\\.[0-9]*)?$"
+   tstr .regexp "-?[0-9]+(\\.[0-9]*)?" ; CoSPDX canonical \
+                                 representation of quantities as strings
    prop_security_CvssV3VulnAssessmentRelationship_security_severity = \
      const.critical / const.high / const.low / const.medium / const.none
    prop_security_CvssV3VulnAssessmentRelationship_security_vectorStrin\
@@ -382,7 +384,8 @@ Table of Contents
    prop_security_CvssV4VulnAssessmentRelationship_security_vectorStrin\
                                                                      g }
    prop_security_CvssV4VulnAssessmentRelationship_security_score = \
-                           float / tstr .regexp "^-?[0-9]+(\\.[0-9]*)?$"
+   tstr .regexp "-?[0-9]+(\\.[0-9]*)?" ; CoSPDX canonical \
+                                 representation of quantities as strings
    prop_security_CvssV4VulnAssessmentRelationship_security_severity = \
      const.critical / const.high / const.low / const.medium / const.none
    prop_security_CvssV4VulnAssessmentRelationship_security_vectorStrin\
@@ -399,9 +402,11 @@ Table of Contents
    label.security_probability => \
      prop_security_EpssVulnAssessmentRelationship_security_probability }
    prop_security_EpssVulnAssessmentRelationship_security_percentile = \
-                           float / tstr .regexp "^-?[0-9]+(\\.[0-9]*)?$"
+   tstr .regexp "-?[0-9]+(\\.[0-9]*)?" ; CoSPDX canonical \
+                                 representation of quantities as strings
    prop_security_EpssVulnAssessmentRelationship_security_probability = \
-                           float / tstr .regexp "^-?[0-9]+(\\.[0-9]*)?$"
+   tstr .regexp "-?[0-9]+(\\.[0-9]*)?" ; CoSPDX canonical \
+                                 representation of quantities as strings
    security_ExploitCatalogVulnAssessmentRelationship = { label.type => \
    const.security_ExploitCatalogVulnAssessmentRelationship, label.\
    spdxId => IRI, ~\
@@ -875,8 +880,9 @@ Table of Contents
    ai_energyQuantity => \
    prop_ai_EnergyConsumptionDescription_ai_energyQuantity, label.\
    ai_energyUnit => prop_ai_EnergyConsumptionDescription_ai_energyUnit }
-   prop_ai_EnergyConsumptionDescription_ai_energyQuantity = float / \
-                                   tstr .regexp "^-?[0-9]+(\\.[0-9]*)?$"
+   prop_ai_EnergyConsumptionDescription_ai_energyQuantity = tstr .\
+   regexp "-?[0-9]+(\\.[0-9]*)?" ; CoSPDX canonical representation of \
+                                                   quantities as strings
    prop_ai_EnergyConsumptionDescription_ai_energyUnit = const.\
                             kilowattHour / const.megajoule / const.other
    ai_EnergyUnitType = { label.type => const.ai_EnergyUnitType, ?label.\
