@@ -2654,7 +2654,8 @@ SoftwareAgent_props = { ~Agent_props, ~AnyObject }
 Bom = { label.type =&gt; const.Bom, label.spdxId =&gt; IRI, ~Bom_props }
 Bom_derived = software_Sbom / Bom / BlankNodeOrIRI
 Bom_props = { ~Bundle_props, ~AnyObject }
-IRI = tstr .regexp "^(?!_:).+:.+"
+IRI = tstr .regexp "[^_].*:.+|_[^:].*:.+" ; CoSPDX representation \
+                                                              of IRIs
 BlankNode = tstr .regexp "_:.+" ; CoSPDX representation of blank \
                                                                 nodes
 BlankNodeOrIRI = IRI / BlankNode

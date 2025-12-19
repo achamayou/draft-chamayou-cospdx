@@ -1552,7 +1552,8 @@ Table of Contents
    Bom = { label.type => const.Bom, label.spdxId => IRI, ~Bom_props }
    Bom_derived = software_Sbom / Bom / BlankNodeOrIRI
    Bom_props = { ~Bundle_props, ~AnyObject }
-   IRI = tstr .regexp "^(?!_:).+:.+"
+   IRI = tstr .regexp "[^_].*:.+|_[^:].*:.+" ; CoSPDX representation \
+                                                                 of IRIs
    BlankNode = tstr .regexp "_:.+" ; CoSPDX representation of blank \
                                                                    nodes
    BlankNodeOrIRI = IRI / BlankNode
