@@ -142,7 +142,7 @@ simplelicensing_LicenseExpression_derived = simplelicensing_LicenseExpression / 
 simplelicensing_LicenseExpression_props = { ~simplelicensing_AnyLicenseInfo_props, ?label.simplelicensing_customIdToUri => [ * prop_simplelicensing_LicenseExpression_simplelicensing_customIdToUri ], label.simplelicensing_licenseExpression => prop_simplelicensing_LicenseExpression_simplelicensing_licenseExpression, ?label.simplelicensing_licenseListVersion => prop_simplelicensing_LicenseExpression_simplelicensing_licenseListVersion }
 prop_simplelicensing_LicenseExpression_simplelicensing_customIdToUri = DictionaryEntry_derived
 prop_simplelicensing_LicenseExpression_simplelicensing_licenseExpression = tstr
-prop_simplelicensing_LicenseExpression_simplelicensing_licenseListVersion = tstr .regexp "(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-((0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-zA-Z-]*)(\.(0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-zA-Z-]*))*))?(\+([0-9a-zA-Z-]+(\.[0-9a-zA-Z-]+)*))?" ; CoSPDX representation of versions
+prop_simplelicensing_LicenseExpression_simplelicensing_licenseListVersion = tstr .regexp "(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(-((0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-zA-Z-]*)(\\.(0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-zA-Z-]*))*))?(\\+([0-9a-zA-Z-]+(\\.[0-9a-zA-Z-]+)*))?" ; CoSPDX representation of versions
 simplelicensing_SimpleLicensingText = { label.type => const.simplelicensing_SimpleLicensingText, label.spdxId => IRI, ~simplelicensing_SimpleLicensingText_props }
 simplelicensing_SimpleLicensingText_derived = simplelicensing_SimpleLicensingText / BlankNodeOrIRI
 simplelicensing_SimpleLicensingText_props = { ~Element_props, label.simplelicensing_licenseText => prop_simplelicensing_SimpleLicensingText_simplelicensing_licenseText }
@@ -316,7 +316,7 @@ prop_CreationInfo_comment = tstr
 prop_CreationInfo_created = #6.1(uint) ; ISO8601 UTC with second-precision strings in SPDX-JSON
 prop_CreationInfo_createdBy = Agent_derived
 prop_CreationInfo_createdUsing = Tool_derived
-prop_CreationInfo_specVersion = tstr .regexp "(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-((0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-zA-Z-]*)(\.(0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-zA-Z-]*))*))?(\+([0-9a-zA-Z-]+(\.[0-9a-zA-Z-]+)*))?" ; CoSPDX representation of versions
+prop_CreationInfo_specVersion = tstr .regexp "(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(-((0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-zA-Z-]*)(\\.(0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-zA-Z-]*))*))?(\\+([0-9a-zA-Z-]+(\\.[0-9a-zA-Z-]+)*))?" ; CoSPDX representation of versions
 DictionaryEntry = { label.type => const.DictionaryEntry, ?label.@id => BlankNodeOrIRI, ~DictionaryEntry_props }
 DictionaryEntry_derived = DictionaryEntry / BlankNodeOrIRI
 DictionaryEntry_props = { ~SHACLClass, label.key => prop_DictionaryEntry_key, ?label.value => prop_DictionaryEntry_value }

@@ -649,7 +649,7 @@ if __name__ == "__main__":
                         # SPDX JSON pattern to match SemVer, but CDDL regexp are matches and do not support lookaheads.
                         # See fuzz_semver_regex.py for testing the equivalence of the patterns.
                         print(
-                            f'{type_name} = tstr .regexp "(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(-((0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-zA-Z-]*)(\\.(0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-zA-Z-]*))*))?(\\+([0-9a-zA-Z-]+(\\.[0-9a-zA-Z-]+)*))?" ; CoSPDX representation of versions'
+                            f'{type_name} = tstr .regexp "(0|[1-9][0-9]*)\\\\.(0|[1-9][0-9]*)\\\\.(0|[1-9][0-9]*)(-((0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-zA-Z-]*)(\\\\.(0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-zA-Z-]*))*))?(\\\\+([0-9a-zA-Z-]+(\\\\.[0-9a-zA-Z-]+)*))?" ; CoSPDX representation of versions'
                         )
                     else:
                         print(declaration(type_name, type_schema, type_class))
