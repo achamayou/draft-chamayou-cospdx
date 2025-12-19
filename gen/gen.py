@@ -542,6 +542,15 @@ DATETIME_TYPES = {
     "prop_security_VexNotAffectedVulnAssessmentRelationship_security_impactStatementTime",
 }
 
+QUANTITY_TYPES = {
+    "prop_security_CvssV2VulnAssessmentRelationship_security_score",
+    "prop_security_CvssV3VulnAssessmentRelationship_security_score",
+    "prop_security_CvssV4VulnAssessmentRelationship_security_score",
+    "prop_security_EpssVulnAssessmentRelationship_security_percentile",
+    "prop_security_EpssVulnAssessmentRelationship_security_probability",
+    "prop_ai_EnergyConsumptionDescription_ai_energyQuantity",
+}
+
 DIGESTVALUE_TYPES = {"prop_Hash_hashValue"}
 EXTENSIBLE_TYPES = {"AnyClass"}
 
@@ -572,6 +581,7 @@ if __name__ == "__main__":
                 if type_class is None:
                     unmapped.append((type_name, type_schema))
                 else:
+                    # Special casing, either for canonicality or for future extensibility
                     if type_name in DIGESTVALUE_TYPES:
                         print(
                             f"{type_name}_wrapped = #6.108(bstr) ; Strings in SPDX-JSON, usually hex-encoded"
@@ -600,6 +610,14 @@ if __name__ == "__main__":
                         )
                         for value in label_type_values:
                             print(f"$label.type /= {value}")
+                    elif type_name in QUANTITY_TYPES:
+                        # SPDX allows either float, or strings matching "^-?[0-9]+(\\.[0-9]*)?$"
+                        # CoSPDX must make a choice for canonicality, and chooses the string representation
+                        # because it avoids precision issues if the document is converted to SPDX JSON.
+                        # The regexp is converted to its CDDL/XSD equivalent (https://www.rfc-editor.org/rfc/rfc8610#section-3.8.3)
+                        print(
+                            f'{type_name} = tstr .regexp "-?[0-9]+(\\\\.[0-9]*)?" ; CoSPDX canonical representation of quantities as strings'
+                        )
                     else:
                         print(declaration(type_name, type_schema, type_class))
             print()

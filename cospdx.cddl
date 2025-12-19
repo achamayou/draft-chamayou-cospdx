@@ -76,25 +76,25 @@ prop_security_VulnAssessmentRelationship_security_withdrawnTime = #6.1(uint) ; I
 security_CvssV2VulnAssessmentRelationship = { label.type => const.security_CvssV2VulnAssessmentRelationship, label.spdxId => IRI, ~security_CvssV2VulnAssessmentRelationship_props }
 security_CvssV2VulnAssessmentRelationship_derived = security_CvssV2VulnAssessmentRelationship / BlankNodeOrIRI
 security_CvssV2VulnAssessmentRelationship_props = { ~security_VulnAssessmentRelationship_props, label.security_score => prop_security_CvssV2VulnAssessmentRelationship_security_score, label.security_vectorString => prop_security_CvssV2VulnAssessmentRelationship_security_vectorString }
-prop_security_CvssV2VulnAssessmentRelationship_security_score = float / tstr .regexp "^-?[0-9]+(\\.[0-9]*)?$"
+prop_security_CvssV2VulnAssessmentRelationship_security_score = tstr .regexp "-?[0-9]+(\\.[0-9]*)?" ; CoSPDX canonical representation of quantities as strings
 prop_security_CvssV2VulnAssessmentRelationship_security_vectorString = tstr
 security_CvssV3VulnAssessmentRelationship = { label.type => const.security_CvssV3VulnAssessmentRelationship, label.spdxId => IRI, ~security_CvssV3VulnAssessmentRelationship_props }
 security_CvssV3VulnAssessmentRelationship_derived = security_CvssV3VulnAssessmentRelationship / BlankNodeOrIRI
 security_CvssV3VulnAssessmentRelationship_props = { ~security_VulnAssessmentRelationship_props, label.security_score => prop_security_CvssV3VulnAssessmentRelationship_security_score, label.security_severity => prop_security_CvssV3VulnAssessmentRelationship_security_severity, label.security_vectorString => prop_security_CvssV3VulnAssessmentRelationship_security_vectorString }
-prop_security_CvssV3VulnAssessmentRelationship_security_score = float / tstr .regexp "^-?[0-9]+(\\.[0-9]*)?$"
+prop_security_CvssV3VulnAssessmentRelationship_security_score = tstr .regexp "-?[0-9]+(\\.[0-9]*)?" ; CoSPDX canonical representation of quantities as strings
 prop_security_CvssV3VulnAssessmentRelationship_security_severity = const.critical / const.high / const.low / const.medium / const.none
 prop_security_CvssV3VulnAssessmentRelationship_security_vectorString = tstr
 security_CvssV4VulnAssessmentRelationship = { label.type => const.security_CvssV4VulnAssessmentRelationship, label.spdxId => IRI, ~security_CvssV4VulnAssessmentRelationship_props }
 security_CvssV4VulnAssessmentRelationship_derived = security_CvssV4VulnAssessmentRelationship / BlankNodeOrIRI
 security_CvssV4VulnAssessmentRelationship_props = { ~security_VulnAssessmentRelationship_props, label.security_score => prop_security_CvssV4VulnAssessmentRelationship_security_score, label.security_severity => prop_security_CvssV4VulnAssessmentRelationship_security_severity, label.security_vectorString => prop_security_CvssV4VulnAssessmentRelationship_security_vectorString }
-prop_security_CvssV4VulnAssessmentRelationship_security_score = float / tstr .regexp "^-?[0-9]+(\\.[0-9]*)?$"
+prop_security_CvssV4VulnAssessmentRelationship_security_score = tstr .regexp "-?[0-9]+(\\.[0-9]*)?" ; CoSPDX canonical representation of quantities as strings
 prop_security_CvssV4VulnAssessmentRelationship_security_severity = const.critical / const.high / const.low / const.medium / const.none
 prop_security_CvssV4VulnAssessmentRelationship_security_vectorString = tstr
 security_EpssVulnAssessmentRelationship = { label.type => const.security_EpssVulnAssessmentRelationship, label.spdxId => IRI, ~security_EpssVulnAssessmentRelationship_props }
 security_EpssVulnAssessmentRelationship_derived = security_EpssVulnAssessmentRelationship / BlankNodeOrIRI
 security_EpssVulnAssessmentRelationship_props = { ~security_VulnAssessmentRelationship_props, label.security_percentile => prop_security_EpssVulnAssessmentRelationship_security_percentile, label.security_probability => prop_security_EpssVulnAssessmentRelationship_security_probability }
-prop_security_EpssVulnAssessmentRelationship_security_percentile = float / tstr .regexp "^-?[0-9]+(\\.[0-9]*)?$"
-prop_security_EpssVulnAssessmentRelationship_security_probability = float / tstr .regexp "^-?[0-9]+(\\.[0-9]*)?$"
+prop_security_EpssVulnAssessmentRelationship_security_percentile = tstr .regexp "-?[0-9]+(\\.[0-9]*)?" ; CoSPDX canonical representation of quantities as strings
+prop_security_EpssVulnAssessmentRelationship_security_probability = tstr .regexp "-?[0-9]+(\\.[0-9]*)?" ; CoSPDX canonical representation of quantities as strings
 security_ExploitCatalogVulnAssessmentRelationship = { label.type => const.security_ExploitCatalogVulnAssessmentRelationship, label.spdxId => IRI, ~security_ExploitCatalogVulnAssessmentRelationship_props }
 security_ExploitCatalogVulnAssessmentRelationship_derived = security_ExploitCatalogVulnAssessmentRelationship / BlankNodeOrIRI
 security_ExploitCatalogVulnAssessmentRelationship_props = { ~security_VulnAssessmentRelationship_props, label.security_catalogType => prop_security_ExploitCatalogVulnAssessmentRelationship_security_catalogType, label.security_exploited => prop_security_ExploitCatalogVulnAssessmentRelationship_security_exploited, label.security_locator => prop_security_ExploitCatalogVulnAssessmentRelationship_security_locator }
@@ -247,7 +247,7 @@ prop_ai_EnergyConsumption_ai_trainingEnergyConsumption = ai_EnergyConsumptionDes
 ai_EnergyConsumptionDescription = { label.type => const.ai_EnergyConsumptionDescription, ?label.@id => BlankNodeOrIRI, ~ai_EnergyConsumptionDescription_props }
 ai_EnergyConsumptionDescription_derived = ai_EnergyConsumptionDescription / BlankNodeOrIRI
 ai_EnergyConsumptionDescription_props = { ~SHACLClass, label.ai_energyQuantity => prop_ai_EnergyConsumptionDescription_ai_energyQuantity, label.ai_energyUnit => prop_ai_EnergyConsumptionDescription_ai_energyUnit }
-prop_ai_EnergyConsumptionDescription_ai_energyQuantity = float / tstr .regexp "^-?[0-9]+(\\.[0-9]*)?$"
+prop_ai_EnergyConsumptionDescription_ai_energyQuantity = tstr .regexp "-?[0-9]+(\\.[0-9]*)?" ; CoSPDX canonical representation of quantities as strings
 prop_ai_EnergyConsumptionDescription_ai_energyUnit = const.kilowattHour / const.megajoule / const.other
 ai_EnergyUnitType = { label.type => const.ai_EnergyUnitType, ?label.@id => BlankNodeOrIRI, ~ai_EnergyUnitType_props }
 ai_EnergyUnitType_derived = ai_EnergyUnitType / const.spdx_AI_EnergyUnitType_kilowattHour / const.spdx_AI_EnergyUnitType_megajoule / const.spdx_AI_EnergyUnitType_other / BlankNodeOrIRI
