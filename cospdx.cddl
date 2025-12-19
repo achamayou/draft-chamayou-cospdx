@@ -473,7 +473,7 @@ Bom = { label.type => const.Bom, label.spdxId => IRI, ~Bom_props }
 Bom_derived = software_Sbom / Bom / BlankNodeOrIRI
 Bom_props = { ~Bundle_props, ~AnyObject }
 IRI = tstr .regexp "^(?!_:).+:.+"
-BlankNode = tstr .regexp "^_:.+"
+BlankNode = tstr .regexp "_:.+"
 BlankNodeOrIRI = IRI / BlankNode
 anyURI = tstr
 SHACLClass = { label.type => $label.type } ; Socket for eventual post-SPDX 3.0.1 extensions

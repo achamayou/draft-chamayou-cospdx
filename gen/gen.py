@@ -618,6 +618,10 @@ if __name__ == "__main__":
                         print(
                             f'{type_name} = tstr .regexp "-?[0-9]+(\\\\.[0-9]*)?" ; CoSPDX canonical representation of quantities as strings'
                         )
+                    elif type_name == "BlankNode":
+                        # SPDX JSON pattern is "^_:.+", but CDDL regexp are matches, and we assume that the intention is not
+                        # to match any line returns.
+                        print(f'{type_name} = tstr .regexp "_:.+"')
                     else:
                         print(declaration(type_name, type_schema, type_class))
             print()
