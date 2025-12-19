@@ -8,6 +8,7 @@ TODO:
 """
 
 import json
+import re
 import sys
 import pathlib
 
@@ -558,6 +559,10 @@ CONTENT_TYPES = {
     "prop_ExternalRef_contentType",
     "prop_Annotation_contentType",
 }
+SEMVER_TYPES = {
+    "prop_simplelicensing_LicenseExpression_simplelicensing_licenseListVersion"
+    "prop_CreationInfo_specVersion",
+}
 
 if __name__ == "__main__":
     # Default to checked-in 3.0.1 schema if no path is provided
@@ -636,8 +641,15 @@ if __name__ == "__main__":
                         )
                     elif type_name == "IRI":
                         # SPDX JSON pattern is "^(?!_:).+:.+", but CDDL regexp are matches and do not support lookaheads.
+                        # See fuzz_iri_regex.py for testing the equivalence of the patterns.
                         print(
                             f'{type_name} = tstr .regexp "[^_].*:.+|_[^:].*:.+" ; CoSPDX representation of IRIs'
+                        )
+                    elif type_name in SEMVER_TYPES:
+                        # SPDX JSON pattern to match SemVer, but CDDL regexp are matches and do not support lookaheads.
+                        # See fuzz_semver_regex.py for testing the equivalence of the patterns.
+                        print(
+                            f'{type_name} = tstr .regexp "(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(-((0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-zA-Z-]*)(\\.(0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-zA-Z-]*))*))?(\\+([0-9a-zA-Z-]+(\\.[0-9a-zA-Z-]+)*))?" ; CoSPDX representation of versions'
                         )
                     else:
                         print(declaration(type_name, type_schema, type_class))
