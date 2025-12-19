@@ -634,6 +634,11 @@ if __name__ == "__main__":
                         print(
                             f'{type_name} = tstr .regexp "[^/]+/[^/]+" ; CoSPDX representation of content types'
                         )
+                    elif type_name == "IRI":
+                        # SPDX JSON pattern is "^(?!_:).+:.+", but CDDL regexp are matches and do not support lookaheads.
+                        print(
+                            f'{type_name} = tstr .regexp "[^_].*:.+|_[^:].*:.+" ; CoSPDX representation of IRIs'
+                        )
                     else:
                         print(declaration(type_name, type_schema, type_class))
             print()
