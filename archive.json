@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-12-16T01:54:16.005638+00:00",
+  "timestamp": "2025-12-21T01:59:42.908738+00:00",
   "repo": "achamayou/draft-chamayou-cospdx",
   "labels": [
     {
@@ -60,9 +60,9 @@
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
-      "body": "- [x] Property labels to integers\n\nThere are 163 property labels in the 3.0.1 spec, and they seem to be the most frequently used values in documents, so it is natural to allocate them starting from 1. The current mapping uses the order of appearance in the json schema.\n\n- [x] Const strings to integers\n\nThere are 337 string const values defined in the spec, they are allocated from 1001 onwards.\n\n- [x] Enum strings to integers\n\nThere are 303 string enum values defined in the spec, they are allocated from 2001 onwards.\n\n- [x] hashValue is a string in JSON LD, and typically hex-encoded although the spec is not precise (https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/hashValue/). A bstr would be more efficient in terms of space and processing, with Tag 108 to convey that it is expected to be represented as a lower-case hex string.\n\n- [x] Datetime to CBOR datetime, Epoch-based/tag1: https://www.rfc-editor.org/rfc/rfc8949.html#name-epoch-based-date-time\n\n- [x] *Version are SemVer 2.0 strings. They stay as strings because CoSWID would only make them larger.\n\n- [ ] Regular expressions, need specific translation in cases where they remain (i.e. not DateTimes).",
+      "body": "- [x] Property labels to integers\n\nThere are 163 property labels in the 3.0.1 spec, and they seem to be the most frequently used values in documents, so it is natural to allocate them starting from 1. The current mapping uses the order of appearance in the json schema.\n\n- [x] Const strings to integers\n\nThere are 337 string const values defined in the spec, they are allocated from 1001 onwards.\n\n- [x] Enum strings to integers\n\nThere are 303 string enum values defined in the spec, they are allocated from 2001 onwards.\n\n- [x] hashValue is a string in JSON LD, and typically hex-encoded although the spec is not precise (https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/hashValue/). A bstr would be more efficient in terms of space and processing, with Tag 108 to convey that it is expected to be represented as a lower-case hex string.\n\n- [x] Datetime to CBOR datetime, Epoch-based/tag1: https://www.rfc-editor.org/rfc/rfc8949.html#name-epoch-based-date-time\n\n- [x] *Version are SemVer 2.0 strings. They stay as strings because CoSWID would only make them larger.\n\nRegular expressions, need specific translation in cases where they remain (i.e. not DateTimes), see below.",
       "createdAt": "2025-12-09T11:49:50Z",
-      "updatedAt": "2025-12-15T13:36:43Z",
+      "updatedAt": "2025-12-19T17:23:44Z",
       "closedAt": null,
       "comments": [
         {
@@ -99,6 +99,13 @@
           "body": "```\nsamples/dataset/example01.spdx3.json                            : JSON: 7078     CoSPDX: 3880      Ratio: 0.55 CoSPDXsr: 0.38 LZMA: 0.26\nsamples/software/example13.spdx3.json                           : JSON: 5375     CoSPDX: 2944      Ratio: 0.55 CoSPDXsr: 0.32 LZMA: 0.18\nsamples/software/example5-src.json                              : JSON: 8781     CoSPDX: 5208      Ratio: 0.59 CoSPDXsr: 0.32 LZMA: 0.13\nsamples/software/hello-source.spdx.json                         : JSON: 12425    CoSPDX: 6732      Ratio: 0.54 CoSPDXsr: 0.32 LZMA: 0.11\nsamples/software/example7-golang.spdx.json                      : JSON: 3531     CoSPDX: 1832      Ratio: 0.52 CoSPDXsr: 0.35 LZMA: 0.31\nsamples/software/example4-src.json                              : JSON: 10915    CoSPDX: 6284      Ratio: 0.58 CoSPDXsr: 0.32 LZMA: 0.12\nsamples/software/example7-bin.spdx.json                         : JSON: 5820     CoSPDX: 2811      Ratio: 0.48 CoSPDXsr: 0.31 LZMA: 0.24\nsamples/software/example3-src.json                              : JSON: 10915    CoSPDX: 6284      Ratio: 0.58 CoSPDXsr: 0.32 LZMA: 0.12\nsamples/software/example7-go-module.spdx.json                   : JSON: 2364     CoSPDX: 1325      Ratio: 0.56 CoSPDXsr: 0.43 LZMA: 0.38\nsamples/software/appbomination.spdx.json                        : JSON: 53063    CoSPDX: 35632     Ratio: 0.67 CoSPDXsr: 0.34 LZMA: 0.06\nsamples/software/sbom.spdx.json                                 : JSON: 14520    CoSPDX: 9285      Ratio: 0.64 CoSPDXsr: 0.33 LZMA: 0.10\nsamples/software/example6-bin.json                              : JSON: 16305    CoSPDX: 10829     Ratio: 0.66 CoSPDXsr: 0.46 LZMA: 0.18\nsamples/software/example6-lib.json                              : JSON: 12530    CoSPDX: 7451      Ratio: 0.59 CoSPDXsr: 0.32 LZMA: 0.11\nsamples/software/example1.json                                  : JSON: 11380    CoSPDX: 6588      Ratio: 0.58 CoSPDXsr: 0.31 LZMA: 0.12\nsamples/software/hello-src.spdx.json                            : JSON: 31165    CoSPDX: 20185     Ratio: 0.65 CoSPDXsr: 0.31 LZMA: 0.06\nsamples/software/example6-src.json                              : JSON: 8781     CoSPDX: 5208      Ratio: 0.59 CoSPDXsr: 0.32 LZMA: 0.13\nsamples/software/example4-bin.json                              : JSON: 16866    CoSPDX: 9976      Ratio: 0.59 CoSPDXsr: 0.32 LZMA: 0.09\nsamples/software/examplemaven-0.0.1-enriched.spdx.json          : JSON: 22245    CoSPDX: 13803     Ratio: 0.62 CoSPDXsr: 0.32 LZMA: 0.09\nsamples/software/examplemaven-0.0.1.spdx.json                   : JSON: 19651    CoSPDX: 11798     Ratio: 0.60 CoSPDXsr: 0.31 LZMA: 0.09\nsamples/software/example7-third-party-modules.spdx.json         : JSON: 3538     CoSPDX: 2021      Ratio: 0.57 CoSPDXsr: 0.37 LZMA: 0.31\nsamples/software/hello-dist.spdx.json                           : JSON: 7444     CoSPDX: 4851      Ratio: 0.65 CoSPDXsr: 0.34 LZMA: 0.13\nsamples/software/example5-bin.json                              : JSON: 8222     CoSPDX: 4852      Ratio: 0.59 CoSPDXsr: 0.34 LZMA: 0.14\nsamples/software/example3-bin.json                              : JSON: 11484    CoSPDX: 6640      Ratio: 0.58 CoSPDXsr: 0.32 LZMA: 0.12\nsamples/ai/simplehtr-example.json                               : JSON: 73134    CoSPDX: 49908     Ratio: 0.68 CoSPDXsr: 0.45 LZMA: 0.14\nsamples/ai/sbom.spdx.json                                       : JSON: 27271    CoSPDX: 11700     Ratio: 0.43 CoSPDXsr: 0.29 LZMA: 0.14\nsamples/ccf/manifest.spdx.json                                  : JSON: 4355500  CoSPDX: 1311058   Ratio: 0.30 CoSPDXsr: 0.16 LZMA: 0.10\n```\n\nSnapshot as of `af6a26b58cd06f62f52ef295416ab7ef13a0365d`, the ccf sample is good example of what can be achieved on the output of sbom-tool, with a step to make the Ids for compact (they are opaque to begin with): a rough total 70% decrease in size.\n\nSPDX examples get less of a benefit here because their Ids are left intact, and they use large IRI strings such as `\"https://swinslow.net/spdx-examples/example1/hello-v3-specv3/SPDXRef-gnrtd4\"`. The CoSPSXSr results show that they land in a similar range once full string interning is applied.\n\nIt's reasonable to assume that a native emitter would produce efficient UUIDs to begin with, and so an early estimate for CoSPDX is \"about a third of the JSON size\".",
           "createdAt": "2025-12-15T13:36:43Z",
           "updatedAt": "2025-12-15T13:36:43Z"
+        },
+        {
+          "author": "achamayou",
+          "authorAssociation": "OWNER",
+          "body": "Regular expression types:\n\n- [x] Quantities, done in https://github.com/achamayou/draft-chamayou-cospdx/commit/07700ca91f053c9f8ad0a5e6647e359cef3c26bb\n- [x] Content Type `\"^[^\\\\/]+\\\\/[^\\\\/]+$\"`\n- [x] Spec Version `\"^(0|[1-9]\\\\d*)\\\\.(0|[1-9]\\\\d*)\\\\.(0|[1-9]\\\\d*)(?:-((?:0|[1-9]\\\\d*|\\\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\\\.(?:0|[1-9]\\\\d*|\\\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\\\+([0-9a-zA-Z-]+(?:\\\\.[0-9a-zA-Z-]+)*))?$\"`\n- [x] IRI `\"^(?!_:).+:.+\"`\n- [x] BlankNode `\"^_:.+\"`",
+          "createdAt": "2025-12-19T13:33:53Z",
+          "updatedAt": "2025-12-19T17:23:44Z"
         }
       ]
     },
@@ -138,7 +145,7 @@
       "labels": [],
       "body": "Reference https://datatracker.ietf.org/doc/html/rfc8949#section-4.2.1 and https://datatracker.ietf.org/doc/draft-ietf-cbor-cde/",
       "createdAt": "2025-12-09T11:57:49Z",
-      "updatedAt": "2025-12-10T08:46:17Z",
+      "updatedAt": "2025-12-19T13:35:27Z",
       "closedAt": null,
       "comments": [
         {
@@ -161,6 +168,13 @@
           "body": "In this case, the definition is:\n\n```\n        \"prop_security_EpssVulnAssessmentRelationship_security_probability\": {\n                    \"anyOf\": [\n                        {\n                            \"type\": \"number\"\n                        },\n                        {\n                            \"type\": \"string\",\n                            \"pattern\": \"^-?[0-9]+(\\\\.[0-9]*)?$\"\n                        }\n                    ]\n        },\n```\n\nYes, this can be populated with text string decimals: https://spdx.github.io/spdx-spec/v3.0.1/model/Security/Classes/EpssVulnAssessmentRelationship/\n\n```\n{\n  \"type\": \"EpssVulnAssessmentRelationship\",\n  \"spdxId\": \"urn:spdx.dev:epss-CVE-2020-28498\",\n  \"relationshipType\": \"hasAssessmentFor\",\n  \"security_probability\": \"0.00105\",\n  \"security_percentile\": \"0.42356\",\n  \"from\": \"urn:spdx.dev:vuln-cve-2020-28498\",\n  \"to\": [\"urn:product-acme-application-1.3\"],\n  \"suppliedBy\": [\"urn:spdx.dev:agent-jane-doe\"],\n  \"publishedTime\": \"2023-10-05T00:00:30Z\"\n}\n```\n\nExponents are not allowed by the regexp. On second thought, the mapping of json `number` to `int / float` is a mistake and can be removed. The difficulty with float vs string remains.\n",
           "createdAt": "2025-12-10T08:46:17Z",
           "updatedAt": "2025-12-10T08:46:17Z"
+        },
+        {
+          "author": "achamayou",
+          "authorAssociation": "OWNER",
+          "body": "Quantity types fixed in https://github.com/achamayou/draft-chamayou-cospdx/commit/07700ca91f053c9f8ad0a5e6647e359cef3c26bb",
+          "createdAt": "2025-12-19T13:30:50Z",
+          "updatedAt": "2025-12-19T13:30:50Z"
         }
       ]
     },
@@ -169,30 +183,62 @@
       "id": "I_kwDOQEUIIM7ddr1C",
       "title": "Use cut operator at least in contexts where AnyObject is an alternative",
       "url": "https://github.com/achamayou/draft-chamayou-cospdx/issues/6",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "achamayou",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "This it to make it clear AnyObject with labels that overlap with a named type but differently-typed values is not permitted.",
       "createdAt": "2025-12-10T14:53:59Z",
-      "updatedAt": "2025-12-10T14:53:59Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2025-12-18T15:29:42Z",
+      "closedAt": "2025-12-18T15:29:42Z",
+      "comments": [
+        {
+          "author": "achamayou",
+          "authorAssociation": "OWNER",
+          "body": "There is no opportunity for this, because all occurrences of AnyObject are in anyOf with named types:\n\n```\n$ grep AnyObject ../cospdx.cddl \nsoftware_ContentIdentifierType_props = { ~SHACLClass, ~AnyObject }\nsoftware_FileKindType_props = { ~SHACLClass, ~AnyObject }\nsoftware_SbomType_props = { ~SHACLClass, ~AnyObject }\nsoftware_SoftwarePurpose_props = { ~SHACLClass, ~AnyObject }\nsecurity_CvssSeverityType_props = { ~SHACLClass, ~AnyObject }\nsecurity_ExploitCatalogType_props = { ~SHACLClass, ~AnyObject }\nsecurity_SsvcDecisionType_props = { ~SHACLClass, ~AnyObject }\nsecurity_VexJustificationType_props = { ~SHACLClass, ~AnyObject }\nsecurity_VexFixedVulnAssessmentRelationship_props = { ~security_VexVulnAssessmentRelationship_props, ~AnyObject }\nsecurity_VexUnderInvestigationVulnAssessmentRelationship_props = { ~security_VexVulnAssessmentRelationship_props, ~AnyObject }\nsimplelicensing_AnyLicenseInfo_props = { ~Element_props, ~AnyObject }\nexpandedlicensing_CustomLicenseAddition_props = { ~expandedlicensing_LicenseAddition_props, ~AnyObject }\nexpandedlicensing_ExtendableLicense_props = { ~simplelicensing_AnyLicenseInfo_props, ~AnyObject }\nexpandedlicensing_IndividualLicensingInfo_props = { ~simplelicensing_AnyLicenseInfo_props, ~AnyObject }\nexpandedlicensing_CustomLicense_props = { ~expandedlicensing_License_props, ~AnyObject }\ndataset_ConfidentialityLevelType_props = { ~SHACLClass, ~AnyObject }\ndataset_DatasetAvailabilityType_props = { ~SHACLClass, ~AnyObject }\ndataset_DatasetType_props = { ~SHACLClass, ~AnyObject }\nai_EnergyUnitType_props = { ~SHACLClass, ~AnyObject }\nai_SafetyRiskAssessmentType_props = { ~SHACLClass, ~AnyObject }\nextension_Extension_props = { ~SHACLClass, ~AnyObject }\nAnnotationType_props = { ~SHACLClass, ~AnyObject }\nExternalIdentifierType_props = { ~SHACLClass, ~AnyObject }\nExternalRefType_props = { ~SHACLClass, ~AnyObject }\nHashAlgorithm_props = { ~SHACLClass, ~AnyObject }\nIndividualElement_props = { ~Element_props, ~AnyObject }\nLifecycleScopeType_props = { ~SHACLClass, ~AnyObject }\nPresenceType_props = { ~SHACLClass, ~AnyObject }\nProfileIdentifierType_props = { ~SHACLClass, ~AnyObject }\nRelationshipCompleteness_props = { ~SHACLClass, ~AnyObject }\nRelationshipType_props = { ~SHACLClass, ~AnyObject }\nSupportType_props = { ~SHACLClass, ~AnyObject }\nTool_props = { ~Element_props, ~AnyObject }\nAgent_props = { ~Element_props, ~AnyObject }\nOrganization_props = { ~Agent_props, ~AnyObject }\nPerson_props = { ~Agent_props, ~AnyObject }\nSoftwareAgent_props = { ~Agent_props, ~AnyObject }\nBom_props = { ~Bundle_props, ~AnyObject }\nAnyObject = { * any => any }\n```",
+          "createdAt": "2025-12-18T15:29:42Z",
+          "updatedAt": "2025-12-18T15:29:42Z"
+        }
+      ]
     },
     {
       "number": 7,
       "id": "I_kwDOQEUIIM7ddsx9",
       "title": "Add socket to SHACLClass and AnyClass to indicate possible future extension in later revisions of the spec",
       "url": "https://github.com/achamayou/draft-chamayou-cospdx/issues/7",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "achamayou",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "Needs name-based special casing in gen.py",
       "createdAt": "2025-12-10T14:54:50Z",
-      "updatedAt": "2025-12-10T14:54:50Z",
+      "updatedAt": "2025-12-18T15:26:26Z",
+      "closedAt": "2025-12-18T15:26:26Z",
+      "comments": [
+        {
+          "author": "achamayou",
+          "authorAssociation": "OWNER",
+          "body": "done in https://github.com/achamayou/draft-chamayou-cospdx/commit/a85bcd1e72d4f087b432d377c74029d1f42937cf",
+          "createdAt": "2025-12-18T15:26:23Z",
+          "updatedAt": "2025-12-18T15:26:23Z"
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "id": "I_kwDOQEUIIM7fX3Br",
+      "title": "Evaluate extending the context to intern strings",
+      "url": "https://github.com/achamayou/draft-chamayou-cospdx/issues/8",
+      "state": "OPEN",
+      "author": "achamayou",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Experiments with string references as implemented by `cbor2` (https://github.com/achamayou/draft-chamayou-cospdx/issues/2#issuecomment-3655693265) show relatively substantial savings. SPDX has an explicit \"context\" mechanism that could be used to intern larger strings, and replace them with integer values without affecting canonicality.\n\nThis ad-hoc mechanism could be removed in later iterations of CoSPDX once https://www.ietf.org/archive/id/draft-ietf-cbor-packed-14.html is finalised and available.",
+      "createdAt": "2025-12-19T13:39:18Z",
+      "updatedAt": "2025-12-19T13:39:22Z",
       "closedAt": null,
       "comments": []
     }
