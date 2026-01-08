@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-12-21T01:59:42.908738+00:00",
+  "timestamp": "2026-01-08T01:57:01.606659+00:00",
   "repo": "achamayou/draft-chamayou-cospdx",
   "labels": [
     {
@@ -55,15 +55,15 @@
       "id": "I_kwDOQEUIIM7dKiCd",
       "title": "Efficient type mapping",
       "url": "https://github.com/achamayou/draft-chamayou-cospdx/issues/2",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "achamayou",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "- [x] Property labels to integers\n\nThere are 163 property labels in the 3.0.1 spec, and they seem to be the most frequently used values in documents, so it is natural to allocate them starting from 1. The current mapping uses the order of appearance in the json schema.\n\n- [x] Const strings to integers\n\nThere are 337 string const values defined in the spec, they are allocated from 1001 onwards.\n\n- [x] Enum strings to integers\n\nThere are 303 string enum values defined in the spec, they are allocated from 2001 onwards.\n\n- [x] hashValue is a string in JSON LD, and typically hex-encoded although the spec is not precise (https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/hashValue/). A bstr would be more efficient in terms of space and processing, with Tag 108 to convey that it is expected to be represented as a lower-case hex string.\n\n- [x] Datetime to CBOR datetime, Epoch-based/tag1: https://www.rfc-editor.org/rfc/rfc8949.html#name-epoch-based-date-time\n\n- [x] *Version are SemVer 2.0 strings. They stay as strings because CoSWID would only make them larger.\n\nRegular expressions, need specific translation in cases where they remain (i.e. not DateTimes), see below.",
       "createdAt": "2025-12-09T11:49:50Z",
-      "updatedAt": "2025-12-19T17:23:44Z",
-      "closedAt": null,
+      "updatedAt": "2026-01-07T11:27:36Z",
+      "closedAt": "2026-01-07T11:27:36Z",
       "comments": [
         {
           "author": "cabo",
@@ -239,6 +239,54 @@
       "body": "Experiments with string references as implemented by `cbor2` (https://github.com/achamayou/draft-chamayou-cospdx/issues/2#issuecomment-3655693265) show relatively substantial savings. SPDX has an explicit \"context\" mechanism that could be used to intern larger strings, and replace them with integer values without affecting canonicality.\n\nThis ad-hoc mechanism could be removed in later iterations of CoSPDX once https://www.ietf.org/archive/id/draft-ietf-cbor-packed-14.html is finalised and available.",
       "createdAt": "2025-12-19T13:39:18Z",
       "updatedAt": "2025-12-19T13:39:22Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 9,
+      "id": "I_kwDOQEUIIM7hyJAC",
+      "title": "Add validation of generated content to the CI",
+      "url": "https://github.com/achamayou/draft-chamayou-cospdx/issues/9",
+      "state": "OPEN",
+      "author": "achamayou",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "The output of conv, currently used for size comparison, should be fed to cddlc for validation.",
+      "createdAt": "2026-01-07T09:36:15Z",
+      "updatedAt": "2026-01-07T09:36:15Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 10,
+      "id": "I_kwDOQEUIIM7hyUxk",
+      "title": "Add reasoning and evolution provisions in the document",
+      "url": "https://github.com/achamayou/draft-chamayou-cospdx/issues/10",
+      "state": "OPEN",
+      "author": "achamayou",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-01-07T09:51:56Z",
+      "updatedAt": "2026-01-07T09:51:56Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 11,
+      "id": "I_kwDOQEUIIM7hyVTD",
+      "title": "Security Considerations",
+      "url": "https://github.com/achamayou/draft-chamayou-cospdx/issues/11",
+      "state": "OPEN",
+      "author": "achamayou",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Look at rfc9880",
+      "createdAt": "2026-01-07T09:52:39Z",
+      "updatedAt": "2026-01-07T09:52:39Z",
       "closedAt": null,
       "comments": []
     }
