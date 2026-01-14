@@ -5,8 +5,8 @@
 Network Working Group                                        A. Chamayou
 Internet-Draft                                                 Microsoft
 Intended status: Standards Track                             H. Birkholz
-Expires: 22 June 2026                                     Fraunhofer SIT
-                                                        19 December 2025
+Expires: 18 July 2026                                     Fraunhofer SIT
+                                                         14 January 2026
 
 
             A Deterministic Compact (CBOR) Encoding for SPDX
@@ -46,11 +46,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 22 June 2026.
+   This Internet-Draft will expire on 18 July 2026.
 
 Copyright Notice
 
-   Copyright (c) 2025 IETF Trust and the persons identified as the
+   Copyright (c) 2026 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -66,12 +66,13 @@ Table of Contents
 
    1.  Introduction
    2.  CDDL Schema
-   3.  Conventions and Definitions
-   4.  Security Considerations
-   5.  IANA Considerations
-   6.  References
-     6.1.  Normative References
-     6.2.  Informative References
+   3.  Encoding
+   4.  Conventions and Definitions
+   5.  Security Considerations
+   6.  IANA Considerations
+   7.  References
+     7.1.  Normative References
+     7.2.  Informative References
    Acknowledgments
    Authors' Addresses
 
@@ -93,6 +94,9 @@ Table of Contents
    [CBOR-LD], but aims to contribute CDDL schemas ([RFC8610]) rather
    than registries for the various SPDX profiles that describe how to
    emit CBOR-encoded SPDX 3.0.1 directly.
+
+   CoSPDX documents MUST follow the structure defined in the CDDL schema
+   below:
 
 2.  CDDL Schema
 
@@ -2777,7 +2781,12 @@ Table of Contents
    const.SoftwareAgent = 1561
    const.Bom = 1562
 
-3.  Conventions and Definitions
+3.  Encoding
+
+   The encoding of CoSPDX documents MUST follow the Core Deterministic
+   Encoding Requirements defined in Section 4.2.1 of [RFC8949].
+
+4.  Conventions and Definitions
 
    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
    "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
@@ -2785,17 +2794,17 @@ Table of Contents
    BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
    capitals, as shown here.
 
-4.  Security Considerations
+5.  Security Considerations
 
    TODO Security
 
-5.  IANA Considerations
+6.  IANA Considerations
 
    This document has no IANA actions.
 
-6.  References
+7.  References
 
-6.1.  Normative References
+7.1.  Normative References
 
    [CBOR-LD]  "CBOR-LD", n.d.,
               <https://json-ld.github.io/cbor-ld-spec/>.
@@ -2815,10 +2824,15 @@ Table of Contents
               JSON Data Structures", RFC 8610, DOI 10.17487/RFC8610,
               June 2019, <https://www.rfc-editor.org/rfc/rfc8610>.
 
+   [RFC8949]  Bormann, C. and P. Hoffman, "Concise Binary Object
+              Representation (CBOR)", STD 94, RFC 8949,
+              DOI 10.17487/RFC8949, December 2020,
+              <https://www.rfc-editor.org/rfc/rfc8949>.
+
    [SPDX]     "SPDX Specification", n.d.,
               <https://spdx.dev/use/specifications/>.
 
-6.2.  Informative References
+7.2.  Informative References
 
    [CAN-SPDX] "Canonical Serialization for SPDX", n.d.,
               <https://spdx.github.io/spdx-spec/v3.0.1/
