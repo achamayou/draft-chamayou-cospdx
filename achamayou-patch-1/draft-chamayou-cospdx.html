@@ -1,0 +1,4030 @@
+<!DOCTYPE html>
+<html lang="en" class="Internet-Draft">
+<head>
+<meta charset="utf-8">
+<meta content="Common,Latin" name="scripts">
+<meta content="initial-scale=1.0" name="viewport">
+<title>A Deterministic Compact (CBOR) Encoding for SPDX</title>
+<meta content="Amaury Chamayou" name="author">
+<meta content="Henk Birkholz" name="author">
+<meta content="
+       This document proposes a canonical serialization of SPDX 3.0.1 to CBOR, to enable the reproducible and efficient creation of System Package Data Exchange information. This representation is consistent with, and lends itself to being used with transparency services proposed by the Supply Chain Integrity, Transparency and Trust initiative. 
+    " name="description">
+<meta content="xml2rfc 3.31.0" name="generator">
+<meta content="CBOR" name="keyword">
+<meta content="SPDX" name="keyword">
+<meta content="deterministic" name="keyword">
+<meta content="draft-chamayou-cospdx-latest" name="ietf.draft">
+<!-- Generator version information:
+  xml2rfc 3.31.0
+    Python 3.12.12
+    ConfigArgParse 1.7
+    google-i18n-address 3.1.1
+    intervaltree 3.2.1
+    Jinja2 3.1.6
+    lxml 6.0.2
+    platformdirs 4.5.1
+    pycountry 24.6.1
+    PyYAML 6.0.3
+    requests 2.32.5
+    wcwidth 0.2.14
+-->
+<link href="draft-chamayou-cospdx.xml" rel="alternate" type="application/rfc+xml">
+<link href="#copyright" rel="license">
+<style type="text/css">@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-cyrillic.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-cyrillic.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Lora SemiBold'), local('Lora-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-semibold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Oxygen Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Oxygen Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: italic;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: italic;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-italic-cyrillic.woff2') format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: italic;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-italic-greek.woff2') format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: italic;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-italic-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: italic;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-italic-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: normal;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-regular-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: normal;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-regular-cyrillic.woff2') format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: normal;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-regular-greek.woff2') format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: normal;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: normal;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  color-scheme: light dark;
+  --background-color: #fff;
+  --text-color: #222;
+  --title-color: #191919;
+  --link-color: #2a6496;
+  --highlight-color: #f9f9f9;
+  --line-color: #eee;
+  --pilcrow-weak: #ddd;
+  --pilcrow-strong: #bbb;
+  --small-font-size: 14.5px;
+  --font-mono: 'Oxygen Mono', monospace;
+  --font-title: "Sofia Sans Semi Condensed", sans-serif;
+  scrollbar-color: #bbb #eee;
+}
+body {
+  max-width: 600px;
+  margin: 75px auto;
+  padding: 0 5px;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  font: 16px/22px "Lora", serif;
+  scroll-behavior: smooth;
+}
+
+.ears {
+  display: none;
+}
+
+/* headings */
+section {
+  clear: both;
+}
+.section-number {
+  padding-right: 0.5em;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-title);
+  font-weight: 680;
+  margin: 0.8em 0 0.3em;
+  font-size-adjust: 0.5;
+  color: var(--title-color);
+}
+h1#title {
+  font-size: 32px;
+  line-height: 40px;
+  clear: both;
+}
+h1#title, h1#rfcnum {
+  margin: 1.5em 0 0.2em;
+}
+h1#rfcnum + h1#title {
+  margin: 0.2em 0;
+}
+
+h1, h2, h3 {
+  font-size: 22px;
+  line-height: 27px;
+}
+h4, h5, h6 {
+  font-size: 20px;
+  line-height: 24px;
+}
+
+/* general structure */
+.author {
+  padding-bottom: 0.3em;
+  vertical-align: top;
+}
+#abstract+p {
+  font-size: 18px;
+  line-height: 24px;
+}
+#abstract+p code, #abstract+p samp, #abstract+p tt {
+  font-size: 16px;
+  line-height: 0;
+}
+
+p {
+  padding: 0;
+  margin: 0.5em 0;
+  text-align: left;
+}
+div {
+  margin: 0;
+}
+.alignRight.art-text {
+  background-color: var(--highlight-color);
+  border: 1px solid var(--line-color);
+  border-radius: 3px;
+  padding: 0.5em 1em 0;
+  margin-bottom: 0.5em;
+}
+.alignRight.art-text pre {
+  padding: 0;
+  width: auto;
+}
+.alignRight {
+  margin: 1em 0;
+}
+.alignRight > *:first-child {
+  border: none;
+  margin: 0;
+  float: right;
+  clear: both;
+}
+.alignRight > *:nth-child(2) {
+  clear: both;
+  display: block;
+  border: none;
+}
+svg {
+  display: block;
+}
+/* font-family isn't space-separated, but =~ will have to do */
+svg[font-family~="monospace" i], svg [font-family~="monospace" i] {
+  font-family: var(--font-mono);
+}
+.alignCenter.art-text {
+  background-color: var(--highlight-color);
+  border: 1px solid var(--line-color);
+  border-radius: 3px;
+  padding: 0.5em 1em 0;
+  margin-bottom: 0.5em;
+}
+.alignCenter.art-text pre {
+  padding: 0;
+  width: auto;
+}
+.alignCenter {
+  margin: 1em 0;
+}
+.alignCenter > *:first-child {
+  border: none;
+  /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
+     support flexbox yet.
+  */
+  display: table;
+  margin: 0 auto;
+}
+
+/* lists */
+ol, ul {
+  padding: 0;
+  margin: 0 0 0.5em 2em;
+  & :is(ol, ul) {
+    margin-left: 1em;
+  }
+}
+li {
+  margin: 0 0 0.25em 0;
+}
+ul.empty, .ulEmpty {
+  list-style-type: none;
+  & li {
+    margin-top: 0.5em;
+  }
+}
+:is(ul, ol).compact, .ulCompact, .olCompact {
+  margin: 0 0 0 2em;
+  & li {
+    margin: 0;
+    & :first-child { margin-top: 0; }
+    & :last-child { margin-bottom: 0; }
+  }
+}
+
+/* definition lists */
+dl {
+  clear: left;
+  --indent: 3ch;
+  /* --indent: attr(indent ch); not supported in any browser, but we can dream */
+  &.olPercent {
+    --indent: 5ch;
+    & > dt {
+      min-width: calc(var(--indent) - 2ch);
+    }
+  }
+  &.olPercent > dt {
+    float: none;
+  }
+
+  dl > dd > & {
+    margin-top: 0.5em;
+    margin-bottom: 0;
+  }
+}
+dl:not(.dlNewline) > dt {
+  float: left;
+  margin-right: 2ch;
+  min-width: 8ch;
+}
+dl > dd {
+  margin-bottom: .8em;
+  margin-left: var(--indent) !important; /* stupid element overrides */
+  min-height: 2ex;
+}
+:is(dl.compact, .dlCompact) > dd {
+  margin-bottom: 0;
+  & > :is(:first-child, .break:first-child + *) {
+    margin-top: 0;
+  }
+  & > :is(:last-child) {
+    margin-bottom: 0;
+  }
+}
+:is(dd, span).break {
+  display: none;
+}
+
+/* links */
+a, a[href].selfRef:hover {
+  text-decoration: none;
+}
+a[href] {
+  color: var(--link-color);
+}
+a[href].selfRef, .iref + a[href].internal {
+  color: var(--text-color);
+}
+a[href]:hover {
+  text-decoration: underline;
+}
+a[href].selfRef:hover {
+  background-color: var(--highlight-color);
+}
+a.xref:is(.cite, .auto), :is(#status-of-memo, #copyright) a {
+  white-space: nowrap;
+}
+
+/* Figures */
+tt, code, pre {
+  background-color: var(--highlight-color);
+  font: 14px/22px var(--font-mono);
+}
+tt, code {
+  /* changing the font for inline elements leads to different ascender
+     and descender heights; as we want to retain baseline alignment,
+     remove leading to avoid altering the final height of lines
+     note: this fails if these blocks take an entire line,
+     a different solution would be great */
+  line-height: 0;
+}
+:is(h1, h2, h3, h4, h5, h6) :is(tt, code) {
+  font-size: 84%;
+}
+pre {
+  border: 1px solid var(--line-color);
+  font-size: 13.5px;
+  line-height: 16px;
+  letter-spacing: -0.2px;
+  margin: 5px;
+  padding: 5px;
+}
+img {
+  max-width: 100%;
+}
+figure {
+  margin: 0.5em 0;
+  padding: 0;
+}
+figure blockquote {
+  margin: 0.8em 0.4em 0.4em;
+}
+figcaption, caption {
+  font-style: italic;
+  margin: 0.5em 1.5em;
+  text-align: left;
+  caption-side: bottom;
+}
+@media screen {
+  /* Auto-collapse boilerplate. */
+  :is(#status-of-memo, #copyright) p {
+    margin: -2px 0;
+    max-height: 0;
+    transition: max-height 2s ease, margin 0.5s ease 0.5s;
+    overflow: hidden;
+  }
+  :is(#status-of-memo, #copyright):hover p,
+  :is(#status-of-memo, #copyright) h2:target ~ p {
+    margin: 0.5em 0;
+    max-height: 500px;
+    overflow: auto;
+  }
+  pre, svg {
+    display: inline-block;
+    /* In the horizontal direction, sometimes people make over-sized figures.
+       Scrollbars for those is therefore necessary: auto adds them as necessary..
+       In the vertical direction, the line-height can combine with the font
+       asender/descender height to produce scrollbars: hidden avoids that. */
+    overflow: auto hidden;
+  }
+  pre {
+    max-width: 100%;
+    width: calc(100% - 22px - 1em);
+  }
+  svg {
+    max-width: calc(100% - 22px - 1em);
+  }
+  figure pre {
+    display: block;
+    width: calc(100% - 25px);
+  }
+  :is(pre, svg) + .pilcrow {
+    display: inline-block;
+    vertical-align: text-bottom;
+    padding-bottom: 8px;
+  }
+}
+
+/* aside, blockquote */
+aside, blockquote {
+  margin-left: 0;
+  padding: 0 2em;
+  font-style: italic;
+}
+blockquote {
+  margin: 1em 0;
+}
+cite {
+  display: block;
+  text-align: right;
+  font-style: italic;
+}
+
+/* tables */
+table {
+  width: auto;
+  max-width: 100%;
+  margin: 0 0 1em;
+  border-collapse: collapse;
+}
+table.right {
+  margin-left: auto;
+}
+table.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+table.left {
+  margin-right: auto;
+}
+table .text-left {
+  text-align: left;
+}
+table .text-center {
+  text-align: center;
+}
+table .text-right {
+  text-align: right;
+}
+
+thead, tbody {
+  border: 1px solid var(--line-color);
+}
+th, td {
+  text-align: left;
+  vertical-align: top;
+  padding: 5px 10px;
+}
+th {
+  background-color: var(--line-color);
+}
+:is(tr:nth-child(2n), thead+tbody > tr:nth-child(2n+1)) > td {
+  background-color: var(--background-color);
+}
+:is(tr:nth-child(2n+1), thead+tbody > tr:nth-child(2n)) > td {
+  background-color: var(--highlight-color);
+}
+table caption {
+  margin: 0;
+  padding: 3px 0 3px 1em;
+}
+table p {
+  margin: 0;
+}
+
+/* pilcrow */
+a.pilcrow {
+  margin-left: 3px;
+  opacity: 0.2;
+  user-select: none;
+  &[href] {
+    color: var(--pilcrow-weak);
+    &:hover { text-decoration: none; }
+  }
+}
+@media not print {
+  :hover > a.pilcrow {
+    opacity: 1;
+  }
+  a.pilcrow[href]:hover {
+    color: var(--pilcrow-strong);
+    background-color: transparent;
+  }
+}
+@media print {
+  a.pilcrow {
+    display: none;
+  }
+}
+
+/* misc */
+hr {
+  border: 0;
+  border-top: 1px solid var(--line-color);
+}
+.bcp14 {
+  font-variant: small-caps;
+  font-weight: 600;
+  font-size: var(--small-font-size);
+}
+.role {
+  font-variant: all-small-caps;
+}
+sub, sup {
+  line-height: 1;
+  font-size: 80%;
+}
+
+/* info block */
+#identifiers {
+  margin: 0;
+  font-size: var(--small-font-size);
+  line-height: 18px;
+  --identifier-width: 15ch;
+  & dt {
+    width: var(--identifier-width);
+    min-width: var(--identifier-width);
+    clear: left;
+    float: left;
+    text-align: right;
+    margin-right: 1ch;
+  }
+  & dd {
+    margin: 0;
+    margin-left: calc(1em + var(--identifier-width)) !important;
+    min-width: 5em;
+  }
+  & .authors {
+    & .author {
+      display: inline-block;
+      margin-right: 1.5em;
+    }
+    & .org {
+      font-style: italic;
+    }
+  }
+}
+
+/* The prepared/rendered info at the very bottom of the page */
+.docInfo {
+  color: #999;
+  font-size: 0.9em;
+  font-style: italic;
+  margin-top: 2em;
+}
+.docInfo .prepared {
+  float: right;
+}
+
+/* table of contents */
+#toc {
+  padding: 0.75em 0 2em 0;
+  margin-bottom: 1em;
+
+  & nav {
+    & ul {
+      margin: 0 0.5em 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    & li {
+      line-height: 1.3em;
+      margin: 2px 0;
+      padding-left: 1.2em;
+      text-indent: -1.2em;
+    }
+  }
+  & a.xref {
+    white-space: normal;
+  }
+}
+
+.references {
+  & > dt {
+    text-align: right;
+    font-weight: bold;
+    min-width: 10ch;
+    margin-right: 1.5ch;
+    &:target::before {
+      content: "⇒";
+      margin: 0 10px 0 -25px;
+    }
+  }
+  & > dd {
+    margin-left: 12ch !important;
+    overflow: visible;
+    & .refInstance {
+      margin-bottom: 0.8em;
+    }
+    & .ascii {
+      margin-bottom: 0.25em;
+    }
+  }
+}
+
+#rfc\.index\.index + ul {
+  margin-left: 0;
+}
+
+/* authors */
+address.vcard {
+  font-style: normal;
+  max-width: 20em;
+  margin: 1em auto 1em 0;
+
+  & .nameRole {
+    font-weight: 700;
+    margin-left: 0;
+  }
+  & .label {
+    margin: 0.5em 0;
+  }
+  & .type {
+    display: none;
+  }
+  & .alternative-contact {
+    margin: 0.5em 0 0.25em 0;
+  }
+  & .non-ascii {
+    margin: 0 0 0 2em;
+  }
+  & div.left {
+    text-align: left;
+  }
+  & div.right {
+    text-align: right;
+  }
+}
+
+hr.addr {
+  border-top: 1px dashed;
+  margin: 0;
+  color: #ddd;
+  max-width: calc(100% - 16px);
+}
+@media (min-width: 500px) {
+  #authors-addresses > section {
+    column-count: 2;
+    column-gap: 20px;
+  }
+  #authors-addresses > section > h2 {
+    column-span: all;
+  }
+  /* hack for break-inside: avoid-column */
+  #authors-addresses address {
+    display: inline-block;
+    break-inside: avoid-column;
+  }
+}
+
+/* Comments */
+.rfcEditorRemove p:first-of-type {
+  font-style: italic;
+}
+.cref {
+  background-color: rgba(249, 232, 105, 0.3);
+  padding: 2px 4px;
+}
+.crefSource {
+  font-style: italic;
+}
+
+@media screen {
+  #toc nav {
+    font-family: var(--font-title);
+    font-weight: 360;
+    & > ul { margin-bottom: 2em; }
+    & ul {
+      margin: 0 0 0 4px;
+      & :is(p, li) {
+        margin: 2px 0;
+      }
+    }
+  }
+  #toc a.toplink {
+    float: right;
+  }
+}
+@media not screen {
+  #toc a.toplink {
+    display: none;
+  }
+}
+
+
+/* TOC layout for smaller screens */
+@media screen and (max-width: 929px) {
+  #toc {
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    padding: 1px 0 0 0;
+    margin: 0;
+    border-bottom: 1px solid #ccc;
+    opacity: 0.6;
+  }
+  #toc h2 {
+    margin: 0;
+    padding: 2px 0 2px 6px;
+    padding-right: 1em;
+    font-size: 18px;
+    line-height: 24px;
+    min-width: 190px;
+    text-align: right;
+    background-color: #444;
+    color: white;
+    cursor: pointer;
+    &::before { /* css hamburger */
+      float: right;
+      position: relative;
+      width: 1em;
+      height: 1px;
+      left: -164px;
+      margin: 8px 0 0 0;
+      background: white none repeat scroll 0 0;
+      box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
+      content: "";
+    }
+  }
+  #toc nav {
+    display: none;
+    background-color: var(--background-color);
+    padding: 0.5em 1em 1em;
+    overflow: auto;
+    overscroll-behavior: contain;
+    height: calc(100vh - 48px);
+    border-left: 1px solid #ddd;
+  }
+  #toc.active {
+    opacity: 1;
+    & nav { display: block; }
+  }
+  /* Make the collapsed ToC header render white on gray also when it's a link */
+  #toc h2 a,
+  #toc h2 a:is(:link, :focus, :hover),
+  #toc a.toplink,
+  #toc a.toplink:hover {
+    color: white;
+    background-color: #444;
+    text-decoration: none;
+  }
+  #toc a.toplink {
+    margin: 2px 0.5em 0;
+  }
+}
+
+/* TOC layout for wide screens */
+@media screen and (min-width: 930px) {
+  body {
+    padding-right: 360px;
+    padding-right: calc(min(180px + 20%, 500px));
+  }
+  #toc {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    right: calc(50vw - 480px);
+    width: 312px;
+    margin: 0;
+    padding: 0;
+    z-index: 1;
+  }
+  #toc h2 {
+    margin: 0;
+    padding: 0.25em 1em 1em 0;
+  }
+  #toc nav {
+    display: block;
+    height: calc(90vh - 84px);
+    bottom: 0;
+    padding: 0.5em 0 2em;
+    overflow: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+  img { /* future proofing */
+    max-width: 100%;
+    height: auto;
+  }
+  #toc a.toplink {
+    margin: 8px 0.5em 0;
+  }
+}
+
+/* pagination */
+@media print {
+  body {
+    width: 100%;
+  }
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+  #n-copyright-notice {
+    border-bottom: none;
+  }
+  #toc, #n-introduction {
+    page-break-before: always;
+  }
+  #toc {
+    border-top: none;
+    padding-top: 0;
+  }
+  figure, pre, .vcard {
+    page-break-inside: avoid;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  :is(h2, h3, h4, h5, h6)+*, dd {
+    page-break-before: avoid;
+  }
+  pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 10pt;
+  }
+  table {
+    border: 1px solid #ddd;
+  }
+  td {
+    border-top: 1px solid #ddd;
+  }
+}
+
+@page :first {
+  padding-top: 0;
+  @top-left {
+    content: normal;
+    border: none;
+  }
+  @top-center {
+    content: normal;
+    border: none;
+  }
+  @top-right {
+    content: normal;
+    border: none;
+  }
+}
+
+@page {
+  size: A4;
+  margin-bottom: 45mm;
+  padding-top: 20px;
+}
+
+/* Dark mode. */
+@media (prefers-color-scheme: dark) {
+:root {
+  --background-color: #121212;
+  --text-color: #f0f0f0;
+  --title-color: #fff;
+  --link-color: #4da4f0;
+  --highlight-color: #282828;
+  --line-color: #444;
+  --pilcrow-weak: #444;
+  --pilcrow-strong: #666;
+  scrollbar-color: #777 #333;
+}
+}
+
+/* SVG Trick: a prefix match works because only black and white are allowed */
+svg :is([stroke="black"], [stroke^="#000"]) {
+  stroke: var(--text-color);
+}
+svg :is([stroke="white"], [stroke^="#fff"]) {
+  stroke: var(--background-color);
+}
+svg :is([fill="black"], [fill^="#000"], :not([fill])) {
+  fill: var(--text-color);
+}
+svg :is([fill="white"], [fill^="#fff"]) {
+  fill: var(--background-color);
+}
+</style>
+
+</head>
+<body class="xml2rfc">
+<table class="ears">
+<thead><tr>
+<td class="left">Internet-Draft</td>
+<td class="center">Deterministic Compact SPDX</td>
+<td class="right">January 2026</td>
+</tr></thead>
+<tfoot><tr>
+<td class="left">Chamayou &amp; Birkholz</td>
+<td class="center">Expires 18 July 2026</td>
+<td class="right">[Page]</td>
+</tr></tfoot>
+</table>
+<div id="external-metadata" class="document-information"></div>
+<div id="internal-metadata" class="document-information">
+<dl id="identifiers">
+<dt class="label-workgroup">Workgroup:</dt>
+<dd class="workgroup">Network Working Group</dd>
+<dt class="label-internet-draft">Internet-Draft:</dt>
+<dd class="internet-draft">draft-chamayou-cospdx-latest</dd>
+<dt class="label-published">Published:</dt>
+<dd class="published">
+<time datetime="2026-01-14" class="published">14 January 2026</time>
+    </dd>
+<dt class="label-intended-status">Intended Status:</dt>
+<dd class="intended-status">Standards Track</dd>
+<dt class="label-expires">Expires:</dt>
+<dd class="expires"><time datetime="2026-07-18">18 July 2026</time></dd>
+<dt class="label-authors">Authors:</dt>
+<dd class="authors">
+<div class="author">
+      <div class="author-name">A. Chamayou</div>
+<div class="org">Microsoft</div>
+</div>
+<div class="author">
+      <div class="author-name">H. Birkholz</div>
+<div class="org">Fraunhofer SIT</div>
+</div>
+</dd>
+</dl>
+</div>
+<h1 id="title">A Deterministic Compact (CBOR) Encoding for SPDX</h1>
+<section id="section-abstract">
+      <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
+<p id="section-abstract-1">This document proposes a canonical serialization of SPDX 3.0.1 to CBOR, to enable the reproducible and efficient creation of System Package Data Exchange information. This representation is consistent with, and lends itself to being used with transparency services proposed by the Supply Chain Integrity, Transparency and Trust initiative.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+</section>
+<section class="note rfcEditorRemove" id="section-note.1">
+      <h2 id="name-about-this-document">
+<a href="#name-about-this-document" class="section-name selfRef">About This Document</a>
+      </h2>
+<p id="section-note.1-1">This note is to be removed before publishing as an RFC.<a href="#section-note.1-1" class="pilcrow">¶</a></p>
+<p id="section-note.1-2">
+        Status information for this document may be found at <span><a href="https://datatracker.ietf.org/doc/draft-chamayou-cospdx/">https://datatracker.ietf.org/doc/draft-chamayou-cospdx/</a></span>.<a href="#section-note.1-2" class="pilcrow">¶</a></p>
+<p id="section-note.1-3">Source for this draft and an issue tracker can be found at
+        <span><a href="https://github.com/achamayou/draft-chamayou-cospdx">https://github.com/achamayou/draft-chamayou-cospdx</a></span>.<a href="#section-note.1-3" class="pilcrow">¶</a></p>
+</section>
+<div id="status-of-memo">
+<section id="section-boilerplate.1">
+        <h2 id="name-status-of-this-memo">
+<a href="#name-status-of-this-memo" class="section-name selfRef">Status of This Memo</a>
+        </h2>
+<p id="section-boilerplate.1-1">
+        This Internet-Draft is submitted in full conformance with the
+        provisions of BCP 78 and BCP 79.<a href="#section-boilerplate.1-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-2">
+        Internet-Drafts are working documents of the Internet Engineering Task
+        Force (IETF). Note that other groups may also distribute working
+        documents as Internet-Drafts. The list of current Internet-Drafts is
+        at <span><a href="https://datatracker.ietf.org/drafts/current/">https://datatracker.ietf.org/drafts/current/</a></span>.<a href="#section-boilerplate.1-2" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-3">
+        Internet-Drafts are draft documents valid for a maximum of six months
+        and may be updated, replaced, or obsoleted by other documents at any
+        time. It is inappropriate to use Internet-Drafts as reference
+        material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-4">
+        This Internet-Draft will expire on 18 July 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="copyright">
+<section id="section-boilerplate.2">
+        <h2 id="name-copyright-notice">
+<a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
+        </h2>
+<p id="section-boilerplate.2-1">
+            Copyright (c) 2026 IETF Trust and the persons identified as the
+            document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.2-2">
+            This document is subject to BCP 78 and the IETF Trust's Legal
+            Provisions Relating to IETF Documents
+            (<span><a href="https://trustee.ietf.org/license-info">https://trustee.ietf.org/license-info</a></span>) in effect on the date of
+            publication of this document. Please review these documents
+            carefully, as they describe your rights and restrictions with
+            respect to this document. Code Components extracted from this
+            document must include Revised BSD License text as described in
+            Section 4.e of the Trust Legal Provisions and are provided without
+            warranty as described in the Revised BSD License.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="toc">
+<section id="section-toc.1">
+        <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
+<a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
+        </h2>
+<nav class="toc"><ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1">
+            <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="auto internal xref">1</a>.  <a href="#name-introduction" class="internal xref">Introduction</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
+            <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-cddl-schema" class="internal xref">CDDL Schema</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
+            <p id="section-toc.1-1.3.1" class="keepWithNext"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-encoding" class="internal xref">Encoding</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-conventions-and-definitions" class="internal xref">Conventions and Definitions</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-references" class="internal xref">References</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
+                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
+                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+</li>
+        </ul>
+</nav>
+</section>
+</div>
+<div id="introduction">
+<section id="section-1">
+      <h2 id="name-introduction">
+<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
+      </h2>
+<p id="section-1-1">The System Package Data Exchange (<span>[<a href="#SPDX" class="cite xref">SPDX</a>]</span>) specification defines an open standard for communicating bill of materials information for different topic areas, and multiple serialization formats to encode that data model.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">Serialization formats defined for SPDX 3.0.1 (see <span>[<a href="#SER-SPDX" class="cite xref">SER-SPDX</a>]</span>) are text-based and so tend to produce large payloads even for documents that describe a relatively small number of artifacts. A JSON canonical serialisation (<span>[<a href="#CAN-SPDX" class="cite xref">CAN-SPDX</a>]</span>), based on <span>[<a href="#RFC8259" class="cite xref">RFC8259</a>]</span> with additional encoding rules, is defined in SPDX 3.0.1, but is not widely implemented by SBOM generation tools currently.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">This document follows an approach similar to that proposed by <span>[<a href="#CBOR-LD" class="cite xref">CBOR-LD</a>]</span>, but aims to contribute CDDL schemas (<span>[<a href="#RFC8610" class="cite xref">RFC8610</a>]</span>) rather than registries for the various SPDX profiles that describe how to emit CBOR-encoded SPDX 3.0.1 directly.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-4">CoSPDX documents <span class="bcp14">MUST</span> follow the structure defined in the CDDL schema below:<a href="#section-1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="cddl-schema">
+<section id="section-2">
+      <h2 id="name-cddl-schema">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-cddl-schema" class="section-name selfRef">CDDL Schema</a>
+      </h2>
+<div class="breakable lang-cddl sourcecode" id="section-2-1">
+<pre>
+=============== NOTE: '\' line wrapping per RFC 8792 ================
+
+; https://raw.githubusercontent.com/achamayou/draft-chamayou-cospdx/\
+                                          refs/heads/main/cospdx.cddl
+; Entry Point
+SPDX_Document = { label.@graph =&gt; [ * AnyClass ] } / { ~AnyClass }
+
+; Software Profile
+
+software_ContentIdentifier = { label.type =&gt; const.\
+software_ContentIdentifier, ?label.@id =&gt; BlankNodeOrIRI, ~\
+                                   software_ContentIdentifier_props }
+software_ContentIdentifier_derived = software_ContentIdentifier / \
+                                                       BlankNodeOrIRI
+software_ContentIdentifier_props = { ~IntegrityMethod_props, label.\
+software_contentIdentifierType =&gt; \
+prop_software_ContentIdentifier_software_contentIdentifierType, \
+label.software_contentIdentifierValue =&gt; \
+    prop_software_ContentIdentifier_software_contentIdentifierValue }
+prop_software_ContentIdentifier_software_contentIdentifierType = \
+                                           const.gitoid / const.swhid
+prop_software_ContentIdentifier_software_contentIdentifierValue = \
+                                                               anyURI
+software_ContentIdentifierType = { label.type =&gt; const.\
+software_ContentIdentifierType, ?label.@id =&gt; BlankNodeOrIRI, ~\
+                               software_ContentIdentifierType_props }
+software_ContentIdentifierType_derived = \
+software_ContentIdentifierType / const.\
+spdx_Software_ContentIdentifierType_gitoid / const.\
+           spdx_Software_ContentIdentifierType_swhid / BlankNodeOrIRI
+software_ContentIdentifierType_props = { ~SHACLClass, ~AnyObject }
+software_FileKindType = { label.type =&gt; const.software_FileKindType\
+       , ?label.@id =&gt; BlankNodeOrIRI, ~software_FileKindType_props }
+software_FileKindType_derived = software_FileKindType / const.\
+spdx_Software_FileKindType_directory / const.\
+                     spdx_Software_FileKindType_file / BlankNodeOrIRI
+software_FileKindType_props = { ~SHACLClass, ~AnyObject }
+software_SbomType = { label.type =&gt; const.software_SbomType, ?label.\
+                    @id =&gt; BlankNodeOrIRI, ~software_SbomType_props }
+software_SbomType_derived = software_SbomType / const.\
+spdx_Software_SbomType_analyzed / const.\
+spdx_Software_SbomType_build / const.\
+spdx_Software_SbomType_deployed / const.\
+spdx_Software_SbomType_design / const.\
+spdx_Software_SbomType_runtime / const.\
+                       spdx_Software_SbomType_source / BlankNodeOrIRI
+software_SbomType_props = { ~SHACLClass, ~AnyObject }
+software_SoftwarePurpose = { label.type =&gt; const.\
+software_SoftwarePurpose, ?label.@id =&gt; BlankNodeOrIRI, ~\
+                                     software_SoftwarePurpose_props }
+software_SoftwarePurpose_derived = software_SoftwarePurpose / const.\
+spdx_Software_SoftwarePurpose_application / const.\
+spdx_Software_SoftwarePurpose_archive / const.\
+spdx_Software_SoftwarePurpose_bom / const.\
+spdx_Software_SoftwarePurpose_configuration / const.\
+spdx_Software_SoftwarePurpose_container / const.\
+spdx_Software_SoftwarePurpose_data / const.\
+spdx_Software_SoftwarePurpose_device / const.\
+spdx_Software_SoftwarePurpose_deviceDriver / const.\
+spdx_Software_SoftwarePurpose_diskImage / const.\
+spdx_Software_SoftwarePurpose_documentation / const.\
+spdx_Software_SoftwarePurpose_evidence / const.\
+spdx_Software_SoftwarePurpose_executable / const.\
+spdx_Software_SoftwarePurpose_file / const.\
+spdx_Software_SoftwarePurpose_filesystemImage / const.\
+spdx_Software_SoftwarePurpose_firmware / const.\
+spdx_Software_SoftwarePurpose_framework / const.\
+spdx_Software_SoftwarePurpose_install / const.\
+spdx_Software_SoftwarePurpose_library / const.\
+spdx_Software_SoftwarePurpose_manifest / const.\
+spdx_Software_SoftwarePurpose_model / const.\
+spdx_Software_SoftwarePurpose_module / const.\
+spdx_Software_SoftwarePurpose_operatingSystem / const.\
+spdx_Software_SoftwarePurpose_other / const.\
+spdx_Software_SoftwarePurpose_patch / const.\
+spdx_Software_SoftwarePurpose_platform / const.\
+spdx_Software_SoftwarePurpose_requirement / const.\
+spdx_Software_SoftwarePurpose_source / const.\
+spdx_Software_SoftwarePurpose_specification / const.\
+                  spdx_Software_SoftwarePurpose_test / BlankNodeOrIRI
+software_SoftwarePurpose_props = { ~SHACLClass, ~AnyObject }
+software_SoftwareArtifact_derived = ai_AIPackage / \
+dataset_DatasetPackage / software_File / software_Package / \
+                                    software_Snippet / BlankNodeOrIRI
+software_SoftwareArtifact_props = { ~Artifact_props, ?label.\
+software_additionalPurpose =&gt; [ * \
+prop_software_SoftwareArtifact_software_additionalPurpose ], ?label.\
+software_attributionText =&gt; [ * \
+prop_software_SoftwareArtifact_software_attributionText ], ?label.\
+software_contentIdentifier =&gt; [ * \
+prop_software_SoftwareArtifact_software_contentIdentifier ], ?label.\
+software_copyrightText =&gt; \
+prop_software_SoftwareArtifact_software_copyrightText, ?label.\
+software_primaryPurpose =&gt; \
+             prop_software_SoftwareArtifact_software_primaryPurpose }
+prop_software_SoftwareArtifact_software_additionalPurpose = const.\
+application / const.archive / const.bom / const.configuration / \
+const.container / const.data / const.device / const.deviceDriver / \
+const.diskImage / const.documentation / const.evidence / const.\
+executable / const.file / const.filesystemImage / const.firmware / \
+const.framework / const.install / const.library / const.manifest / \
+const.model / const.module / const.operatingSystem / const.other / \
+const.patch / const.platform / const.requirement / const.source / \
+                                     const.specification / const.test
+prop_software_SoftwareArtifact_software_attributionText = tstr
+prop_software_SoftwareArtifact_software_contentIdentifier = \
+                                   software_ContentIdentifier_derived
+prop_software_SoftwareArtifact_software_copyrightText = tstr
+prop_software_SoftwareArtifact_software_primaryPurpose = const.\
+application / const.archive / const.bom / const.configuration / \
+const.container / const.data / const.device / const.deviceDriver / \
+const.diskImage / const.documentation / const.evidence / const.\
+executable / const.file / const.filesystemImage / const.firmware / \
+const.framework / const.install / const.library / const.manifest / \
+const.model / const.module / const.operatingSystem / const.other / \
+const.patch / const.platform / const.requirement / const.source / \
+                                     const.specification / const.test
+software_File = { label.type =&gt; const.software_File, label.spdxId =\
+                                        &gt; IRI, ~software_File_props }
+software_File_derived = software_File / BlankNodeOrIRI
+software_File_props = { ~software_SoftwareArtifact_props, ?label.\
+contentType =&gt; prop_software_File_contentType, ?label.\
+          software_fileKind =&gt; prop_software_File_software_fileKind }
+prop_software_File_contentType = tstr .regexp "[^/]+/[^/]+" ; \
+                               CoSPDX representation of content types
+prop_software_File_software_fileKind = const.directory / const.file
+software_Package = { label.type =&gt; const.software_Package, label.\
+                             spdxId =&gt; IRI, ~software_Package_props }
+software_Package_derived = ai_AIPackage / dataset_DatasetPackage / \
+                                    software_Package / BlankNodeOrIRI
+software_Package_props = { ~software_SoftwareArtifact_props, ?label.\
+software_downloadLocation =&gt; \
+prop_software_Package_software_downloadLocation, ?label.\
+software_homePage =&gt; prop_software_Package_software_homePage, ?label\
+.software_packageUrl =&gt; prop_software_Package_software_packageUrl, ?\
+label.software_packageVersion =&gt; \
+prop_software_Package_software_packageVersion, ?label.\
+   software_sourceInfo =&gt; prop_software_Package_software_sourceInfo }
+prop_software_Package_software_downloadLocation = anyURI
+prop_software_Package_software_homePage = anyURI
+prop_software_Package_software_packageUrl = anyURI
+prop_software_Package_software_packageVersion = tstr
+prop_software_Package_software_sourceInfo = tstr
+software_Sbom = { label.type =&gt; const.software_Sbom, label.spdxId =\
+                                        &gt; IRI, ~software_Sbom_props }
+software_Sbom_derived = software_Sbom / BlankNodeOrIRI
+software_Sbom_props = { ~Bom_props, ?label.software_sbomType =&gt; [ * \
+                             prop_software_Sbom_software_sbomType ] }
+prop_software_Sbom_software_sbomType = const.analyzed / const.build \
+       / const.deployed / const.design / const.runtime / const.source
+software_Snippet = { label.type =&gt; const.software_Snippet, label.\
+                             spdxId =&gt; IRI, ~software_Snippet_props }
+software_Snippet_derived = software_Snippet / BlankNodeOrIRI
+software_Snippet_props = { ~software_SoftwareArtifact_props, ?label.\
+software_byteRange =&gt; prop_software_Snippet_software_byteRange, ?\
+label.software_lineRange =&gt; prop_software_Snippet_software_lineRange\
+, label.software_snippetFromFile =&gt; \
+                     prop_software_Snippet_software_snippetFromFile }
+prop_software_Snippet_software_byteRange = \
+                                         PositiveIntegerRange_derived
+prop_software_Snippet_software_lineRange = \
+                                         PositiveIntegerRange_derived
+prop_software_Snippet_software_snippetFromFile = \
+                                                software_File_derived
+
+; Security Profile
+
+security_CvssSeverityType = { label.type =&gt; const.\
+security_CvssSeverityType, ?label.@id =&gt; BlankNodeOrIRI, ~\
+                                    security_CvssSeverityType_props }
+security_CvssSeverityType_derived = security_CvssSeverityType / \
+const.spdx_Security_CvssSeverityType_critical / const.\
+spdx_Security_CvssSeverityType_high / const.\
+spdx_Security_CvssSeverityType_low / const.\
+spdx_Security_CvssSeverityType_medium / const.\
+                 spdx_Security_CvssSeverityType_none / BlankNodeOrIRI
+security_CvssSeverityType_props = { ~SHACLClass, ~AnyObject }
+security_ExploitCatalogType = { label.type =&gt; const.\
+security_ExploitCatalogType, ?label.@id =&gt; BlankNodeOrIRI, ~\
+                                  security_ExploitCatalogType_props }
+security_ExploitCatalogType_derived = security_ExploitCatalogType / \
+const.spdx_Security_ExploitCatalogType_kev / const.\
+              spdx_Security_ExploitCatalogType_other / BlankNodeOrIRI
+security_ExploitCatalogType_props = { ~SHACLClass, ~AnyObject }
+security_SsvcDecisionType = { label.type =&gt; const.\
+security_SsvcDecisionType, ?label.@id =&gt; BlankNodeOrIRI, ~\
+                                    security_SsvcDecisionType_props }
+security_SsvcDecisionType_derived = security_SsvcDecisionType / \
+const.spdx_Security_SsvcDecisionType_act / const.\
+spdx_Security_SsvcDecisionType_attend / const.\
+spdx_Security_SsvcDecisionType_track / const.\
+            spdx_Security_SsvcDecisionType_trackStar / BlankNodeOrIRI
+security_SsvcDecisionType_props = { ~SHACLClass, ~AnyObject }
+security_VexJustificationType = { label.type =&gt; const.\
+security_VexJustificationType, ?label.@id =&gt; BlankNodeOrIRI, ~\
+                                security_VexJustificationType_props }
+security_VexJustificationType_derived = \
+security_VexJustificationType / const.\
+spdx_Security_VexJustificationType_componentNotPresent / const.\
+spdx_Security_VexJustificationType_inlineMitigationsAlreadyExist / \
+const.\
+spdx_Security_VexJustificationType_vulnerableCodeCannotBeControlledB\
+yAdversary / const.\
+spdx_Security_VexJustificationType_vulnerableCodeNotInExecutePath / \
+const.spdx_Security_VexJustificationType_vulnerableCodeNotPresent / \
+                                                       BlankNodeOrIRI
+security_VexJustificationType_props = { ~SHACLClass, ~AnyObject }
+security_VulnAssessmentRelationship_derived = \
+security_CvssV2VulnAssessmentRelationship / \
+security_CvssV3VulnAssessmentRelationship / \
+security_CvssV4VulnAssessmentRelationship / \
+security_EpssVulnAssessmentRelationship / \
+security_ExploitCatalogVulnAssessmentRelationship / \
+security_SsvcVulnAssessmentRelationship / \
+security_VexAffectedVulnAssessmentRelationship / \
+security_VexFixedVulnAssessmentRelationship / \
+security_VexNotAffectedVulnAssessmentRelationship / \
+security_VexUnderInvestigationVulnAssessmentRelationship / \
+                                                       BlankNodeOrIRI
+security_VulnAssessmentRelationship_props = { ~Relationship_props, ?\
+label.suppliedBy =&gt; \
+prop_security_VulnAssessmentRelationship_suppliedBy, ?label.\
+security_assessedElement =&gt; \
+prop_security_VulnAssessmentRelationship_security_assessedElement, ?\
+label.security_modifiedTime =&gt; \
+prop_security_VulnAssessmentRelationship_security_modifiedTime, ?\
+label.security_publishedTime =&gt; \
+prop_security_VulnAssessmentRelationship_security_publishedTime, ?\
+label.security_withdrawnTime =&gt; \
+    prop_security_VulnAssessmentRelationship_security_withdrawnTime }
+prop_security_VulnAssessmentRelationship_suppliedBy = Agent_derived
+prop_security_VulnAssessmentRelationship_security_assessedElement = \
+                                    software_SoftwareArtifact_derived
+prop_security_VulnAssessmentRelationship_security_modifiedTime = #6.\
+     1(uint) ; ISO8601 UTC with second-precision strings in SPDX-JSON
+prop_security_VulnAssessmentRelationship_security_publishedTime = #6\
+    .1(uint) ; ISO8601 UTC with second-precision strings in SPDX-JSON
+prop_security_VulnAssessmentRelationship_security_withdrawnTime = #6\
+    .1(uint) ; ISO8601 UTC with second-precision strings in SPDX-JSON
+security_CvssV2VulnAssessmentRelationship = { label.type =&gt; const.\
+security_CvssV2VulnAssessmentRelationship, label.spdxId =&gt; IRI, ~\
+                    security_CvssV2VulnAssessmentRelationship_props }
+security_CvssV2VulnAssessmentRelationship_derived = \
+           security_CvssV2VulnAssessmentRelationship / BlankNodeOrIRI
+security_CvssV2VulnAssessmentRelationship_props = { ~\
+security_VulnAssessmentRelationship_props, label.security_score =&gt; \
+prop_security_CvssV2VulnAssessmentRelationship_security_score, label\
+.security_vectorString =&gt; \
+prop_security_CvssV2VulnAssessmentRelationship_security_vectorStrin\
+                                                                  g }
+prop_security_CvssV2VulnAssessmentRelationship_security_score = \
+tstr .regexp "-?[0-9]+(\\.[0-9]*)?" ; CoSPDX representation of \
+                                                           quantities
+prop_security_CvssV2VulnAssessmentRelationship_security_vectorStrin\
+                                                             g = tstr
+security_CvssV3VulnAssessmentRelationship = { label.type =&gt; const.\
+security_CvssV3VulnAssessmentRelationship, label.spdxId =&gt; IRI, ~\
+                    security_CvssV3VulnAssessmentRelationship_props }
+security_CvssV3VulnAssessmentRelationship_derived = \
+           security_CvssV3VulnAssessmentRelationship / BlankNodeOrIRI
+security_CvssV3VulnAssessmentRelationship_props = { ~\
+security_VulnAssessmentRelationship_props, label.security_score =&gt; \
+prop_security_CvssV3VulnAssessmentRelationship_security_score, label\
+.security_severity =&gt; \
+prop_security_CvssV3VulnAssessmentRelationship_security_severity, \
+label.security_vectorString =&gt; \
+prop_security_CvssV3VulnAssessmentRelationship_security_vectorStrin\
+                                                                  g }
+prop_security_CvssV3VulnAssessmentRelationship_security_score = \
+tstr .regexp "-?[0-9]+(\\.[0-9]*)?" ; CoSPDX representation of \
+                                                           quantities
+prop_security_CvssV3VulnAssessmentRelationship_security_severity = \
+  const.critical / const.high / const.low / const.medium / const.none
+prop_security_CvssV3VulnAssessmentRelationship_security_vectorStrin\
+                                                             g = tstr
+security_CvssV4VulnAssessmentRelationship = { label.type =&gt; const.\
+security_CvssV4VulnAssessmentRelationship, label.spdxId =&gt; IRI, ~\
+                    security_CvssV4VulnAssessmentRelationship_props }
+security_CvssV4VulnAssessmentRelationship_derived = \
+           security_CvssV4VulnAssessmentRelationship / BlankNodeOrIRI
+security_CvssV4VulnAssessmentRelationship_props = { ~\
+security_VulnAssessmentRelationship_props, label.security_score =&gt; \
+prop_security_CvssV4VulnAssessmentRelationship_security_score, label\
+.security_severity =&gt; \
+prop_security_CvssV4VulnAssessmentRelationship_security_severity, \
+label.security_vectorString =&gt; \
+prop_security_CvssV4VulnAssessmentRelationship_security_vectorStrin\
+                                                                  g }
+prop_security_CvssV4VulnAssessmentRelationship_security_score = \
+tstr .regexp "-?[0-9]+(\\.[0-9]*)?" ; CoSPDX representation of \
+                                                           quantities
+prop_security_CvssV4VulnAssessmentRelationship_security_severity = \
+  const.critical / const.high / const.low / const.medium / const.none
+prop_security_CvssV4VulnAssessmentRelationship_security_vectorStrin\
+                                                             g = tstr
+security_EpssVulnAssessmentRelationship = { label.type =&gt; const.\
+security_EpssVulnAssessmentRelationship, label.spdxId =&gt; IRI, ~\
+                      security_EpssVulnAssessmentRelationship_props }
+security_EpssVulnAssessmentRelationship_derived = \
+             security_EpssVulnAssessmentRelationship / BlankNodeOrIRI
+security_EpssVulnAssessmentRelationship_props = { ~\
+security_VulnAssessmentRelationship_props, label.\
+security_percentile =&gt; \
+prop_security_EpssVulnAssessmentRelationship_security_percentile, \
+label.security_probability =&gt; \
+  prop_security_EpssVulnAssessmentRelationship_security_probability }
+prop_security_EpssVulnAssessmentRelationship_security_percentile = \
+tstr .regexp "-?[0-9]+(\\.[0-9]*)?" ; CoSPDX representation of \
+                                                           quantities
+prop_security_EpssVulnAssessmentRelationship_security_probability = \
+tstr .regexp "-?[0-9]+(\\.[0-9]*)?" ; CoSPDX representation of \
+                                                           quantities
+security_ExploitCatalogVulnAssessmentRelationship = { label.type =&gt; \
+const.security_ExploitCatalogVulnAssessmentRelationship, label.\
+spdxId =&gt; IRI, ~\
+            security_ExploitCatalogVulnAssessmentRelationship_props }
+security_ExploitCatalogVulnAssessmentRelationship_derived = \
+   security_ExploitCatalogVulnAssessmentRelationship / BlankNodeOrIRI
+security_ExploitCatalogVulnAssessmentRelationship_props = { ~\
+security_VulnAssessmentRelationship_props, label.\
+security_catalogType =&gt; \
+prop_security_ExploitCatalogVulnAssessmentRelationship_security_cata\
+logType, label.security_exploited =&gt; \
+prop_security_ExploitCatalogVulnAssessmentRelationship_security_expl\
+oited, label.security_locator =&gt; \
+prop_security_ExploitCatalogVulnAssessmentRelationship_security_loca\
+                                                                tor }
+prop_security_ExploitCatalogVulnAssessmentRelationship_security_cata\
+                                    logType = const.kev / const.other
+prop_security_ExploitCatalogVulnAssessmentRelationship_security_expl\
+                                                         oited = bool
+prop_security_ExploitCatalogVulnAssessmentRelationship_security_loca\
+                                                         tor = anyURI
+security_SsvcVulnAssessmentRelationship = { label.type =&gt; const.\
+security_SsvcVulnAssessmentRelationship, label.spdxId =&gt; IRI, ~\
+                      security_SsvcVulnAssessmentRelationship_props }
+security_SsvcVulnAssessmentRelationship_derived = \
+             security_SsvcVulnAssessmentRelationship / BlankNodeOrIRI
+security_SsvcVulnAssessmentRelationship_props = { ~\
+security_VulnAssessmentRelationship_props, label.\
+security_decisionType =&gt; \
+ prop_security_SsvcVulnAssessmentRelationship_security_decisionType }
+prop_security_SsvcVulnAssessmentRelationship_security_decisionType \
+           = const.act / const.attend / const.track / const.trackStar
+security_VexVulnAssessmentRelationship_derived = \
+security_VexAffectedVulnAssessmentRelationship / \
+security_VexFixedVulnAssessmentRelationship / \
+security_VexNotAffectedVulnAssessmentRelationship / \
+security_VexUnderInvestigationVulnAssessmentRelationship / \
+                                                       BlankNodeOrIRI
+security_VexVulnAssessmentRelationship_props = { ~\
+security_VulnAssessmentRelationship_props, ?label.\
+security_statusNotes =&gt; \
+prop_security_VexVulnAssessmentRelationship_security_statusNotes, ?\
+label.security_vexVersion =&gt; \
+    prop_security_VexVulnAssessmentRelationship_security_vexVersion }
+prop_security_VexVulnAssessmentRelationship_security_statusNotes = \
+                                                                 tstr
+prop_security_VexVulnAssessmentRelationship_security_vexVersion = \
+                                                                 tstr
+security_Vulnerability = { label.type =&gt; const.\
+security_Vulnerability, label.spdxId =&gt; IRI, ~\
+                                       security_Vulnerability_props }
+security_Vulnerability_derived = security_Vulnerability / \
+                                                       BlankNodeOrIRI
+security_Vulnerability_props = { ~Artifact_props, ?label.\
+security_modifiedTime =&gt; \
+prop_security_Vulnerability_security_modifiedTime, ?label.\
+security_publishedTime =&gt; \
+prop_security_Vulnerability_security_publishedTime, ?label.\
+security_withdrawnTime =&gt; \
+                 prop_security_Vulnerability_security_withdrawnTime }
+prop_security_Vulnerability_security_modifiedTime = #6.1(uint) ; \
+               ISO8601 UTC with second-precision strings in SPDX-JSON
+prop_security_Vulnerability_security_publishedTime = #6.1(uint) ; \
+               ISO8601 UTC with second-precision strings in SPDX-JSON
+prop_security_Vulnerability_security_withdrawnTime = #6.1(uint) ; \
+               ISO8601 UTC with second-precision strings in SPDX-JSON
+security_VexAffectedVulnAssessmentRelationship = { label.type =&gt; \
+const.security_VexAffectedVulnAssessmentRelationship, label.spdxId =\
+       &gt; IRI, ~security_VexAffectedVulnAssessmentRelationship_props }
+security_VexAffectedVulnAssessmentRelationship_derived = \
+      security_VexAffectedVulnAssessmentRelationship / BlankNodeOrIRI
+security_VexAffectedVulnAssessmentRelationship_props = { ~\
+security_VexVulnAssessmentRelationship_props, label.\
+security_actionStatement =&gt; \
+prop_security_VexAffectedVulnAssessmentRelationship_security_actionS\
+tatement, ?label.security_actionStatementTime =&gt; \
+prop_security_VexAffectedVulnAssessmentRelationship_security_actionS\
+                                                       tatementTime }
+prop_security_VexAffectedVulnAssessmentRelationship_security_actionS\
+                                                      tatement = tstr
+prop_security_VexAffectedVulnAssessmentRelationship_security_actionS\
+tatementTime = #6.1(uint) ; ISO8601 UTC with second-precision \
+                                                 strings in SPDX-JSON
+security_VexFixedVulnAssessmentRelationship = { label.type =&gt; const.\
+security_VexFixedVulnAssessmentRelationship, label.spdxId =&gt; IRI, ~\
+                  security_VexFixedVulnAssessmentRelationship_props }
+security_VexFixedVulnAssessmentRelationship_derived = \
+         security_VexFixedVulnAssessmentRelationship / BlankNodeOrIRI
+security_VexFixedVulnAssessmentRelationship_props = { ~\
+           security_VexVulnAssessmentRelationship_props, ~AnyObject }
+security_VexNotAffectedVulnAssessmentRelationship = { label.type =&gt; \
+const.security_VexNotAffectedVulnAssessmentRelationship, label.\
+spdxId =&gt; IRI, ~\
+            security_VexNotAffectedVulnAssessmentRelationship_props }
+security_VexNotAffectedVulnAssessmentRelationship_derived = \
+   security_VexNotAffectedVulnAssessmentRelationship / BlankNodeOrIRI
+security_VexNotAffectedVulnAssessmentRelationship_props = { ~\
+security_VexVulnAssessmentRelationship_props, ?label.\
+security_impactStatement =&gt; \
+prop_security_VexNotAffectedVulnAssessmentRelationship_security_impa\
+ctStatement, ?label.security_impactStatementTime =&gt; \
+prop_security_VexNotAffectedVulnAssessmentRelationship_security_impa\
+ctStatementTime, ?label.security_justificationType =&gt; \
+prop_security_VexNotAffectedVulnAssessmentRelationship_security_just\
+                                                      ificationType }
+prop_security_VexNotAffectedVulnAssessmentRelationship_security_impa\
+                                                   ctStatement = tstr
+prop_security_VexNotAffectedVulnAssessmentRelationship_security_impa\
+ctStatementTime = #6.1(uint) ; ISO8601 UTC with second-precision \
+                                                 strings in SPDX-JSON
+prop_security_VexNotAffectedVulnAssessmentRelationship_security_just\
+ificationType = const.componentNotPresent / const.\
+inlineMitigationsAlreadyExist / const.\
+vulnerableCodeCannotBeControlledByAdversary / const.\
+      vulnerableCodeNotInExecutePath / const.vulnerableCodeNotPresent
+security_VexUnderInvestigationVulnAssessmentRelationship = { label.\
+type =&gt; const.\
+security_VexUnderInvestigationVulnAssessmentRelationship, label.\
+spdxId =&gt; IRI, ~\
+     security_VexUnderInvestigationVulnAssessmentRelationship_props }
+security_VexUnderInvestigationVulnAssessmentRelationship_derived = \
+security_VexUnderInvestigationVulnAssessmentRelationship / \
+                                                       BlankNodeOrIRI
+security_VexUnderInvestigationVulnAssessmentRelationship_props = { ~\
+           security_VexVulnAssessmentRelationship_props, ~AnyObject }
+
+; SimpleLicensing Profile
+
+simplelicensing_AnyLicenseInfo_derived = \
+expandedlicensing_ConjunctiveLicenseSet / \
+expandedlicensing_CustomLicense / \
+expandedlicensing_DisjunctiveLicenseSet / \
+expandedlicensing_IndividualLicensingInfo / \
+expandedlicensing_ListedLicense / expandedlicensing_OrLaterOperator \
+/ expandedlicensing_WithAdditionOperator / \
+simplelicensing_LicenseExpression / const.\
+expandedlicensing_NoAssertionLicense / const.\
+                       expandedlicensing_NoneLicense / BlankNodeOrIRI
+simplelicensing_AnyLicenseInfo_props = { ~Element_props, ~AnyObject }
+simplelicensing_LicenseExpression = { label.type =&gt; const.\
+simplelicensing_LicenseExpression, label.spdxId =&gt; IRI, ~\
+                            simplelicensing_LicenseExpression_props }
+simplelicensing_LicenseExpression_derived = \
+                   simplelicensing_LicenseExpression / BlankNodeOrIRI
+simplelicensing_LicenseExpression_props = { ~\
+simplelicensing_AnyLicenseInfo_props, ?label.\
+simplelicensing_customIdToUri =&gt; [ * \
+prop_simplelicensing_LicenseExpression_simplelicensing_customIdToUr\
+i ], label.simplelicensing_licenseExpression =&gt; \
+prop_simplelicensing_LicenseExpression_simplelicensing_licenseExpres\
+sion, ?label.simplelicensing_licenseListVersion =&gt; \
+prop_simplelicensing_LicenseExpression_simplelicensing_licenseListVe\
+                                                              rsion }
+prop_simplelicensing_LicenseExpression_simplelicensing_customIdToUr\
+                                          i = DictionaryEntry_derived
+prop_simplelicensing_LicenseExpression_simplelicensing_licenseExpres\
+                                                          sion = tstr
+prop_simplelicensing_LicenseExpression_simplelicensing_licenseListVe\
+rsion = tstr .regexp "(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0\
+-9]*)(-((0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-zA-Z-]*)(\\.(0|[1-9][0-9\
+]*|[0-9]*[a-zA-Z-][0-9a-zA-Z-]*))*))?(\\+([0-9a-zA-Z-]+(\\.[0-9a-zA-\
+                       Z-]+)*))?" ; CoSPDX representation of versions
+simplelicensing_SimpleLicensingText = { label.type =&gt; const.\
+simplelicensing_SimpleLicensingText, label.spdxId =&gt; IRI, ~\
+                          simplelicensing_SimpleLicensingText_props }
+simplelicensing_SimpleLicensingText_derived = \
+                 simplelicensing_SimpleLicensingText / BlankNodeOrIRI
+simplelicensing_SimpleLicensingText_props = { ~Element_props, label.\
+simplelicensing_licenseText =&gt; \
+prop_simplelicensing_SimpleLicensingText_simplelicensing_licenseTex\
+                                                                  t }
+prop_simplelicensing_SimpleLicensingText_simplelicensing_licenseTex\
+                                                             t = tstr
+
+; ExpandedLicensing Profile
+
+expandedlicensing_LicenseAddition_derived = \
+expandedlicensing_CustomLicenseAddition / \
+            expandedlicensing_ListedLicenseException / BlankNodeOrIRI
+expandedlicensing_LicenseAddition_props = { ~Element_props, label.\
+expandedlicensing_additionText =&gt; \
+prop_expandedlicensing_LicenseAddition_expandedlicensing_additionTex\
+t, ?label.expandedlicensing_isDeprecatedAdditionId =&gt; \
+prop_expandedlicensing_LicenseAddition_expandedlicensing_isDeprecate\
+dAdditionId, ?label.expandedlicensing_licenseXml =&gt; \
+prop_expandedlicensing_LicenseAddition_expandedlicensing_licenseXml\
+, ?label.expandedlicensing_obsoletedBy =&gt; \
+prop_expandedlicensing_LicenseAddition_expandedlicensing_obsoletedBy\
+, ?label.expandedlicensing_seeAlso =&gt; [ * \
+prop_expandedlicensing_LicenseAddition_expandedlicensing_seeAlso ], \
+?label.expandedlicensing_standardAdditionTemplate =&gt; \
+prop_expandedlicensing_LicenseAddition_expandedlicensing_standardAdd\
+                                                      itionTemplate }
+prop_expandedlicensing_LicenseAddition_expandedlicensing_additionTex\
+                                                             t = tstr
+prop_expandedlicensing_LicenseAddition_expandedlicensing_isDeprecate\
+                                                   dAdditionId = bool
+prop_expandedlicensing_LicenseAddition_expandedlicensing_licenseXml \
+                                                               = tstr
+prop_expandedlicensing_LicenseAddition_expandedlicensing_obsoletedB\
+                                                             y = tstr
+prop_expandedlicensing_LicenseAddition_expandedlicensing_seeAlso = \
+                                                               anyURI
+prop_expandedlicensing_LicenseAddition_expandedlicensing_standardAdd\
+                                                 itionTemplate = tstr
+expandedlicensing_ListedLicenseException = { label.type =&gt; const.\
+expandedlicensing_ListedLicenseException, label.spdxId =&gt; IRI, ~\
+                     expandedlicensing_ListedLicenseException_props }
+expandedlicensing_ListedLicenseException_derived = \
+            expandedlicensing_ListedLicenseException / BlankNodeOrIRI
+expandedlicensing_ListedLicenseException_props = { ~\
+expandedlicensing_LicenseAddition_props, ?label.\
+expandedlicensing_deprecatedVersion =&gt; \
+prop_expandedlicensing_ListedLicenseException_expandedlicensing_depr\
+ecatedVersion, ?label.expandedlicensing_listVersionAdded =&gt; \
+prop_expandedlicensing_ListedLicenseException_expandedlicensing_list\
+                                                       VersionAdded }
+prop_expandedlicensing_ListedLicenseException_expandedlicensing_depr\
+                                                 ecatedVersion = tstr
+prop_expandedlicensing_ListedLicenseException_expandedlicensing_list\
+                                                  VersionAdded = tstr
+expandedlicensing_ConjunctiveLicenseSet = { label.type =&gt; const.\
+expandedlicensing_ConjunctiveLicenseSet, label.spdxId =&gt; IRI, ~\
+                      expandedlicensing_ConjunctiveLicenseSet_props }
+expandedlicensing_ConjunctiveLicenseSet_derived = \
+             expandedlicensing_ConjunctiveLicenseSet / BlankNodeOrIRI
+expandedlicensing_ConjunctiveLicenseSet_props = { ~\
+simplelicensing_AnyLicenseInfo_props, label.\
+expandedlicensing_member =&gt; [ + \
+prop_expandedlicensing_ConjunctiveLicenseSet_expandedlicensing_membe\
+                                                                r ] }
+prop_expandedlicensing_ConjunctiveLicenseSet_expandedlicensing_membe\
+                           r = simplelicensing_AnyLicenseInfo_derived
+expandedlicensing_CustomLicenseAddition = { label.type =&gt; const.\
+expandedlicensing_CustomLicenseAddition, label.spdxId =&gt; IRI, ~\
+                      expandedlicensing_CustomLicenseAddition_props }
+expandedlicensing_CustomLicenseAddition_derived = \
+             expandedlicensing_CustomLicenseAddition / BlankNodeOrIRI
+expandedlicensing_CustomLicenseAddition_props = { ~\
+                expandedlicensing_LicenseAddition_props, ~AnyObject }
+expandedlicensing_DisjunctiveLicenseSet = { label.type =&gt; const.\
+expandedlicensing_DisjunctiveLicenseSet, label.spdxId =&gt; IRI, ~\
+                      expandedlicensing_DisjunctiveLicenseSet_props }
+expandedlicensing_DisjunctiveLicenseSet_derived = \
+             expandedlicensing_DisjunctiveLicenseSet / BlankNodeOrIRI
+expandedlicensing_DisjunctiveLicenseSet_props = { ~\
+simplelicensing_AnyLicenseInfo_props, label.\
+expandedlicensing_member =&gt; [ + \
+prop_expandedlicensing_DisjunctiveLicenseSet_expandedlicensing_membe\
+                                                                r ] }
+prop_expandedlicensing_DisjunctiveLicenseSet_expandedlicensing_membe\
+                           r = simplelicensing_AnyLicenseInfo_derived
+expandedlicensing_ExtendableLicense_derived = \
+expandedlicensing_CustomLicense / expandedlicensing_ListedLicense / \
+                   expandedlicensing_OrLaterOperator / BlankNodeOrIRI
+expandedlicensing_ExtendableLicense_props = { ~\
+                   simplelicensing_AnyLicenseInfo_props, ~AnyObject }
+expandedlicensing_IndividualLicensingInfo = { label.type =&gt; const.\
+expandedlicensing_IndividualLicensingInfo, label.spdxId =&gt; IRI, ~\
+                    expandedlicensing_IndividualLicensingInfo_props }
+expandedlicensing_IndividualLicensingInfo_derived = \
+expandedlicensing_IndividualLicensingInfo / const.\
+expandedlicensing_NoAssertionLicense / const.\
+                       expandedlicensing_NoneLicense / BlankNodeOrIRI
+expandedlicensing_IndividualLicensingInfo_props = { ~\
+                   simplelicensing_AnyLicenseInfo_props, ~AnyObject }
+expandedlicensing_License_derived = expandedlicensing_CustomLicense \
+                   / expandedlicensing_ListedLicense / BlankNodeOrIRI
+expandedlicensing_License_props = { ~\
+expandedlicensing_ExtendableLicense_props, ?label.\
+expandedlicensing_isDeprecatedLicenseId =&gt; \
+prop_expandedlicensing_License_expandedlicensing_isDeprecatedLicense\
+Id, ?label.expandedlicensing_isFsfLibre =&gt; \
+prop_expandedlicensing_License_expandedlicensing_isFsfLibre, ?label.\
+expandedlicensing_isOsiApproved =&gt; \
+prop_expandedlicensing_License_expandedlicensing_isOsiApproved, ?\
+label.expandedlicensing_licenseXml =&gt; \
+prop_expandedlicensing_License_expandedlicensing_licenseXml, ?label.\
+expandedlicensing_obsoletedBy =&gt; \
+prop_expandedlicensing_License_expandedlicensing_obsoletedBy, ?label\
+.expandedlicensing_seeAlso =&gt; [ * \
+prop_expandedlicensing_License_expandedlicensing_seeAlso ], ?label.\
+expandedlicensing_standardLicenseHeader =&gt; \
+prop_expandedlicensing_License_expandedlicensing_standardLicenseHead\
+er, ?label.expandedlicensing_standardLicenseTemplate =&gt; \
+prop_expandedlicensing_License_expandedlicensing_standardLicenseTemp\
+late, label.simplelicensing_licenseText =&gt; \
+         prop_expandedlicensing_License_simplelicensing_licenseText }
+prop_expandedlicensing_License_expandedlicensing_isDeprecatedLicense\
+                                                            Id = bool
+prop_expandedlicensing_License_expandedlicensing_isFsfLibre = bool
+prop_expandedlicensing_License_expandedlicensing_isOsiApproved = bool
+prop_expandedlicensing_License_expandedlicensing_licenseXml = tstr
+prop_expandedlicensing_License_expandedlicensing_obsoletedBy = tstr
+prop_expandedlicensing_License_expandedlicensing_seeAlso = anyURI
+prop_expandedlicensing_License_expandedlicensing_standardLicenseHead\
+                                                            er = tstr
+prop_expandedlicensing_License_expandedlicensing_standardLicenseTemp\
+                                                          late = tstr
+prop_expandedlicensing_License_simplelicensing_licenseText = tstr
+expandedlicensing_ListedLicense = { label.type =&gt; const.\
+expandedlicensing_ListedLicense, label.spdxId =&gt; IRI, ~\
+                              expandedlicensing_ListedLicense_props }
+expandedlicensing_ListedLicense_derived = \
+                     expandedlicensing_ListedLicense / BlankNodeOrIRI
+expandedlicensing_ListedLicense_props = { ~\
+expandedlicensing_License_props, ?label.\
+expandedlicensing_deprecatedVersion =&gt; \
+prop_expandedlicensing_ListedLicense_expandedlicensing_deprecatedVer\
+sion, ?label.expandedlicensing_listVersionAdded =&gt; \
+prop_expandedlicensing_ListedLicense_expandedlicensing_listVersionAd\
+                                                                ded }
+prop_expandedlicensing_ListedLicense_expandedlicensing_deprecatedVer\
+                                                          sion = tstr
+prop_expandedlicensing_ListedLicense_expandedlicensing_listVersionAd\
+                                                           ded = tstr
+expandedlicensing_OrLaterOperator = { label.type =&gt; const.\
+expandedlicensing_OrLaterOperator, label.spdxId =&gt; IRI, ~\
+                            expandedlicensing_OrLaterOperator_props }
+expandedlicensing_OrLaterOperator_derived = \
+                   expandedlicensing_OrLaterOperator / BlankNodeOrIRI
+expandedlicensing_OrLaterOperator_props = { ~\
+expandedlicensing_ExtendableLicense_props, label.\
+expandedlicensing_subjectLicense =&gt; \
+prop_expandedlicensing_OrLaterOperator_expandedlicensing_subjectLice\
+                                                                nse }
+prop_expandedlicensing_OrLaterOperator_expandedlicensing_subjectLice\
+                              nse = expandedlicensing_License_derived
+expandedlicensing_WithAdditionOperator = { label.type =&gt; const.\
+expandedlicensing_WithAdditionOperator, label.spdxId =&gt; IRI, ~\
+                       expandedlicensing_WithAdditionOperator_props }
+expandedlicensing_WithAdditionOperator_derived = \
+              expandedlicensing_WithAdditionOperator / BlankNodeOrIRI
+expandedlicensing_WithAdditionOperator_props = { ~\
+simplelicensing_AnyLicenseInfo_props, label.\
+expandedlicensing_subjectAddition =&gt; \
+prop_expandedlicensing_WithAdditionOperator_expandedlicensing_subjec\
+tAddition, label.expandedlicensing_subjectExtendableLicense =&gt; \
+prop_expandedlicensing_WithAdditionOperator_expandedlicensing_subjec\
+                                                 tExtendableLicense }
+prop_expandedlicensing_WithAdditionOperator_expandedlicensing_subjec\
+                tAddition = expandedlicensing_LicenseAddition_derived
+prop_expandedlicensing_WithAdditionOperator_expandedlicensing_subjec\
+     tExtendableLicense = expandedlicensing_ExtendableLicense_derived
+expandedlicensing_CustomLicense = { label.type =&gt; const.\
+expandedlicensing_CustomLicense, label.spdxId =&gt; IRI, ~\
+                              expandedlicensing_CustomLicense_props }
+expandedlicensing_CustomLicense_derived = \
+                     expandedlicensing_CustomLicense / BlankNodeOrIRI
+expandedlicensing_CustomLicense_props = { ~\
+                        expandedlicensing_License_props, ~AnyObject }
+
+; Dataset Profile
+
+dataset_ConfidentialityLevelType = { label.type =&gt; const.\
+dataset_ConfidentialityLevelType, ?label.@id =&gt; BlankNodeOrIRI, ~\
+                             dataset_ConfidentialityLevelType_props }
+dataset_ConfidentialityLevelType_derived = \
+dataset_ConfidentialityLevelType / const.\
+spdx_Dataset_ConfidentialityLevelType_amber / const.\
+spdx_Dataset_ConfidentialityLevelType_clear / const.\
+spdx_Dataset_ConfidentialityLevelType_green / const.\
+           spdx_Dataset_ConfidentialityLevelType_red / BlankNodeOrIRI
+dataset_ConfidentialityLevelType_props = { ~SHACLClass, ~AnyObject }
+dataset_DatasetAvailabilityType = { label.type =&gt; const.\
+dataset_DatasetAvailabilityType, ?label.@id =&gt; BlankNodeOrIRI, ~\
+                              dataset_DatasetAvailabilityType_props }
+dataset_DatasetAvailabilityType_derived = \
+dataset_DatasetAvailabilityType / const.\
+spdx_Dataset_DatasetAvailabilityType_clickthrough / const.\
+spdx_Dataset_DatasetAvailabilityType_directDownload / const.\
+spdx_Dataset_DatasetAvailabilityType_query / const.\
+spdx_Dataset_DatasetAvailabilityType_registration / const.\
+ spdx_Dataset_DatasetAvailabilityType_scrapingScript / BlankNodeOrIRI
+dataset_DatasetAvailabilityType_props = { ~SHACLClass, ~AnyObject }
+dataset_DatasetType = { label.type =&gt; const.dataset_DatasetType, ?\
+            label.@id =&gt; BlankNodeOrIRI, ~dataset_DatasetType_props }
+dataset_DatasetType_derived = dataset_DatasetType / const.\
+spdx_Dataset_DatasetType_audio / const.\
+spdx_Dataset_DatasetType_categorical / const.\
+spdx_Dataset_DatasetType_graph / const.\
+spdx_Dataset_DatasetType_image / const.\
+spdx_Dataset_DatasetType_noAssertion / const.\
+spdx_Dataset_DatasetType_numeric / const.\
+spdx_Dataset_DatasetType_other / const.\
+spdx_Dataset_DatasetType_sensor / const.\
+spdx_Dataset_DatasetType_structured / const.\
+spdx_Dataset_DatasetType_syntactic / const.\
+spdx_Dataset_DatasetType_text / const.\
+spdx_Dataset_DatasetType_timeseries / const.\
+spdx_Dataset_DatasetType_timestamp / const.\
+                      spdx_Dataset_DatasetType_video / BlankNodeOrIRI
+dataset_DatasetType_props = { ~SHACLClass, ~AnyObject }
+dataset_DatasetPackage = { label.type =&gt; const.\
+dataset_DatasetPackage, label.spdxId =&gt; IRI, ~\
+                                       dataset_DatasetPackage_props }
+dataset_DatasetPackage_derived = dataset_DatasetPackage / \
+                                                       BlankNodeOrIRI
+dataset_DatasetPackage_props = { ~software_Package_props, ?label.\
+dataset_anonymizationMethodUsed =&gt; [ * \
+prop_dataset_DatasetPackage_dataset_anonymizationMethodUsed ], ?\
+label.dataset_confidentialityLevel =&gt; \
+prop_dataset_DatasetPackage_dataset_confidentialityLevel, ?label.\
+dataset_dataCollectionProcess =&gt; \
+prop_dataset_DatasetPackage_dataset_dataCollectionProcess, ?label.\
+dataset_dataPreprocessing =&gt; [ * \
+prop_dataset_DatasetPackage_dataset_dataPreprocessing ], ?label.\
+dataset_datasetAvailability =&gt; \
+prop_dataset_DatasetPackage_dataset_datasetAvailability, ?label.\
+dataset_datasetNoise =&gt; \
+prop_dataset_DatasetPackage_dataset_datasetNoise, ?label.\
+dataset_datasetSize =&gt; \
+prop_dataset_DatasetPackage_dataset_datasetSize, label.\
+dataset_datasetType =&gt; [ + \
+prop_dataset_DatasetPackage_dataset_datasetType ], ?label.\
+dataset_datasetUpdateMechanism =&gt; \
+prop_dataset_DatasetPackage_dataset_datasetUpdateMechanism, ?label.\
+dataset_hasSensitivePersonalInformation =&gt; \
+prop_dataset_DatasetPackage_dataset_hasSensitivePersonalInformation\
+, ?label.dataset_intendedUse =&gt; \
+prop_dataset_DatasetPackage_dataset_intendedUse, ?label.\
+dataset_knownBias =&gt; [ * \
+prop_dataset_DatasetPackage_dataset_knownBias ], ?label.\
+ dataset_sensor =&gt; [ * prop_dataset_DatasetPackage_dataset_sensor ] }
+prop_dataset_DatasetPackage_dataset_anonymizationMethodUsed = tstr
+prop_dataset_DatasetPackage_dataset_confidentialityLevel = const.\
+                        amber / const.clear / const.green / const.red
+prop_dataset_DatasetPackage_dataset_dataCollectionProcess = tstr
+prop_dataset_DatasetPackage_dataset_dataPreprocessing = tstr
+prop_dataset_DatasetPackage_dataset_datasetAvailability = const.\
+clickthrough / const.directDownload / const.query / const.\
+                                  registration / const.scrapingScript
+prop_dataset_DatasetPackage_dataset_datasetNoise = tstr
+prop_dataset_DatasetPackage_dataset_datasetSize = uint
+prop_dataset_DatasetPackage_dataset_datasetType = const.audio / \
+const.categorical / const.graph / const.image / const.noAssertion / \
+const.numeric / const.other / const.sensor / const.structured / \
+const.syntactic / const.text / const.timeseries / const.timestamp / \
+                                                          const.video
+prop_dataset_DatasetPackage_dataset_datasetUpdateMechanism = tstr
+prop_dataset_DatasetPackage_dataset_hasSensitivePersonalInformation \
+                           = const.no / const.noAssertion / const.yes
+prop_dataset_DatasetPackage_dataset_intendedUse = tstr
+prop_dataset_DatasetPackage_dataset_knownBias = tstr
+prop_dataset_DatasetPackage_dataset_sensor = DictionaryEntry_derived
+
+; AI Profile
+
+ai_EnergyConsumption = { label.type =&gt; const.ai_EnergyConsumption, ?\
+           label.@id =&gt; BlankNodeOrIRI, ~ai_EnergyConsumption_props }
+ai_EnergyConsumption_derived = ai_EnergyConsumption / BlankNodeOrIRI
+ai_EnergyConsumption_props = { ~SHACLClass, ?label.\
+ai_finetuningEnergyConsumption =&gt; [ * \
+prop_ai_EnergyConsumption_ai_finetuningEnergyConsumption ], ?label.\
+ai_inferenceEnergyConsumption =&gt; [ * \
+prop_ai_EnergyConsumption_ai_inferenceEnergyConsumption ], ?label.\
+ai_trainingEnergyConsumption =&gt; [ * \
+           prop_ai_EnergyConsumption_ai_trainingEnergyConsumption ] }
+prop_ai_EnergyConsumption_ai_finetuningEnergyConsumption = \
+                              ai_EnergyConsumptionDescription_derived
+prop_ai_EnergyConsumption_ai_inferenceEnergyConsumption = \
+                              ai_EnergyConsumptionDescription_derived
+prop_ai_EnergyConsumption_ai_trainingEnergyConsumption = \
+                              ai_EnergyConsumptionDescription_derived
+ai_EnergyConsumptionDescription = { label.type =&gt; const.\
+ai_EnergyConsumptionDescription, ?label.@id =&gt; BlankNodeOrIRI, ~\
+                              ai_EnergyConsumptionDescription_props }
+ai_EnergyConsumptionDescription_derived = \
+                     ai_EnergyConsumptionDescription / BlankNodeOrIRI
+ai_EnergyConsumptionDescription_props = { ~SHACLClass, label.\
+ai_energyQuantity =&gt; \
+prop_ai_EnergyConsumptionDescription_ai_energyQuantity, label.\
+ai_energyUnit =&gt; prop_ai_EnergyConsumptionDescription_ai_energyUnit }
+prop_ai_EnergyConsumptionDescription_ai_energyQuantity = tstr .\
+  regexp "-?[0-9]+(\\.[0-9]*)?" ; CoSPDX representation of quantities
+prop_ai_EnergyConsumptionDescription_ai_energyUnit = const.\
+                         kilowattHour / const.megajoule / const.other
+ai_EnergyUnitType = { label.type =&gt; const.ai_EnergyUnitType, ?label.\
+                    @id =&gt; BlankNodeOrIRI, ~ai_EnergyUnitType_props }
+ai_EnergyUnitType_derived = ai_EnergyUnitType / const.\
+spdx_AI_EnergyUnitType_kilowattHour / const.\
+spdx_AI_EnergyUnitType_megajoule / const.\
+                        spdx_AI_EnergyUnitType_other / BlankNodeOrIRI
+ai_EnergyUnitType_props = { ~SHACLClass, ~AnyObject }
+ai_SafetyRiskAssessmentType = { label.type =&gt; const.\
+ai_SafetyRiskAssessmentType, ?label.@id =&gt; BlankNodeOrIRI, ~\
+                                  ai_SafetyRiskAssessmentType_props }
+ai_SafetyRiskAssessmentType_derived = ai_SafetyRiskAssessmentType / \
+const.spdx_AI_SafetyRiskAssessmentType_high / const.\
+spdx_AI_SafetyRiskAssessmentType_low / const.\
+spdx_AI_SafetyRiskAssessmentType_medium / const.\
+            spdx_AI_SafetyRiskAssessmentType_serious / BlankNodeOrIRI
+ai_SafetyRiskAssessmentType_props = { ~SHACLClass, ~AnyObject }
+ai_AIPackage = { label.type =&gt; const.ai_AIPackage, label.spdxId =&gt; \
+                                           IRI, ~ai_AIPackage_props }
+ai_AIPackage_derived = ai_AIPackage / BlankNodeOrIRI
+ai_AIPackage_props = { ~software_Package_props, ?label.\
+ai_autonomyType =&gt; prop_ai_AIPackage_ai_autonomyType, ?label.\
+ai_domain =&gt; [ * prop_ai_AIPackage_ai_domain ], ?label.\
+ai_energyConsumption =&gt; prop_ai_AIPackage_ai_energyConsumption, ?\
+label.ai_hyperparameter =&gt; [ * prop_ai_AIPackage_ai_hyperparameter ]\
+, ?label.ai_informationAboutApplication =&gt; \
+prop_ai_AIPackage_ai_informationAboutApplication, ?label.\
+ai_informationAboutTraining =&gt; \
+prop_ai_AIPackage_ai_informationAboutTraining, ?label.ai_limitation \
+=&gt; prop_ai_AIPackage_ai_limitation, ?label.ai_metric =&gt; [ * \
+prop_ai_AIPackage_ai_metric ], ?label.ai_metricDecisionThreshold =&gt; \
+[ * prop_ai_AIPackage_ai_metricDecisionThreshold ], ?label.\
+ai_modelDataPreprocessing =&gt; [ * \
+prop_ai_AIPackage_ai_modelDataPreprocessing ], ?label.\
+ai_modelExplainability =&gt; [ * \
+prop_ai_AIPackage_ai_modelExplainability ], ?label.\
+ai_safetyRiskAssessment =&gt; prop_ai_AIPackage_ai_safetyRiskAssessment\
+, ?label.ai_standardCompliance =&gt; [ * \
+prop_ai_AIPackage_ai_standardCompliance ], ?label.ai_typeOfModel =&gt; \
+[ * prop_ai_AIPackage_ai_typeOfModel ], ?label.\
+ai_useSensitivePersonalInformation =&gt; \
+               prop_ai_AIPackage_ai_useSensitivePersonalInformation }
+prop_ai_AIPackage_ai_autonomyType = const.no / const.noAssertion / \
+                                                            const.yes
+prop_ai_AIPackage_ai_domain = tstr
+prop_ai_AIPackage_ai_energyConsumption = ai_EnergyConsumption_derived
+prop_ai_AIPackage_ai_hyperparameter = DictionaryEntry_derived
+prop_ai_AIPackage_ai_informationAboutApplication = tstr
+prop_ai_AIPackage_ai_informationAboutTraining = tstr
+prop_ai_AIPackage_ai_limitation = tstr
+prop_ai_AIPackage_ai_metric = DictionaryEntry_derived
+prop_ai_AIPackage_ai_metricDecisionThreshold = \
+                                              DictionaryEntry_derived
+prop_ai_AIPackage_ai_modelDataPreprocessing = tstr
+prop_ai_AIPackage_ai_modelExplainability = tstr
+prop_ai_AIPackage_ai_safetyRiskAssessment = const.high / const.low \
+                                       / const.medium / const.serious
+prop_ai_AIPackage_ai_standardCompliance = tstr
+prop_ai_AIPackage_ai_typeOfModel = tstr
+prop_ai_AIPackage_ai_useSensitivePersonalInformation = const.no / \
+                                        const.noAssertion / const.yes
+
+; Build Profile
+
+build_Build = { label.type =&gt; const.build_Build, label.spdxId =&gt; IRI\
+                                               , ~build_Build_props }
+build_Build_derived = build_Build / BlankNodeOrIRI
+build_Build_props = { ~Element_props, ?label.build_buildEndTime =&gt; \
+prop_build_Build_build_buildEndTime, ?label.build_buildId =&gt; \
+prop_build_Build_build_buildId, ?label.build_buildStartTime =&gt; \
+prop_build_Build_build_buildStartTime, label.build_buildType =&gt; \
+prop_build_Build_build_buildType, ?label.build_configSourceDigest =\
+&gt; [ * prop_build_Build_build_configSourceDigest ], ?label.\
+build_configSourceEntrypoint =&gt; [ * \
+prop_build_Build_build_configSourceEntrypoint ], ?label.\
+build_configSourceUri =&gt; [ * prop_build_Build_build_configSourceUri \
+], ?label.build_environment =&gt; [ * \
+prop_build_Build_build_environment ], ?label.build_parameter =&gt; [ * \
+                                 prop_build_Build_build_parameter ] }
+prop_build_Build_build_buildEndTime = #6.1(uint) ; ISO8601 UTC with \
+                                second-precision strings in SPDX-JSON
+prop_build_Build_build_buildId = tstr
+prop_build_Build_build_buildStartTime = #6.1(uint) ; ISO8601 UTC \
+                           with second-precision strings in SPDX-JSON
+prop_build_Build_build_buildType = anyURI
+prop_build_Build_build_configSourceDigest = Hash_derived
+prop_build_Build_build_configSourceEntrypoint = tstr
+prop_build_Build_build_configSourceUri = anyURI
+prop_build_Build_build_environment = DictionaryEntry_derived
+prop_build_Build_build_parameter = DictionaryEntry_derived
+
+; Extension Profile
+
+extension_CdxPropertyEntry = { label.type =&gt; const.\
+extension_CdxPropertyEntry, ?label.@id =&gt; BlankNodeOrIRI, ~\
+                                   extension_CdxPropertyEntry_props }
+extension_CdxPropertyEntry_derived = extension_CdxPropertyEntry / \
+                                                       BlankNodeOrIRI
+extension_CdxPropertyEntry_props = { ~SHACLClass, label.\
+extension_cdxPropName =&gt; \
+prop_extension_CdxPropertyEntry_extension_cdxPropName, ?label.\
+extension_cdxPropValue =&gt; \
+             prop_extension_CdxPropertyEntry_extension_cdxPropValue }
+prop_extension_CdxPropertyEntry_extension_cdxPropName = tstr
+prop_extension_CdxPropertyEntry_extension_cdxPropValue = tstr
+extension_Extension = { label.type =&gt; { ~IRI,  }, ?label.@id =&gt; \
+                         BlankNodeOrIRI, ~extension_Extension_props }
+extension_Extension_derived = extension_CdxPropertiesExtension / \
+                           extension_Extension_props / BlankNodeOrIRI
+extension_Extension_props = { ~SHACLClass, ~AnyObject }
+extension_CdxPropertiesExtension = { label.type =&gt; const.\
+extension_CdxPropertiesExtension, ?label.@id =&gt; BlankNodeOrIRI, ~\
+                             extension_CdxPropertiesExtension_props }
+extension_CdxPropertiesExtension_derived = \
+                    extension_CdxPropertiesExtension / BlankNodeOrIRI
+extension_CdxPropertiesExtension_props = { ~\
+extension_Extension_props, label.extension_cdxProperty =&gt; [ + \
+      prop_extension_CdxPropertiesExtension_extension_cdxProperty ] }
+prop_extension_CdxPropertiesExtension_extension_cdxProperty = \
+                                   extension_CdxPropertyEntry_derived
+
+; Core Profile
+
+AnnotationType = { label.type =&gt; const.AnnotationType, ?label.@id =\
+                            &gt; BlankNodeOrIRI, ~AnnotationType_props }
+AnnotationType_derived = AnnotationType / const.\
+spdx_Core_AnnotationType_other / const.\
+                     spdx_Core_AnnotationType_review / BlankNodeOrIRI
+AnnotationType_props = { ~SHACLClass, ~AnyObject }
+CreationInfo = { label.type =&gt; const.CreationInfo, ?label.@id =&gt; \
+                                BlankNodeOrIRI, ~CreationInfo_props }
+CreationInfo_derived = CreationInfo / BlankNodeOrIRI
+CreationInfo_props = { ~SHACLClass, ?label.comment =&gt; \
+prop_CreationInfo_comment, label.created =&gt; \
+prop_CreationInfo_created, label.createdBy =&gt; [ + \
+prop_CreationInfo_createdBy ], ?label.createdUsing =&gt; [ * \
+prop_CreationInfo_createdUsing ], label.specVersion =&gt; \
+                                      prop_CreationInfo_specVersion }
+prop_CreationInfo_comment = tstr
+prop_CreationInfo_created = #6.1(uint) ; ISO8601 UTC with second-\
+                                       precision strings in SPDX-JSON
+prop_CreationInfo_createdBy = Agent_derived
+prop_CreationInfo_createdUsing = Tool_derived
+prop_CreationInfo_specVersion = tstr .regexp "(0|[1-9][0-9]*)\\.(0|[\
+1-9][0-9]*)\\.(0|[1-9][0-9]*)(-((0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-\
+zA-Z-]*)(\\.(0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-zA-Z-]*))*))?(\\+([0\
+-9a-zA-Z-]+(\\.[0-9a-zA-Z-]+)*))?" ; CoSPDX representation of \
+                                                             versions
+DictionaryEntry = { label.type =&gt; const.DictionaryEntry, ?label.@id \
+                          =&gt; BlankNodeOrIRI, ~DictionaryEntry_props }
+DictionaryEntry_derived = DictionaryEntry / BlankNodeOrIRI
+DictionaryEntry_props = { ~SHACLClass, label.key =&gt; \
+prop_DictionaryEntry_key, ?label.value =&gt; \
+                                         prop_DictionaryEntry_value }
+prop_DictionaryEntry_key = tstr
+prop_DictionaryEntry_value = tstr
+Element_derived = ai_AIPackage / build_Build / Agent / Annotation / \
+Bom / Bundle / IndividualElement / LifecycleScopedRelationship / \
+Organization / Person / Relationship / SoftwareAgent / SpdxDocument \
+/ Tool / dataset_DatasetPackage / \
+expandedlicensing_ConjunctiveLicenseSet / \
+expandedlicensing_CustomLicense / \
+expandedlicensing_CustomLicenseAddition / \
+expandedlicensing_DisjunctiveLicenseSet / \
+expandedlicensing_IndividualLicensingInfo / \
+expandedlicensing_ListedLicense / \
+expandedlicensing_ListedLicenseException / \
+expandedlicensing_OrLaterOperator / \
+expandedlicensing_WithAdditionOperator / \
+security_CvssV2VulnAssessmentRelationship / \
+security_CvssV3VulnAssessmentRelationship / \
+security_CvssV4VulnAssessmentRelationship / \
+security_EpssVulnAssessmentRelationship / \
+security_ExploitCatalogVulnAssessmentRelationship / \
+security_SsvcVulnAssessmentRelationship / \
+security_VexAffectedVulnAssessmentRelationship / \
+security_VexFixedVulnAssessmentRelationship / \
+security_VexNotAffectedVulnAssessmentRelationship / \
+security_VexUnderInvestigationVulnAssessmentRelationship / \
+security_Vulnerability / simplelicensing_LicenseExpression / \
+simplelicensing_SimpleLicensingText / software_File / \
+software_Package / software_Sbom / software_Snippet / const.\
+NoAssertionElement / const.NoneElement / const.SpdxOrganization / \
+const.expandedlicensing_NoAssertionLicense / const.\
+                       expandedlicensing_NoneLicense / BlankNodeOrIRI
+Element_props = { ~SHACLClass, ?label.comment =&gt; \
+prop_Element_comment, label.creationInfo =&gt; \
+prop_Element_creationInfo, ?label.description =&gt; \
+prop_Element_description, ?label.extension =&gt; [ * \
+prop_Element_extension ], ?label.externalIdentifier =&gt; [ * \
+prop_Element_externalIdentifier ], ?label.externalRef =&gt; [ * \
+prop_Element_externalRef ], ?label.name =&gt; prop_Element_name, ?label\
+.summary =&gt; prop_Element_summary, ?label.verifiedUsing =&gt; [ * \
+                                       prop_Element_verifiedUsing ] }
+prop_Element_comment = tstr
+prop_Element_creationInfo = CreationInfo_derived
+prop_Element_description = tstr
+prop_Element_extension = extension_Extension_derived
+prop_Element_externalIdentifier = ExternalIdentifier_derived
+prop_Element_externalRef = ExternalRef_derived
+prop_Element_name = tstr
+prop_Element_summary = tstr
+prop_Element_verifiedUsing = IntegrityMethod_derived
+ElementCollection_derived = Bom / Bundle / SpdxDocument / \
+                                       software_Sbom / BlankNodeOrIRI
+ElementCollection_props = { ~Element_props, ?label.element =&gt; [ * \
+prop_ElementCollection_element ], ?label.profileConformance =&gt; [ * \
+prop_ElementCollection_profileConformance ], ?label.rootElement =&gt; \
+                           [ * prop_ElementCollection_rootElement ] }
+prop_ElementCollection_element = Element_derived
+prop_ElementCollection_profileConformance = const.ai / const.build \
+/ const.core / const.dataset / const.expandedLicensing / const.\
+extension / const.lite / const.security / const.simpleLicensing / \
+                                                       const.software
+prop_ElementCollection_rootElement = Element_derived
+ExternalIdentifier = { label.type =&gt; const.ExternalIdentifier, ?\
+             label.@id =&gt; BlankNodeOrIRI, ~ExternalIdentifier_props }
+ExternalIdentifier_derived = ExternalIdentifier / BlankNodeOrIRI
+ExternalIdentifier_props = { ~SHACLClass, ?label.comment =&gt; \
+prop_ExternalIdentifier_comment, label.externalIdentifierType =&gt; \
+prop_ExternalIdentifier_externalIdentifierType, label.identifier =&gt; \
+prop_ExternalIdentifier_identifier, ?label.identifierLocator =&gt; [ * \
+prop_ExternalIdentifier_identifierLocator ], ?label.\
+       issuingAuthority =&gt; prop_ExternalIdentifier_issuingAuthority }
+prop_ExternalIdentifier_comment = tstr
+prop_ExternalIdentifier_externalIdentifierType = const.cpe22 / const\
+.cpe23 / const.cve / const.email / const.gitoid / const.other / \
+const.packageUrl / const.securityOther / const.swhid / const.swid / \
+                                                      const.urlScheme
+prop_ExternalIdentifier_identifier = tstr
+prop_ExternalIdentifier_identifierLocator = anyURI
+prop_ExternalIdentifier_issuingAuthority = tstr
+ExternalIdentifierType = { label.type =&gt; const.\
+ExternalIdentifierType, ?label.@id =&gt; BlankNodeOrIRI, ~\
+                                       ExternalIdentifierType_props }
+ExternalIdentifierType_derived = ExternalIdentifierType / const.\
+spdx_Core_ExternalIdentifierType_cpe22 / const.\
+spdx_Core_ExternalIdentifierType_cpe23 / const.\
+spdx_Core_ExternalIdentifierType_cve / const.\
+spdx_Core_ExternalIdentifierType_email / const.\
+spdx_Core_ExternalIdentifierType_gitoid / const.\
+spdx_Core_ExternalIdentifierType_other / const.\
+spdx_Core_ExternalIdentifierType_packageUrl / const.\
+spdx_Core_ExternalIdentifierType_securityOther / const.\
+spdx_Core_ExternalIdentifierType_swhid / const.\
+spdx_Core_ExternalIdentifierType_swid / const.\
+          spdx_Core_ExternalIdentifierType_urlScheme / BlankNodeOrIRI
+ExternalIdentifierType_props = { ~SHACLClass, ~AnyObject }
+ExternalMap = { label.type =&gt; const.ExternalMap, ?label.@id =&gt; \
+                                 BlankNodeOrIRI, ~ExternalMap_props }
+ExternalMap_derived = ExternalMap / BlankNodeOrIRI
+ExternalMap_props = { ~SHACLClass, ?label.definingArtifact =&gt; \
+prop_ExternalMap_definingArtifact, label.externalSpdxId =&gt; \
+prop_ExternalMap_externalSpdxId, ?label.locationHint =&gt; \
+prop_ExternalMap_locationHint, ?label.verifiedUsing =&gt; [ * \
+                                   prop_ExternalMap_verifiedUsing ] }
+prop_ExternalMap_definingArtifact = Artifact_derived
+prop_ExternalMap_externalSpdxId = anyURI
+prop_ExternalMap_locationHint = anyURI
+prop_ExternalMap_verifiedUsing = IntegrityMethod_derived
+ExternalRef = { label.type =&gt; const.ExternalRef, ?label.@id =&gt; \
+                                 BlankNodeOrIRI, ~ExternalRef_props }
+ExternalRef_derived = ExternalRef / BlankNodeOrIRI
+ExternalRef_props = { ~SHACLClass, ?label.comment =&gt; \
+prop_ExternalRef_comment, ?label.contentType =&gt; \
+prop_ExternalRef_contentType, ?label.externalRefType =&gt; \
+prop_ExternalRef_externalRefType, ?label.locator =&gt; [ * \
+                                         prop_ExternalRef_locator ] }
+prop_ExternalRef_comment = tstr
+prop_ExternalRef_contentType = tstr .regexp "[^/]+/[^/]+" ; CoSPDX \
+                                      representation of content types
+prop_ExternalRef_externalRefType = const.altDownloadLocation / const\
+.altWebPage / const.binaryArtifact / const.bower / const.buildMeta \
+/ const.buildSystem / const.certificationReport / const.chat / const\
+.componentAnalysisReport / const.cwe / const.documentation / const.\
+dynamicAnalysisReport / const.eolNotice / const.\
+exportControlAssessment / const.funding / const.issueTracker / const\
+.license / const.mailingList / const.mavenCentral / const.metrics / \
+const.npm / const.nuget / const.other / const.privacyAssessment / \
+const.productMetadata / const.purchaseOrder / const.\
+qualityAssessmentReport / const.releaseHistory / const.releaseNotes \
+/ const.riskAssessment / const.runtimeAnalysisReport / const.\
+secureSoftwareAttestation / const.securityAdversaryModel / const.\
+securityAdvisory / const.securityFix / const.securityOther / const.\
+securityPenTestReport / const.securityPolicy / const.\
+securityThreatModel / const.socialMedia / const.sourceArtifact / \
+const.staticAnalysisReport / const.support / const.vcs / const.\
+vulnerabilityDisclosureReport / const.\
+                                vulnerabilityExploitabilityAssessment
+prop_ExternalRef_locator = tstr
+ExternalRefType = { label.type =&gt; const.ExternalRefType, ?label.@id \
+                          =&gt; BlankNodeOrIRI, ~ExternalRefType_props }
+ExternalRefType_derived = ExternalRefType / const.\
+spdx_Core_ExternalRefType_altDownloadLocation / const.\
+spdx_Core_ExternalRefType_altWebPage / const.\
+spdx_Core_ExternalRefType_binaryArtifact / const.\
+spdx_Core_ExternalRefType_bower / const.\
+spdx_Core_ExternalRefType_buildMeta / const.\
+spdx_Core_ExternalRefType_buildSystem / const.\
+spdx_Core_ExternalRefType_certificationReport / const.\
+spdx_Core_ExternalRefType_chat / const.\
+spdx_Core_ExternalRefType_componentAnalysisReport / const.\
+spdx_Core_ExternalRefType_cwe / const.\
+spdx_Core_ExternalRefType_documentation / const.\
+spdx_Core_ExternalRefType_dynamicAnalysisReport / const.\
+spdx_Core_ExternalRefType_eolNotice / const.\
+spdx_Core_ExternalRefType_exportControlAssessment / const.\
+spdx_Core_ExternalRefType_funding / const.\
+spdx_Core_ExternalRefType_issueTracker / const.\
+spdx_Core_ExternalRefType_license / const.\
+spdx_Core_ExternalRefType_mailingList / const.\
+spdx_Core_ExternalRefType_mavenCentral / const.\
+spdx_Core_ExternalRefType_metrics / const.\
+spdx_Core_ExternalRefType_npm / const.\
+spdx_Core_ExternalRefType_nuget / const.\
+spdx_Core_ExternalRefType_other / const.\
+spdx_Core_ExternalRefType_privacyAssessment / const.\
+spdx_Core_ExternalRefType_productMetadata / const.\
+spdx_Core_ExternalRefType_purchaseOrder / const.\
+spdx_Core_ExternalRefType_qualityAssessmentReport / const.\
+spdx_Core_ExternalRefType_releaseHistory / const.\
+spdx_Core_ExternalRefType_releaseNotes / const.\
+spdx_Core_ExternalRefType_riskAssessment / const.\
+spdx_Core_ExternalRefType_runtimeAnalysisReport / const.\
+spdx_Core_ExternalRefType_secureSoftwareAttestation / const.\
+spdx_Core_ExternalRefType_securityAdversaryModel / const.\
+spdx_Core_ExternalRefType_securityAdvisory / const.\
+spdx_Core_ExternalRefType_securityFix / const.\
+spdx_Core_ExternalRefType_securityOther / const.\
+spdx_Core_ExternalRefType_securityPenTestReport / const.\
+spdx_Core_ExternalRefType_securityPolicy / const.\
+spdx_Core_ExternalRefType_securityThreatModel / const.\
+spdx_Core_ExternalRefType_socialMedia / const.\
+spdx_Core_ExternalRefType_sourceArtifact / const.\
+spdx_Core_ExternalRefType_staticAnalysisReport / const.\
+spdx_Core_ExternalRefType_support / const.\
+spdx_Core_ExternalRefType_vcs / const.\
+spdx_Core_ExternalRefType_vulnerabilityDisclosureReport / const.\
+spdx_Core_ExternalRefType_vulnerabilityExploitabilityAssessment / \
+                                                       BlankNodeOrIRI
+ExternalRefType_props = { ~SHACLClass, ~AnyObject }
+HashAlgorithm = { label.type =&gt; const.HashAlgorithm, ?label.@id =&gt; \
+                               BlankNodeOrIRI, ~HashAlgorithm_props }
+HashAlgorithm_derived = HashAlgorithm / const.\
+spdx_Core_HashAlgorithm_adler32 / const.\
+spdx_Core_HashAlgorithm_blake2b256 / const.\
+spdx_Core_HashAlgorithm_blake2b384 / const.\
+spdx_Core_HashAlgorithm_blake2b512 / const.\
+spdx_Core_HashAlgorithm_blake3 / const.\
+spdx_Core_HashAlgorithm_crystalsDilithium / const.\
+spdx_Core_HashAlgorithm_crystalsKyber / const.\
+spdx_Core_HashAlgorithm_falcon / const.spdx_Core_HashAlgorithm_md2 \
+/ const.spdx_Core_HashAlgorithm_md4 / const.\
+spdx_Core_HashAlgorithm_md5 / const.spdx_Core_HashAlgorithm_md6 / \
+const.spdx_Core_HashAlgorithm_other / const.\
+spdx_Core_HashAlgorithm_sha1 / const.spdx_Core_HashAlgorithm_sha224 \
+/ const.spdx_Core_HashAlgorithm_sha256 / const.\
+spdx_Core_HashAlgorithm_sha384 / const.\
+spdx_Core_HashAlgorithm_sha3_224 / const.\
+spdx_Core_HashAlgorithm_sha3_256 / const.\
+spdx_Core_HashAlgorithm_sha3_384 / const.\
+spdx_Core_HashAlgorithm_sha3_512 / const.\
+                      spdx_Core_HashAlgorithm_sha512 / BlankNodeOrIRI
+HashAlgorithm_props = { ~SHACLClass, ~AnyObject }
+IndividualElement = { label.type =&gt; const.IndividualElement, label.\
+                            spdxId =&gt; IRI, ~IndividualElement_props }
+IndividualElement_derived = IndividualElement / const.\
+              NoAssertionElement / const.NoneElement / BlankNodeOrIRI
+IndividualElement_props = { ~Element_props, ~AnyObject }
+IntegrityMethod_derived = Hash / PackageVerificationCode / \
+                          software_ContentIdentifier / BlankNodeOrIRI
+IntegrityMethod_props = { ~SHACLClass, ?label.comment =&gt; \
+                                       prop_IntegrityMethod_comment }
+prop_IntegrityMethod_comment = tstr
+LifecycleScopeType = { label.type =&gt; const.LifecycleScopeType, ?\
+             label.@id =&gt; BlankNodeOrIRI, ~LifecycleScopeType_props }
+LifecycleScopeType_derived = LifecycleScopeType / const.\
+spdx_Core_LifecycleScopeType_build / const.\
+spdx_Core_LifecycleScopeType_design / const.\
+spdx_Core_LifecycleScopeType_development / const.\
+spdx_Core_LifecycleScopeType_other / const.\
+spdx_Core_LifecycleScopeType_runtime / const.\
+                   spdx_Core_LifecycleScopeType_test / BlankNodeOrIRI
+LifecycleScopeType_props = { ~SHACLClass, ~AnyObject }
+NamespaceMap = { label.type =&gt; const.NamespaceMap, ?label.@id =&gt; \
+                                BlankNodeOrIRI, ~NamespaceMap_props }
+NamespaceMap_derived = NamespaceMap / BlankNodeOrIRI
+NamespaceMap_props = { ~SHACLClass, label.namespace =&gt; \
+prop_NamespaceMap_namespace, label.prefix =&gt; \
+                                           prop_NamespaceMap_prefix }
+prop_NamespaceMap_namespace = anyURI
+prop_NamespaceMap_prefix = tstr
+PackageVerificationCode = { label.type =&gt; const.\
+PackageVerificationCode, ?label.@id =&gt; BlankNodeOrIRI, ~\
+                                      PackageVerificationCode_props }
+PackageVerificationCode_derived = PackageVerificationCode / \
+                                                       BlankNodeOrIRI
+PackageVerificationCode_props = { ~IntegrityMethod_props, label.\
+algorithm =&gt; prop_PackageVerificationCode_algorithm, label.\
+hashValue =&gt; prop_PackageVerificationCode_hashValue, ?label.\
+packageVerificationCodeExcludedFile =&gt; [ * \
+ prop_PackageVerificationCode_packageVerificationCodeExcludedFile ] }
+prop_PackageVerificationCode_algorithm = const.adler32 / const.\
+blake2b256 / const.blake2b384 / const.blake2b512 / const.blake3 / \
+const.crystalsDilithium / const.crystalsKyber / const.falcon / const\
+.md2 / const.md4 / const.md5 / const.md6 / const.other / const.sha1 \
+/ const.sha224 / const.sha256 / const.sha384 / const.sha3_224 / \
+      const.sha3_256 / const.sha3_384 / const.sha3_512 / const.sha512
+prop_PackageVerificationCode_hashValue = tstr
+prop_PackageVerificationCode_packageVerificationCodeExcludedFile = \
+                                                                 tstr
+PositiveIntegerRange = { label.type =&gt; const.PositiveIntegerRange, ?\
+           label.@id =&gt; BlankNodeOrIRI, ~PositiveIntegerRange_props }
+PositiveIntegerRange_derived = PositiveIntegerRange / BlankNodeOrIRI
+PositiveIntegerRange_props = { ~SHACLClass, label.beginIntegerRange \
+=&gt; prop_PositiveIntegerRange_beginIntegerRange, label.\
+       endIntegerRange =&gt; prop_PositiveIntegerRange_endIntegerRange }
+prop_PositiveIntegerRange_beginIntegerRange = uint .ge 1
+prop_PositiveIntegerRange_endIntegerRange = uint .ge 1
+PresenceType = { label.type =&gt; const.PresenceType, ?label.@id =&gt; \
+                                BlankNodeOrIRI, ~PresenceType_props }
+PresenceType_derived = PresenceType / const.\
+spdx_Core_PresenceType_no / const.\
+spdx_Core_PresenceType_noAssertion / const.\
+                          spdx_Core_PresenceType_yes / BlankNodeOrIRI
+PresenceType_props = { ~SHACLClass, ~AnyObject }
+ProfileIdentifierType = { label.type =&gt; const.ProfileIdentifierType\
+       , ?label.@id =&gt; BlankNodeOrIRI, ~ProfileIdentifierType_props }
+ProfileIdentifierType_derived = ProfileIdentifierType / const.\
+spdx_Core_ProfileIdentifierType_ai / const.\
+spdx_Core_ProfileIdentifierType_build / const.\
+spdx_Core_ProfileIdentifierType_core / const.\
+spdx_Core_ProfileIdentifierType_dataset / const.\
+spdx_Core_ProfileIdentifierType_expandedLicensing / const.\
+spdx_Core_ProfileIdentifierType_extension / const.\
+spdx_Core_ProfileIdentifierType_lite / const.\
+spdx_Core_ProfileIdentifierType_security / const.\
+spdx_Core_ProfileIdentifierType_simpleLicensing / const.\
+            spdx_Core_ProfileIdentifierType_software / BlankNodeOrIRI
+ProfileIdentifierType_props = { ~SHACLClass, ~AnyObject }
+Relationship = { label.type =&gt; const.Relationship, label.spdxId =&gt; \
+                                           IRI, ~Relationship_props }
+Relationship_derived = LifecycleScopedRelationship / \
+security_CvssV2VulnAssessmentRelationship / \
+security_CvssV3VulnAssessmentRelationship / \
+security_CvssV4VulnAssessmentRelationship / \
+security_EpssVulnAssessmentRelationship / \
+security_ExploitCatalogVulnAssessmentRelationship / \
+security_SsvcVulnAssessmentRelationship / \
+security_VexAffectedVulnAssessmentRelationship / \
+security_VexFixedVulnAssessmentRelationship / \
+security_VexNotAffectedVulnAssessmentRelationship / \
+security_VexUnderInvestigationVulnAssessmentRelationship / \
+                                        Relationship / BlankNodeOrIRI
+Relationship_props = { ~Element_props, ?label.completeness =&gt; \
+prop_Relationship_completeness, ?label.endTime =&gt; \
+prop_Relationship_endTime, label.from =&gt; prop_Relationship_from_, \
+label.relationshipType =&gt; prop_Relationship_relationshipType, ?label\
+.startTime =&gt; prop_Relationship_startTime, label.to =&gt; [ + \
+                                             prop_Relationship_to ] }
+prop_Relationship_completeness = const.complete / const.incomplete \
+                                                  / const.noAssertion
+prop_Relationship_endTime = #6.1(uint) ; ISO8601 UTC with second-\
+                                       precision strings in SPDX-JSON
+prop_Relationship_from_ = Element_derived
+prop_Relationship_relationshipType = const.affects / const.\
+amendedBy / const.ancestorOf / const.availableFrom / const.\
+configures / const.contains / const.coordinatedBy / const.copiedTo \
+/ const.delegatedTo / const.dependsOn / const.descendantOf / const.\
+describes / const.doesNotAffect / const.expandsTo / const.\
+exploitCreatedBy / const.fixedBy / const.fixedIn / const.foundBy / \
+const.generates / const.hasAddedFile / const.hasAssessmentFor / \
+const.hasAssociatedVulnerability / const.hasConcludedLicense / const\
+.hasDataFile / const.hasDeclaredLicense / const.hasDeletedFile / \
+const.hasDependencyManifest / const.hasDistributionArtifact / const.\
+hasDocumentation / const.hasDynamicLink / const.hasEvidence / const.\
+hasExample / const.hasHost / const.hasInput / const.hasMetadata / \
+const.hasOptionalComponent / const.hasOptionalDependency / const.\
+hasOutput / const.hasPrerequisite / const.hasProvidedDependency / \
+const.hasRequirement / const.hasSpecification / const.hasStaticLink \
+/ const.hasTest / const.hasTestCase / const.hasVariant / const.\
+invokedBy / const.modifiedBy / const.other / const.packagedBy / \
+const.patchedBy / const.publishedBy / const.reportedBy / const.\
+republishedBy / const.serializedInArtifact / const.testedOn / const.\
+             trainedOn / const.underInvestigationFor / const.usesTool
+prop_Relationship_startTime = #6.1(uint) ; ISO8601 UTC with second-\
+                                       precision strings in SPDX-JSON
+prop_Relationship_to = Element_derived
+RelationshipCompleteness = { label.type =&gt; const.\
+RelationshipCompleteness, ?label.@id =&gt; BlankNodeOrIRI, ~\
+                                     RelationshipCompleteness_props }
+RelationshipCompleteness_derived = RelationshipCompleteness / const.\
+spdx_Core_RelationshipCompleteness_complete / const.\
+spdx_Core_RelationshipCompleteness_incomplete / const.\
+      spdx_Core_RelationshipCompleteness_noAssertion / BlankNodeOrIRI
+RelationshipCompleteness_props = { ~SHACLClass, ~AnyObject }
+RelationshipType = { label.type =&gt; const.RelationshipType, ?label.@\
+                      id =&gt; BlankNodeOrIRI, ~RelationshipType_props }
+RelationshipType_derived = RelationshipType / const.\
+spdx_Core_RelationshipType_affects / const.\
+spdx_Core_RelationshipType_amendedBy / const.\
+spdx_Core_RelationshipType_ancestorOf / const.\
+spdx_Core_RelationshipType_availableFrom / const.\
+spdx_Core_RelationshipType_configures / const.\
+spdx_Core_RelationshipType_contains / const.\
+spdx_Core_RelationshipType_coordinatedBy / const.\
+spdx_Core_RelationshipType_copiedTo / const.\
+spdx_Core_RelationshipType_delegatedTo / const.\
+spdx_Core_RelationshipType_dependsOn / const.\
+spdx_Core_RelationshipType_descendantOf / const.\
+spdx_Core_RelationshipType_describes / const.\
+spdx_Core_RelationshipType_doesNotAffect / const.\
+spdx_Core_RelationshipType_expandsTo / const.\
+spdx_Core_RelationshipType_exploitCreatedBy / const.\
+spdx_Core_RelationshipType_fixedBy / const.\
+spdx_Core_RelationshipType_fixedIn / const.\
+spdx_Core_RelationshipType_foundBy / const.\
+spdx_Core_RelationshipType_generates / const.\
+spdx_Core_RelationshipType_hasAddedFile / const.\
+spdx_Core_RelationshipType_hasAssessmentFor / const.\
+spdx_Core_RelationshipType_hasAssociatedVulnerability / const.\
+spdx_Core_RelationshipType_hasConcludedLicense / const.\
+spdx_Core_RelationshipType_hasDataFile / const.\
+spdx_Core_RelationshipType_hasDeclaredLicense / const.\
+spdx_Core_RelationshipType_hasDeletedFile / const.\
+spdx_Core_RelationshipType_hasDependencyManifest / const.\
+spdx_Core_RelationshipType_hasDistributionArtifact / const.\
+spdx_Core_RelationshipType_hasDocumentation / const.\
+spdx_Core_RelationshipType_hasDynamicLink / const.\
+spdx_Core_RelationshipType_hasEvidence / const.\
+spdx_Core_RelationshipType_hasExample / const.\
+spdx_Core_RelationshipType_hasHost / const.\
+spdx_Core_RelationshipType_hasInput / const.\
+spdx_Core_RelationshipType_hasMetadata / const.\
+spdx_Core_RelationshipType_hasOptionalComponent / const.\
+spdx_Core_RelationshipType_hasOptionalDependency / const.\
+spdx_Core_RelationshipType_hasOutput / const.\
+spdx_Core_RelationshipType_hasPrerequisite / const.\
+spdx_Core_RelationshipType_hasProvidedDependency / const.\
+spdx_Core_RelationshipType_hasRequirement / const.\
+spdx_Core_RelationshipType_hasSpecification / const.\
+spdx_Core_RelationshipType_hasStaticLink / const.\
+spdx_Core_RelationshipType_hasTest / const.\
+spdx_Core_RelationshipType_hasTestCase / const.\
+spdx_Core_RelationshipType_hasVariant / const.\
+spdx_Core_RelationshipType_invokedBy / const.\
+spdx_Core_RelationshipType_modifiedBy / const.\
+spdx_Core_RelationshipType_other / const.\
+spdx_Core_RelationshipType_packagedBy / const.\
+spdx_Core_RelationshipType_patchedBy / const.\
+spdx_Core_RelationshipType_publishedBy / const.\
+spdx_Core_RelationshipType_reportedBy / const.\
+spdx_Core_RelationshipType_republishedBy / const.\
+spdx_Core_RelationshipType_serializedInArtifact / const.\
+spdx_Core_RelationshipType_testedOn / const.\
+spdx_Core_RelationshipType_trainedOn / const.\
+spdx_Core_RelationshipType_underInvestigationFor / const.\
+                 spdx_Core_RelationshipType_usesTool / BlankNodeOrIRI
+RelationshipType_props = { ~SHACLClass, ~AnyObject }
+SpdxDocument = { label.type =&gt; const.SpdxDocument, label.spdxId =&gt; \
+                                           IRI, ~SpdxDocument_props }
+SpdxDocument_derived = SpdxDocument / BlankNodeOrIRI
+SpdxDocument_props = { ~ElementCollection_props, ?label.dataLicense \
+=&gt; prop_SpdxDocument_dataLicense, ?label.import =&gt; [ * \
+prop_SpdxDocument_import_ ], ?label.namespaceMap =&gt; [ * \
+                                   prop_SpdxDocument_namespaceMap ] }
+prop_SpdxDocument_dataLicense = \
+                               simplelicensing_AnyLicenseInfo_derived
+prop_SpdxDocument_import_ = ExternalMap_derived
+prop_SpdxDocument_namespaceMap = NamespaceMap_derived
+SupportType = { label.type =&gt; const.SupportType, ?label.@id =&gt; \
+                                 BlankNodeOrIRI, ~SupportType_props }
+SupportType_derived = SupportType / const.\
+spdx_Core_SupportType_deployed / const.\
+spdx_Core_SupportType_development / const.\
+spdx_Core_SupportType_endOfSupport / const.\
+spdx_Core_SupportType_limitedSupport / const.\
+spdx_Core_SupportType_noAssertion / const.\
+spdx_Core_SupportType_noSupport / const.\
+                       spdx_Core_SupportType_support / BlankNodeOrIRI
+SupportType_props = { ~SHACLClass, ~AnyObject }
+Tool = { label.type =&gt; const.Tool, label.spdxId =&gt; IRI, ~Tool_props }
+Tool_derived = Tool / BlankNodeOrIRI
+Tool_props = { ~Element_props, ~AnyObject }
+Agent = { label.type =&gt; const.Agent, label.spdxId =&gt; IRI, ~\
+                                                        Agent_props }
+Agent_derived = Organization / Person / SoftwareAgent / Agent / \
+                              const.SpdxOrganization / BlankNodeOrIRI
+Agent_props = { ~Element_props, ~AnyObject }
+Annotation = { label.type =&gt; const.Annotation, label.spdxId =&gt; IRI, \
+                                                  ~Annotation_props }
+Annotation_derived = Annotation / BlankNodeOrIRI
+Annotation_props = { ~Element_props, label.annotationType =&gt; \
+prop_Annotation_annotationType, ?label.contentType =&gt; \
+prop_Annotation_contentType, ?label.statement =&gt; \
+prop_Annotation_statement, label.subject =&gt; prop_Annotation_subject }
+prop_Annotation_annotationType = const.other / const.review
+prop_Annotation_contentType = tstr .regexp "[^/]+/[^/]+" ; CoSPDX \
+                                      representation of content types
+prop_Annotation_statement = tstr
+prop_Annotation_subject = Element_derived
+Artifact_derived = ai_AIPackage / dataset_DatasetPackage / \
+security_Vulnerability / software_File / software_Package / \
+                                    software_Snippet / BlankNodeOrIRI
+Artifact_props = { ~Element_props, ?label.builtTime =&gt; \
+prop_Artifact_builtTime, ?label.originatedBy =&gt; [ * \
+prop_Artifact_originatedBy ], ?label.releaseTime =&gt; \
+prop_Artifact_releaseTime, ?label.standardName =&gt; [ * \
+prop_Artifact_standardName ], ?label.suppliedBy =&gt; \
+prop_Artifact_suppliedBy, ?label.supportLevel =&gt; [ * \
+prop_Artifact_supportLevel ], ?label.validUntilTime =&gt; \
+                                       prop_Artifact_validUntilTime }
+prop_Artifact_builtTime = #6.1(uint) ; ISO8601 UTC with second-\
+                                       precision strings in SPDX-JSON
+prop_Artifact_originatedBy = Agent_derived
+prop_Artifact_releaseTime = #6.1(uint) ; ISO8601 UTC with second-\
+                                       precision strings in SPDX-JSON
+prop_Artifact_standardName = tstr
+prop_Artifact_suppliedBy = Agent_derived
+prop_Artifact_supportLevel = const.deployed / const.development / \
+const.endOfSupport / const.limitedSupport / const.noAssertion / \
+                                      const.noSupport / const.support
+prop_Artifact_validUntilTime = #6.1(uint) ; ISO8601 UTC with second-\
+                                       precision strings in SPDX-JSON
+Bundle = { label.type =&gt; const.Bundle, label.spdxId =&gt; IRI, ~\
+                                                       Bundle_props }
+Bundle_derived = Bom / software_Sbom / Bundle / BlankNodeOrIRI
+Bundle_props = { ~ElementCollection_props, ?label.context =&gt; \
+                                                prop_Bundle_context }
+prop_Bundle_context = tstr
+Hash = { label.type =&gt; const.Hash, ?label.@id =&gt; BlankNodeOrIRI, ~\
+                                                         Hash_props }
+Hash_derived = Hash / BlankNodeOrIRI
+Hash_props = { ~IntegrityMethod_props, label.algorithm =&gt; \
+        prop_Hash_algorithm, label.hashValue =&gt; prop_Hash_hashValue }
+prop_Hash_algorithm = const.adler32 / const.blake2b256 / const.\
+blake2b384 / const.blake2b512 / const.blake3 / const.\
+crystalsDilithium / const.crystalsKyber / const.falcon / const.md2 \
+/ const.md4 / const.md5 / const.md6 / const.other / const.sha1 / \
+const.sha224 / const.sha256 / const.sha384 / const.sha3_224 / const.\
+            sha3_256 / const.sha3_384 / const.sha3_512 / const.sha512
+prop_Hash_hashValue_wrapped = #6.108(bstr) ; Strings in SPDX-JSON, \
+                                                  usually hex-encoded
+prop_Hash_hashValue = ~prop_Hash_hashValue_wrapped
+LifecycleScopedRelationship = { label.type =&gt; const.\
+LifecycleScopedRelationship, label.spdxId =&gt; IRI, ~\
+                                  LifecycleScopedRelationship_props }
+LifecycleScopedRelationship_derived = LifecycleScopedRelationship / \
+                                                       BlankNodeOrIRI
+LifecycleScopedRelationship_props = { ~Relationship_props, ?label.\
+                    scope =&gt; prop_LifecycleScopedRelationship_scope }
+prop_LifecycleScopedRelationship_scope = const.build / const.design \
+       / const.development / const.other / const.runtime / const.test
+Organization = { label.type =&gt; const.Organization, label.spdxId =&gt; \
+                                           IRI, ~Organization_props }
+Organization_derived = Organization / const.SpdxOrganization / \
+                                                       BlankNodeOrIRI
+Organization_props = { ~Agent_props, ~AnyObject }
+Person = { label.type =&gt; const.Person, label.spdxId =&gt; IRI, ~\
+                                                       Person_props }
+Person_derived = Person / BlankNodeOrIRI
+Person_props = { ~Agent_props, ~AnyObject }
+SoftwareAgent = { label.type =&gt; const.SoftwareAgent, label.spdxId =\
+                                        &gt; IRI, ~SoftwareAgent_props }
+SoftwareAgent_derived = SoftwareAgent / BlankNodeOrIRI
+SoftwareAgent_props = { ~Agent_props, ~AnyObject }
+Bom = { label.type =&gt; const.Bom, label.spdxId =&gt; IRI, ~Bom_props }
+Bom_derived = software_Sbom / Bom / BlankNodeOrIRI
+Bom_props = { ~Bundle_props, ~AnyObject }
+IRI = tstr .regexp "[^_].*:.+|_[^:].*:.+" ; CoSPDX representation \
+                                                              of IRIs
+BlankNode = tstr .regexp "_:.+" ; CoSPDX representation of blank \
+                                                                nodes
+BlankNodeOrIRI = IRI / BlankNode
+anyURI = tstr
+SHACLClass = { label.type =&gt; $label.type } ; Socket for eventual \
+                                           post-SPDX 3.0.1 extensions
+$label.type /= IRI
+$label.type /= const.ai_EnergyConsumption
+$label.type /= const.ai_EnergyConsumptionDescription
+$label.type /= const.ai_EnergyUnitType
+$label.type /= const.ai_SafetyRiskAssessmentType
+$label.type /= const.AnnotationType
+$label.type /= const.CreationInfo
+$label.type /= const.DictionaryEntry
+$label.type /= const.ExternalIdentifier
+$label.type /= const.ExternalIdentifierType
+$label.type /= const.ExternalMap
+$label.type /= const.ExternalRef
+$label.type /= const.ExternalRefType
+$label.type /= const.HashAlgorithm
+$label.type /= const.IndividualElement
+$label.type /= const.LifecycleScopeType
+$label.type /= const.NamespaceMap
+$label.type /= const.PackageVerificationCode
+$label.type /= const.PositiveIntegerRange
+$label.type /= const.PresenceType
+$label.type /= const.ProfileIdentifierType
+$label.type /= const.Relationship
+$label.type /= const.RelationshipCompleteness
+$label.type /= const.RelationshipType
+$label.type /= const.SpdxDocument
+$label.type /= const.SupportType
+$label.type /= const.Tool
+$label.type /= const.dataset_ConfidentialityLevelType
+$label.type /= const.dataset_DatasetAvailabilityType
+$label.type /= const.dataset_DatasetType
+$label.type /= const.expandedlicensing_ListedLicenseException
+$label.type /= const.extension_CdxPropertyEntry
+$label.type /= const.security_CvssSeverityType
+$label.type /= const.security_ExploitCatalogType
+$label.type /= const.security_SsvcDecisionType
+$label.type /= const.security_VexJustificationType
+$label.type /= const.simplelicensing_LicenseExpression
+$label.type /= const.simplelicensing_SimpleLicensingText
+$label.type /= const.software_ContentIdentifier
+$label.type /= const.software_ContentIdentifierType
+$label.type /= const.software_FileKindType
+$label.type /= const.software_SbomType
+$label.type /= const.software_SoftwarePurpose
+$label.type /= const.build_Build
+$label.type /= const.Agent
+$label.type /= const.Annotation
+$label.type /= const.Bundle
+$label.type /= const.Hash
+$label.type /= const.LifecycleScopedRelationship
+$label.type /= const.Organization
+$label.type /= const.Person
+$label.type /= const.SoftwareAgent
+$label.type /= const.expandedlicensing_ConjunctiveLicenseSet
+$label.type /= const.expandedlicensing_CustomLicenseAddition
+$label.type /= const.expandedlicensing_DisjunctiveLicenseSet
+$label.type /= const.expandedlicensing_IndividualLicensingInfo
+$label.type /= const.expandedlicensing_ListedLicense
+$label.type /= const.expandedlicensing_OrLaterOperator
+$label.type /= const.expandedlicensing_WithAdditionOperator
+$label.type /= const.extension_CdxPropertiesExtension
+$label.type /= const.security_CvssV2VulnAssessmentRelationship
+$label.type /= const.security_CvssV3VulnAssessmentRelationship
+$label.type /= const.security_CvssV4VulnAssessmentRelationship
+$label.type /= const.security_EpssVulnAssessmentRelationship
+$label.type /= const.\
+                    security_ExploitCatalogVulnAssessmentRelationship
+$label.type /= const.security_SsvcVulnAssessmentRelationship
+$label.type /= const.security_Vulnerability
+$label.type /= const.Bom
+$label.type /= const.expandedlicensing_CustomLicense
+$label.type /= const.security_VexAffectedVulnAssessmentRelationship
+$label.type /= const.security_VexFixedVulnAssessmentRelationship
+$label.type /= const.\
+                    security_VexNotAffectedVulnAssessmentRelationship
+$label.type /= const.\
+             security_VexUnderInvestigationVulnAssessmentRelationship
+$label.type /= const.software_File
+$label.type /= const.software_Package
+$label.type /= const.software_Sbom
+$label.type /= const.software_Snippet
+$label.type /= const.ai_AIPackage
+$label.type /= const.dataset_DatasetPackage
+AnyClass = $AnyClass ; Socket for eventual post-SPDX 3.0.1 extensions
+$AnyClass /= ai_EnergyConsumption
+$AnyClass /= ai_EnergyConsumptionDescription
+$AnyClass /= ai_EnergyUnitType
+$AnyClass /= ai_SafetyRiskAssessmentType
+$AnyClass /= AnnotationType
+$AnyClass /= CreationInfo
+$AnyClass /= DictionaryEntry
+$AnyClass /= ExternalIdentifier
+$AnyClass /= ExternalIdentifierType
+$AnyClass /= ExternalMap
+$AnyClass /= ExternalRef
+$AnyClass /= ExternalRefType
+$AnyClass /= HashAlgorithm
+$AnyClass /= IndividualElement
+$AnyClass /= LifecycleScopeType
+$AnyClass /= NamespaceMap
+$AnyClass /= PackageVerificationCode
+$AnyClass /= PositiveIntegerRange
+$AnyClass /= PresenceType
+$AnyClass /= ProfileIdentifierType
+$AnyClass /= Relationship
+$AnyClass /= RelationshipCompleteness
+$AnyClass /= RelationshipType
+$AnyClass /= SpdxDocument
+$AnyClass /= SupportType
+$AnyClass /= Tool
+$AnyClass /= dataset_ConfidentialityLevelType
+$AnyClass /= dataset_DatasetAvailabilityType
+$AnyClass /= dataset_DatasetType
+$AnyClass /= expandedlicensing_ListedLicenseException
+$AnyClass /= extension_CdxPropertyEntry
+$AnyClass /= security_CvssSeverityType
+$AnyClass /= security_ExploitCatalogType
+$AnyClass /= security_SsvcDecisionType
+$AnyClass /= security_VexJustificationType
+$AnyClass /= simplelicensing_LicenseExpression
+$AnyClass /= simplelicensing_SimpleLicensingText
+$AnyClass /= software_ContentIdentifier
+$AnyClass /= software_ContentIdentifierType
+$AnyClass /= software_FileKindType
+$AnyClass /= software_SbomType
+$AnyClass /= software_SoftwarePurpose
+$AnyClass /= build_Build
+$AnyClass /= Agent
+$AnyClass /= Annotation
+$AnyClass /= Bundle
+$AnyClass /= Hash
+$AnyClass /= LifecycleScopedRelationship
+$AnyClass /= Organization
+$AnyClass /= Person
+$AnyClass /= SoftwareAgent
+$AnyClass /= expandedlicensing_ConjunctiveLicenseSet
+$AnyClass /= expandedlicensing_CustomLicenseAddition
+$AnyClass /= expandedlicensing_DisjunctiveLicenseSet
+$AnyClass /= expandedlicensing_IndividualLicensingInfo
+$AnyClass /= expandedlicensing_ListedLicense
+$AnyClass /= expandedlicensing_OrLaterOperator
+$AnyClass /= expandedlicensing_WithAdditionOperator
+$AnyClass /= extension_CdxPropertiesExtension
+$AnyClass /= security_CvssV2VulnAssessmentRelationship
+$AnyClass /= security_CvssV3VulnAssessmentRelationship
+$AnyClass /= security_CvssV4VulnAssessmentRelationship
+$AnyClass /= security_EpssVulnAssessmentRelationship
+$AnyClass /= security_ExploitCatalogVulnAssessmentRelationship
+$AnyClass /= security_SsvcVulnAssessmentRelationship
+$AnyClass /= security_Vulnerability
+$AnyClass /= Bom
+$AnyClass /= expandedlicensing_CustomLicense
+$AnyClass /= security_VexAffectedVulnAssessmentRelationship
+$AnyClass /= security_VexFixedVulnAssessmentRelationship
+$AnyClass /= security_VexNotAffectedVulnAssessmentRelationship
+$AnyClass /= security_VexUnderInvestigationVulnAssessmentRelationship
+$AnyClass /= software_File
+$AnyClass /= software_Package
+$AnyClass /= software_Sbom
+$AnyClass /= software_Snippet
+$AnyClass /= ai_AIPackage
+$AnyClass /= dataset_DatasetPackage
+
+AnyObject = { * any =&gt; any }
+
+; Value mapping for label entries (0-163)
+label.@graph = 1
+label.type = 2
+label.@id = 3
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Software/Properties/\
+                                               contentIdentifierType/
+label.software_contentIdentifierType = 4
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Software/Properties/\
+                                              contentIdentifierValue/
+label.software_contentIdentifierValue = 5
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Software/Properties/\
+                                                   additionalPurpose/
+label.software_additionalPurpose = 6
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Software/Properties/\
+                                                     attributionText/
+label.software_attributionText = 7
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Software/Properties/\
+                                                   contentIdentifier/
+label.software_contentIdentifier = 8
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Software/Properties/\
+                                                       copyrightText/
+label.software_copyrightText = 9
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Software/Properties/\
+                                                      primaryPurpose/
+label.software_primaryPurpose = 10
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                              spdxId/
+label.spdxId = 11
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                         contentType/
+label.contentType = 12
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Software/Properties/\
+                                                            fileKind/
+label.software_fileKind = 13
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Software/Properties/\
+                                                    downloadLocation/
+label.software_downloadLocation = 14
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Software/Properties/\
+                                                            homePage/
+label.software_homePage = 15
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Software/Properties/\
+                                                          packageUrl/
+label.software_packageUrl = 16
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Software/Properties/\
+                                                      packageVersion/
+label.software_packageVersion = 17
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Software/Properties/\
+                                                          sourceInfo/
+label.software_sourceInfo = 18
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Software/Properties/\
+                                                            sbomType/
+label.software_sbomType = 19
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Software/Properties/\
+                                                           byteRange/
+label.software_byteRange = 20
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Software/Properties/\
+                                                           lineRange/
+label.software_lineRange = 21
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Software/Properties/\
+                                                     snippetFromFile/
+label.software_snippetFromFile = 22
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                          suppliedBy/
+label.suppliedBy = 23
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Security/Properties/\
+                                                     assessedElement/
+label.security_assessedElement = 24
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Security/Properties/\
+                                                        modifiedTime/
+label.security_modifiedTime = 25
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Security/Properties/\
+                                                       publishedTime/
+label.security_publishedTime = 26
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Security/Properties/\
+                                                       withdrawnTime/
+label.security_withdrawnTime = 27
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Security/Properties/\
+                                                               score/
+label.security_score = 28
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Security/Properties/\
+                                                        vectorString/
+label.security_vectorString = 29
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Security/Properties/\
+                                                            severity/
+label.security_severity = 30
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Security/Properties/\
+                                                          percentile/
+label.security_percentile = 31
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Security/Properties/\
+                                                         probability/
+label.security_probability = 32
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Security/Properties/\
+                                                         catalogType/
+label.security_catalogType = 33
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Security/Properties/\
+                                                           exploited/
+label.security_exploited = 34
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Security/Properties/\
+                                                             locator/
+label.security_locator = 35
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Security/Properties/\
+                                                        decisionType/
+label.security_decisionType = 36
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Security/Properties/\
+                                                         statusNotes/
+label.security_statusNotes = 37
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Security/Properties/\
+                                                          vexVersion/
+label.security_vexVersion = 38
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Security/Properties/\
+                                                     actionStatement/
+label.security_actionStatement = 39
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Security/Properties/\
+                                                 actionStatementTime/
+label.security_actionStatementTime = 40
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Security/Properties/\
+                                                     impactStatement/
+label.security_impactStatement = 41
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Security/Properties/\
+                                                 impactStatementTime/
+label.security_impactStatementTime = 42
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Security/Properties/\
+                                                   justificationType/
+label.security_justificationType = 43
+; https://spdx.github.io/spdx-spec/v3.0.1/model/SimpleLicensing/\
+                                            Properties/customIdToUri/
+label.simplelicensing_customIdToUri = 44
+; https://spdx.github.io/spdx-spec/v3.0.1/model/SimpleLicensing/\
+                                        Properties/licenseExpression/
+label.simplelicensing_licenseExpression = 45
+; https://spdx.github.io/spdx-spec/v3.0.1/model/SimpleLicensing/\
+                                       Properties/licenseListVersion/
+label.simplelicensing_licenseListVersion = 46
+; https://spdx.github.io/spdx-spec/v3.0.1/model/SimpleLicensing/\
+                                              Properties/licenseText/
+label.simplelicensing_licenseText = 47
+; https://spdx.github.io/spdx-spec/v3.0.1/model/ExpandedLicensing/\
+                                             Properties/additionText/
+label.expandedlicensing_additionText = 48
+; https://spdx.github.io/spdx-spec/v3.0.1/model/ExpandedLicensing/\
+                                   Properties/isDeprecatedAdditionId/
+label.expandedlicensing_isDeprecatedAdditionId = 49
+; https://spdx.github.io/spdx-spec/v3.0.1/model/ExpandedLicensing/\
+                                               Properties/licenseXml/
+label.expandedlicensing_licenseXml = 50
+; https://spdx.github.io/spdx-spec/v3.0.1/model/ExpandedLicensing/\
+                                              Properties/obsoletedBy/
+label.expandedlicensing_obsoletedBy = 51
+; https://spdx.github.io/spdx-spec/v3.0.1/model/ExpandedLicensing/\
+                                                  Properties/seeAlso/
+label.expandedlicensing_seeAlso = 52
+; https://spdx.github.io/spdx-spec/v3.0.1/model/ExpandedLicensing/\
+                                 Properties/standardAdditionTemplate/
+label.expandedlicensing_standardAdditionTemplate = 53
+; https://spdx.github.io/spdx-spec/v3.0.1/model/ExpandedLicensing/\
+                                        Properties/deprecatedVersion/
+label.expandedlicensing_deprecatedVersion = 54
+; https://spdx.github.io/spdx-spec/v3.0.1/model/ExpandedLicensing/\
+                                         Properties/listVersionAdded/
+label.expandedlicensing_listVersionAdded = 55
+; https://spdx.github.io/spdx-spec/v3.0.1/model/ExpandedLicensing/\
+                                                   Properties/member/
+label.expandedlicensing_member = 56
+; https://spdx.github.io/spdx-spec/v3.0.1/model/ExpandedLicensing/\
+                                    Properties/isDeprecatedLicenseId/
+label.expandedlicensing_isDeprecatedLicenseId = 57
+; https://spdx.github.io/spdx-spec/v3.0.1/model/ExpandedLicensing/\
+                                               Properties/isFsfLibre/
+label.expandedlicensing_isFsfLibre = 58
+; https://spdx.github.io/spdx-spec/v3.0.1/model/ExpandedLicensing/\
+                                            Properties/isOsiApproved/
+label.expandedlicensing_isOsiApproved = 59
+; https://spdx.github.io/spdx-spec/v3.0.1/model/ExpandedLicensing/\
+                                    Properties/standardLicenseHeader/
+label.expandedlicensing_standardLicenseHeader = 60
+; https://spdx.github.io/spdx-spec/v3.0.1/model/ExpandedLicensing/\
+                                  Properties/standardLicenseTemplate/
+label.expandedlicensing_standardLicenseTemplate = 61
+; https://spdx.github.io/spdx-spec/v3.0.1/model/ExpandedLicensing/\
+                                           Properties/subjectLicense/
+label.expandedlicensing_subjectLicense = 62
+; https://spdx.github.io/spdx-spec/v3.0.1/model/ExpandedLicensing/\
+                                          Properties/subjectAddition/
+label.expandedlicensing_subjectAddition = 63
+; https://spdx.github.io/spdx-spec/v3.0.1/model/ExpandedLicensing/\
+                                 Properties/subjectExtendableLicense/
+label.expandedlicensing_subjectExtendableLicense = 64
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Dataset/Properties/\
+                                             anonymizationMethodUsed/
+label.dataset_anonymizationMethodUsed = 65
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Dataset/Properties/\
+                                                confidentialityLevel/
+label.dataset_confidentialityLevel = 66
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Dataset/Properties/\
+                                               dataCollectionProcess/
+label.dataset_dataCollectionProcess = 67
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Dataset/Properties/\
+                                                   dataPreprocessing/
+label.dataset_dataPreprocessing = 68
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Dataset/Properties/\
+                                                 datasetAvailability/
+label.dataset_datasetAvailability = 69
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Dataset/Properties/\
+                                                        datasetNoise/
+label.dataset_datasetNoise = 70
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Dataset/Properties/\
+                                                         datasetSize/
+label.dataset_datasetSize = 71
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Dataset/Properties/\
+                                                         datasetType/
+label.dataset_datasetType = 72
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Dataset/Properties/\
+                                              datasetUpdateMechanism/
+label.dataset_datasetUpdateMechanism = 73
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Dataset/Properties/\
+                                     hasSensitivePersonalInformation/
+label.dataset_hasSensitivePersonalInformation = 74
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Dataset/Properties/\
+                                                         intendedUse/
+label.dataset_intendedUse = 75
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Dataset/Properties/\
+                                                           knownBias/
+label.dataset_knownBias = 76
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Dataset/Properties/\
+                                                              sensor/
+label.dataset_sensor = 77
+; https://spdx.github.io/spdx-spec/v3.0.1/model/AI/Properties/\
+                                         finetuningEnergyConsumption/
+label.ai_finetuningEnergyConsumption = 78
+; https://spdx.github.io/spdx-spec/v3.0.1/model/AI/Properties/\
+                                          inferenceEnergyConsumption/
+label.ai_inferenceEnergyConsumption = 79
+; https://spdx.github.io/spdx-spec/v3.0.1/model/AI/Properties/\
+                                           trainingEnergyConsumption/
+label.ai_trainingEnergyConsumption = 80
+; https://spdx.github.io/spdx-spec/v3.0.1/model/AI/Properties/\
+                                                      energyQuantity/
+label.ai_energyQuantity = 81
+; https://spdx.github.io/spdx-spec/v3.0.1/model/AI/Properties/\
+                                                          energyUnit/
+label.ai_energyUnit = 82
+; https://spdx.github.io/spdx-spec/v3.0.1/model/AI/Properties/\
+                                                        autonomyType/
+label.ai_autonomyType = 83
+; https://spdx.github.io/spdx-spec/v3.0.1/model/AI/Properties/domain/
+label.ai_domain = 84
+; https://spdx.github.io/spdx-spec/v3.0.1/model/AI/Properties/\
+                                                   energyConsumption/
+label.ai_energyConsumption = 85
+; https://spdx.github.io/spdx-spec/v3.0.1/model/AI/Properties/\
+                                                      hyperparameter/
+label.ai_hyperparameter = 86
+; https://spdx.github.io/spdx-spec/v3.0.1/model/AI/Properties/\
+                                         informationAboutApplication/
+label.ai_informationAboutApplication = 87
+; https://spdx.github.io/spdx-spec/v3.0.1/model/AI/Properties/\
+                                            informationAboutTraining/
+label.ai_informationAboutTraining = 88
+; https://spdx.github.io/spdx-spec/v3.0.1/model/AI/Properties/\
+                                                          limitation/
+label.ai_limitation = 89
+; https://spdx.github.io/spdx-spec/v3.0.1/model/AI/Properties/metric/
+label.ai_metric = 90
+; https://spdx.github.io/spdx-spec/v3.0.1/model/AI/Properties/\
+                                             metricDecisionThreshold/
+label.ai_metricDecisionThreshold = 91
+; https://spdx.github.io/spdx-spec/v3.0.1/model/AI/Properties/\
+                                              modelDataPreprocessing/
+label.ai_modelDataPreprocessing = 92
+; https://spdx.github.io/spdx-spec/v3.0.1/model/AI/Properties/\
+                                                 modelExplainability/
+label.ai_modelExplainability = 93
+; https://spdx.github.io/spdx-spec/v3.0.1/model/AI/Properties/\
+                                                safetyRiskAssessment/
+label.ai_safetyRiskAssessment = 94
+; https://spdx.github.io/spdx-spec/v3.0.1/model/AI/Properties/\
+                                                  standardCompliance/
+label.ai_standardCompliance = 95
+; https://spdx.github.io/spdx-spec/v3.0.1/model/AI/Properties/\
+                                                         typeOfModel/
+label.ai_typeOfModel = 96
+; https://spdx.github.io/spdx-spec/v3.0.1/model/AI/Properties/\
+                                     useSensitivePersonalInformation/
+label.ai_useSensitivePersonalInformation = 97
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Build/Properties/\
+                                                        buildEndTime/
+label.build_buildEndTime = 98
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Build/Properties/\
+                                                             buildId/
+label.build_buildId = 99
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Build/Properties/\
+                                                      buildStartTime/
+label.build_buildStartTime = 100
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Build/Properties/\
+                                                           buildType/
+label.build_buildType = 101
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Build/Properties/\
+                                                  configSourceDigest/
+label.build_configSourceDigest = 102
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Build/Properties/\
+                                              configSourceEntrypoint/
+label.build_configSourceEntrypoint = 103
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Build/Properties/\
+                                                     configSourceUri/
+label.build_configSourceUri = 104
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Build/Properties/\
+                                                         environment/
+label.build_environment = 105
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Build/Properties/\
+                                                           parameter/
+label.build_parameter = 106
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Extension/Properties\
+                                                        /cdxPropName/
+label.extension_cdxPropName = 107
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Extension/Properties\
+                                                       /cdxPropValue/
+label.extension_cdxPropValue = 108
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Extension/Properties\
+                                                        /cdxProperty/
+label.extension_cdxProperty = 109
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                             comment/
+label.comment = 110
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                             created/
+label.created = 111
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                           createdBy/
+label.createdBy = 112
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                        createdUsing/
+label.createdUsing = 113
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                         specVersion/
+label.specVersion = 114
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/key/
+label.key = 115
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                               value/
+label.value = 116
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                        creationInfo/
+label.creationInfo = 117
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                         description/
+label.description = 118
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                           extension/
+label.extension = 119
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                  externalIdentifier/
+label.externalIdentifier = 120
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                         externalRef/
+label.externalRef = 121
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/name/
+label.name = 122
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                             summary/
+label.summary = 123
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                       verifiedUsing/
+label.verifiedUsing = 124
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                             element/
+label.element = 125
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                  profileConformance/
+label.profileConformance = 126
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                         rootElement/
+label.rootElement = 127
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                              externalIdentifierType/
+label.externalIdentifierType = 128
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                          identifier/
+label.identifier = 129
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                   identifierLocator/
+label.identifierLocator = 130
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                    issuingAuthority/
+label.issuingAuthority = 131
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                    definingArtifact/
+label.definingArtifact = 132
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                      externalSpdxId/
+label.externalSpdxId = 133
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                        locationHint/
+label.locationHint = 134
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                     externalRefType/
+label.externalRefType = 135
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                             locator/
+label.locator = 136
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                           namespace/
+label.namespace = 137
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                              prefix/
+label.prefix = 138
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                           algorithm/
+label.algorithm = 139
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                           hashValue/
+label.hashValue = 140
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                 packageVerificationCodeExcludedFile/
+label.packageVerificationCodeExcludedFile = 141
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                   beginIntegerRange/
+label.beginIntegerRange = 142
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                     endIntegerRange/
+label.endIntegerRange = 143
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                        completeness/
+label.completeness = 144
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                             endTime/
+label.endTime = 145
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/from/
+label.from = 146
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                    relationshipType/
+label.relationshipType = 147
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                           startTime/
+label.startTime = 148
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/to/
+label.to = 149
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                         dataLicense/
+label.dataLicense = 150
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                              import/
+label.import = 151
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                        namespaceMap/
+label.namespaceMap = 152
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                      annotationType/
+label.annotationType = 153
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                           statement/
+label.statement = 154
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                             subject/
+label.subject = 155
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                           builtTime/
+label.builtTime = 156
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                        originatedBy/
+label.originatedBy = 157
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                         releaseTime/
+label.releaseTime = 158
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                        standardName/
+label.standardName = 159
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                        supportLevel/
+label.supportLevel = 160
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                      validUntilTime/
+label.validUntilTime = 161
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                             context/
+label.context = 162
+; https://spdx.github.io/spdx-spec/v3.0.1/model/Core/Properties/\
+                                                               scope/
+label.scope = 163
+
+; Value mapping for const entries (1000-1562)
+const.software_ContentIdentifier = 1001
+const.gitoid = 1002
+const.swhid = 1003
+const.software_ContentIdentifierType = 1004
+const.spdx_Software_ContentIdentifierType_gitoid = 1005
+const.spdx_Software_ContentIdentifierType_swhid = 1006
+const.software_FileKindType = 1007
+const.spdx_Software_FileKindType_directory = 1008
+const.spdx_Software_FileKindType_file = 1009
+const.software_SbomType = 1010
+const.spdx_Software_SbomType_analyzed = 1011
+const.spdx_Software_SbomType_build = 1012
+const.spdx_Software_SbomType_deployed = 1013
+const.spdx_Software_SbomType_design = 1014
+const.spdx_Software_SbomType_runtime = 1015
+const.spdx_Software_SbomType_source = 1016
+const.software_SoftwarePurpose = 1017
+const.spdx_Software_SoftwarePurpose_application = 1018
+const.spdx_Software_SoftwarePurpose_archive = 1019
+const.spdx_Software_SoftwarePurpose_bom = 1020
+const.spdx_Software_SoftwarePurpose_configuration = 1021
+const.spdx_Software_SoftwarePurpose_container = 1022
+const.spdx_Software_SoftwarePurpose_data = 1023
+const.spdx_Software_SoftwarePurpose_device = 1024
+const.spdx_Software_SoftwarePurpose_deviceDriver = 1025
+const.spdx_Software_SoftwarePurpose_diskImage = 1026
+const.spdx_Software_SoftwarePurpose_documentation = 1027
+const.spdx_Software_SoftwarePurpose_evidence = 1028
+const.spdx_Software_SoftwarePurpose_executable = 1029
+const.spdx_Software_SoftwarePurpose_file = 1030
+const.spdx_Software_SoftwarePurpose_filesystemImage = 1031
+const.spdx_Software_SoftwarePurpose_firmware = 1032
+const.spdx_Software_SoftwarePurpose_framework = 1033
+const.spdx_Software_SoftwarePurpose_install = 1034
+const.spdx_Software_SoftwarePurpose_library = 1035
+const.spdx_Software_SoftwarePurpose_manifest = 1036
+const.spdx_Software_SoftwarePurpose_model = 1037
+const.spdx_Software_SoftwarePurpose_module = 1038
+const.spdx_Software_SoftwarePurpose_operatingSystem = 1039
+const.spdx_Software_SoftwarePurpose_other = 1040
+const.spdx_Software_SoftwarePurpose_patch = 1041
+const.spdx_Software_SoftwarePurpose_platform = 1042
+const.spdx_Software_SoftwarePurpose_requirement = 1043
+const.spdx_Software_SoftwarePurpose_source = 1044
+const.spdx_Software_SoftwarePurpose_specification = 1045
+const.spdx_Software_SoftwarePurpose_test = 1046
+const.application = 1047
+const.archive = 1048
+const.bom = 1049
+const.configuration = 1050
+const.container = 1051
+const.data = 1052
+const.device = 1053
+const.deviceDriver = 1054
+const.diskImage = 1055
+const.documentation = 1056
+const.evidence = 1057
+const.executable = 1058
+const.file = 1059
+const.filesystemImage = 1060
+const.firmware = 1061
+const.framework = 1062
+const.install = 1063
+const.library = 1064
+const.manifest = 1065
+const.model = 1066
+const.module = 1067
+const.operatingSystem = 1068
+const.other = 1069
+const.patch = 1070
+const.platform = 1071
+const.requirement = 1072
+const.source = 1073
+const.specification = 1074
+const.test = 1075
+const.software_File = 1076
+const.directory = 1077
+const.software_Package = 1078
+const.software_Sbom = 1079
+const.analyzed = 1080
+const.build = 1081
+const.deployed = 1082
+const.design = 1083
+const.runtime = 1084
+const.software_Snippet = 1085
+const.security_CvssSeverityType = 1086
+const.spdx_Security_CvssSeverityType_critical = 1087
+const.spdx_Security_CvssSeverityType_high = 1088
+const.spdx_Security_CvssSeverityType_low = 1089
+const.spdx_Security_CvssSeverityType_medium = 1090
+const.spdx_Security_CvssSeverityType_none = 1091
+const.security_ExploitCatalogType = 1092
+const.spdx_Security_ExploitCatalogType_kev = 1093
+const.spdx_Security_ExploitCatalogType_other = 1094
+const.security_SsvcDecisionType = 1095
+const.spdx_Security_SsvcDecisionType_act = 1096
+const.spdx_Security_SsvcDecisionType_attend = 1097
+const.spdx_Security_SsvcDecisionType_track = 1098
+const.spdx_Security_SsvcDecisionType_trackStar = 1099
+const.security_VexJustificationType = 1100
+const.spdx_Security_VexJustificationType_componentNotPresent = 1101
+const.\
+spdx_Security_VexJustificationType_inlineMitigationsAlreadyExist = \
+                                                                 1102
+const.\
+spdx_Security_VexJustificationType_vulnerableCodeCannotBeControlledB\
+                                                    yAdversary = 1103
+const.\
+spdx_Security_VexJustificationType_vulnerableCodeNotInExecutePath = \
+                                                                 1104
+const.spdx_Security_VexJustificationType_vulnerableCodeNotPresent = \
+                                                                 1105
+const.security_CvssV2VulnAssessmentRelationship = 1106
+const.security_CvssV3VulnAssessmentRelationship = 1107
+const.critical = 1108
+const.high = 1109
+const.low = 1110
+const.medium = 1111
+const.none = 1112
+const.security_CvssV4VulnAssessmentRelationship = 1113
+const.security_EpssVulnAssessmentRelationship = 1114
+const.security_ExploitCatalogVulnAssessmentRelationship = 1115
+const.kev = 1116
+const.security_SsvcVulnAssessmentRelationship = 1117
+const.act = 1118
+const.attend = 1119
+const.track = 1120
+const.trackStar = 1121
+const.security_Vulnerability = 1122
+const.security_VexAffectedVulnAssessmentRelationship = 1123
+const.security_VexFixedVulnAssessmentRelationship = 1124
+const.security_VexNotAffectedVulnAssessmentRelationship = 1125
+const.componentNotPresent = 1126
+const.inlineMitigationsAlreadyExist = 1127
+const.vulnerableCodeCannotBeControlledByAdversary = 1128
+const.vulnerableCodeNotInExecutePath = 1129
+const.vulnerableCodeNotPresent = 1130
+const.security_VexUnderInvestigationVulnAssessmentRelationship = 1131
+const.expandedlicensing_NoAssertionLicense = 1132
+const.expandedlicensing_NoneLicense = 1133
+const.simplelicensing_LicenseExpression = 1134
+const.simplelicensing_SimpleLicensingText = 1135
+const.expandedlicensing_ListedLicenseException = 1136
+const.expandedlicensing_ConjunctiveLicenseSet = 1137
+const.expandedlicensing_CustomLicenseAddition = 1138
+const.expandedlicensing_DisjunctiveLicenseSet = 1139
+const.expandedlicensing_IndividualLicensingInfo = 1140
+const.expandedlicensing_ListedLicense = 1141
+const.expandedlicensing_OrLaterOperator = 1142
+const.expandedlicensing_WithAdditionOperator = 1143
+const.expandedlicensing_CustomLicense = 1144
+const.dataset_ConfidentialityLevelType = 1145
+const.spdx_Dataset_ConfidentialityLevelType_amber = 1146
+const.spdx_Dataset_ConfidentialityLevelType_clear = 1147
+const.spdx_Dataset_ConfidentialityLevelType_green = 1148
+const.spdx_Dataset_ConfidentialityLevelType_red = 1149
+const.dataset_DatasetAvailabilityType = 1150
+const.spdx_Dataset_DatasetAvailabilityType_clickthrough = 1151
+const.spdx_Dataset_DatasetAvailabilityType_directDownload = 1152
+const.spdx_Dataset_DatasetAvailabilityType_query = 1153
+const.spdx_Dataset_DatasetAvailabilityType_registration = 1154
+const.spdx_Dataset_DatasetAvailabilityType_scrapingScript = 1155
+const.dataset_DatasetType = 1156
+const.spdx_Dataset_DatasetType_audio = 1157
+const.spdx_Dataset_DatasetType_categorical = 1158
+const.spdx_Dataset_DatasetType_graph = 1159
+const.spdx_Dataset_DatasetType_image = 1160
+const.spdx_Dataset_DatasetType_noAssertion = 1161
+const.spdx_Dataset_DatasetType_numeric = 1162
+const.spdx_Dataset_DatasetType_other = 1163
+const.spdx_Dataset_DatasetType_sensor = 1164
+const.spdx_Dataset_DatasetType_structured = 1165
+const.spdx_Dataset_DatasetType_syntactic = 1166
+const.spdx_Dataset_DatasetType_text = 1167
+const.spdx_Dataset_DatasetType_timeseries = 1168
+const.spdx_Dataset_DatasetType_timestamp = 1169
+const.spdx_Dataset_DatasetType_video = 1170
+const.dataset_DatasetPackage = 1171
+const.amber = 1172
+const.clear = 1173
+const.green = 1174
+const.red = 1175
+const.clickthrough = 1176
+const.directDownload = 1177
+const.query = 1178
+const.registration = 1179
+const.scrapingScript = 1180
+const.audio = 1181
+const.categorical = 1182
+const.graph = 1183
+const.image = 1184
+const.noAssertion = 1185
+const.numeric = 1186
+const.sensor = 1187
+const.structured = 1188
+const.syntactic = 1189
+const.text = 1190
+const.timeseries = 1191
+const.timestamp = 1192
+const.video = 1193
+const.no = 1194
+const.yes = 1195
+const.ai_EnergyConsumption = 1196
+const.ai_EnergyConsumptionDescription = 1197
+const.kilowattHour = 1198
+const.megajoule = 1199
+const.ai_EnergyUnitType = 1200
+const.spdx_AI_EnergyUnitType_kilowattHour = 1201
+const.spdx_AI_EnergyUnitType_megajoule = 1202
+const.spdx_AI_EnergyUnitType_other = 1203
+const.ai_SafetyRiskAssessmentType = 1204
+const.spdx_AI_SafetyRiskAssessmentType_high = 1205
+const.spdx_AI_SafetyRiskAssessmentType_low = 1206
+const.spdx_AI_SafetyRiskAssessmentType_medium = 1207
+const.spdx_AI_SafetyRiskAssessmentType_serious = 1208
+const.ai_AIPackage = 1209
+const.serious = 1210
+const.build_Build = 1211
+const.extension_CdxPropertyEntry = 1212
+const.extension_CdxPropertiesExtension = 1213
+const.AnnotationType = 1214
+const.spdx_Core_AnnotationType_other = 1215
+const.spdx_Core_AnnotationType_review = 1216
+const.CreationInfo = 1217
+const.DictionaryEntry = 1218
+const.NoAssertionElement = 1219
+const.NoneElement = 1220
+const.SpdxOrganization = 1221
+const.ai = 1222
+const.core = 1223
+const.dataset = 1224
+const.expandedLicensing = 1225
+const.extension = 1226
+const.lite = 1227
+const.security = 1228
+const.simpleLicensing = 1229
+const.software = 1230
+const.ExternalIdentifier = 1231
+const.cpe22 = 1232
+const.cpe23 = 1233
+const.cve = 1234
+const.email = 1235
+const.packageUrl = 1236
+const.securityOther = 1237
+const.swid = 1238
+const.urlScheme = 1239
+const.ExternalIdentifierType = 1240
+const.spdx_Core_ExternalIdentifierType_cpe22 = 1241
+const.spdx_Core_ExternalIdentifierType_cpe23 = 1242
+const.spdx_Core_ExternalIdentifierType_cve = 1243
+const.spdx_Core_ExternalIdentifierType_email = 1244
+const.spdx_Core_ExternalIdentifierType_gitoid = 1245
+const.spdx_Core_ExternalIdentifierType_other = 1246
+const.spdx_Core_ExternalIdentifierType_packageUrl = 1247
+const.spdx_Core_ExternalIdentifierType_securityOther = 1248
+const.spdx_Core_ExternalIdentifierType_swhid = 1249
+const.spdx_Core_ExternalIdentifierType_swid = 1250
+const.spdx_Core_ExternalIdentifierType_urlScheme = 1251
+const.ExternalMap = 1252
+const.ExternalRef = 1253
+const.altDownloadLocation = 1254
+const.altWebPage = 1255
+const.binaryArtifact = 1256
+const.bower = 1257
+const.buildMeta = 1258
+const.buildSystem = 1259
+const.certificationReport = 1260
+const.chat = 1261
+const.componentAnalysisReport = 1262
+const.cwe = 1263
+const.dynamicAnalysisReport = 1264
+const.eolNotice = 1265
+const.exportControlAssessment = 1266
+const.funding = 1267
+const.issueTracker = 1268
+const.license = 1269
+const.mailingList = 1270
+const.mavenCentral = 1271
+const.metrics = 1272
+const.npm = 1273
+const.nuget = 1274
+const.privacyAssessment = 1275
+const.productMetadata = 1276
+const.purchaseOrder = 1277
+const.qualityAssessmentReport = 1278
+const.releaseHistory = 1279
+const.releaseNotes = 1280
+const.riskAssessment = 1281
+const.runtimeAnalysisReport = 1282
+const.secureSoftwareAttestation = 1283
+const.securityAdversaryModel = 1284
+const.securityAdvisory = 1285
+const.securityFix = 1286
+const.securityPenTestReport = 1287
+const.securityPolicy = 1288
+const.securityThreatModel = 1289
+const.socialMedia = 1290
+const.sourceArtifact = 1291
+const.staticAnalysisReport = 1292
+const.support = 1293
+const.vcs = 1294
+const.vulnerabilityDisclosureReport = 1295
+const.vulnerabilityExploitabilityAssessment = 1296
+const.ExternalRefType = 1297
+const.spdx_Core_ExternalRefType_altDownloadLocation = 1298
+const.spdx_Core_ExternalRefType_altWebPage = 1299
+const.spdx_Core_ExternalRefType_binaryArtifact = 1300
+const.spdx_Core_ExternalRefType_bower = 1301
+const.spdx_Core_ExternalRefType_buildMeta = 1302
+const.spdx_Core_ExternalRefType_buildSystem = 1303
+const.spdx_Core_ExternalRefType_certificationReport = 1304
+const.spdx_Core_ExternalRefType_chat = 1305
+const.spdx_Core_ExternalRefType_componentAnalysisReport = 1306
+const.spdx_Core_ExternalRefType_cwe = 1307
+const.spdx_Core_ExternalRefType_documentation = 1308
+const.spdx_Core_ExternalRefType_dynamicAnalysisReport = 1309
+const.spdx_Core_ExternalRefType_eolNotice = 1310
+const.spdx_Core_ExternalRefType_exportControlAssessment = 1311
+const.spdx_Core_ExternalRefType_funding = 1312
+const.spdx_Core_ExternalRefType_issueTracker = 1313
+const.spdx_Core_ExternalRefType_license = 1314
+const.spdx_Core_ExternalRefType_mailingList = 1315
+const.spdx_Core_ExternalRefType_mavenCentral = 1316
+const.spdx_Core_ExternalRefType_metrics = 1317
+const.spdx_Core_ExternalRefType_npm = 1318
+const.spdx_Core_ExternalRefType_nuget = 1319
+const.spdx_Core_ExternalRefType_other = 1320
+const.spdx_Core_ExternalRefType_privacyAssessment = 1321
+const.spdx_Core_ExternalRefType_productMetadata = 1322
+const.spdx_Core_ExternalRefType_purchaseOrder = 1323
+const.spdx_Core_ExternalRefType_qualityAssessmentReport = 1324
+const.spdx_Core_ExternalRefType_releaseHistory = 1325
+const.spdx_Core_ExternalRefType_releaseNotes = 1326
+const.spdx_Core_ExternalRefType_riskAssessment = 1327
+const.spdx_Core_ExternalRefType_runtimeAnalysisReport = 1328
+const.spdx_Core_ExternalRefType_secureSoftwareAttestation = 1329
+const.spdx_Core_ExternalRefType_securityAdversaryModel = 1330
+const.spdx_Core_ExternalRefType_securityAdvisory = 1331
+const.spdx_Core_ExternalRefType_securityFix = 1332
+const.spdx_Core_ExternalRefType_securityOther = 1333
+const.spdx_Core_ExternalRefType_securityPenTestReport = 1334
+const.spdx_Core_ExternalRefType_securityPolicy = 1335
+const.spdx_Core_ExternalRefType_securityThreatModel = 1336
+const.spdx_Core_ExternalRefType_socialMedia = 1337
+const.spdx_Core_ExternalRefType_sourceArtifact = 1338
+const.spdx_Core_ExternalRefType_staticAnalysisReport = 1339
+const.spdx_Core_ExternalRefType_support = 1340
+const.spdx_Core_ExternalRefType_vcs = 1341
+const.spdx_Core_ExternalRefType_vulnerabilityDisclosureReport = 1342
+const.\
+spdx_Core_ExternalRefType_vulnerabilityExploitabilityAssessment = \
+                                                                 1343
+const.HashAlgorithm = 1344
+const.spdx_Core_HashAlgorithm_adler32 = 1345
+const.spdx_Core_HashAlgorithm_blake2b256 = 1346
+const.spdx_Core_HashAlgorithm_blake2b384 = 1347
+const.spdx_Core_HashAlgorithm_blake2b512 = 1348
+const.spdx_Core_HashAlgorithm_blake3 = 1349
+const.spdx_Core_HashAlgorithm_crystalsDilithium = 1350
+const.spdx_Core_HashAlgorithm_crystalsKyber = 1351
+const.spdx_Core_HashAlgorithm_falcon = 1352
+const.spdx_Core_HashAlgorithm_md2 = 1353
+const.spdx_Core_HashAlgorithm_md4 = 1354
+const.spdx_Core_HashAlgorithm_md5 = 1355
+const.spdx_Core_HashAlgorithm_md6 = 1356
+const.spdx_Core_HashAlgorithm_other = 1357
+const.spdx_Core_HashAlgorithm_sha1 = 1358
+const.spdx_Core_HashAlgorithm_sha224 = 1359
+const.spdx_Core_HashAlgorithm_sha256 = 1360
+const.spdx_Core_HashAlgorithm_sha384 = 1361
+const.spdx_Core_HashAlgorithm_sha3_224 = 1362
+const.spdx_Core_HashAlgorithm_sha3_256 = 1363
+const.spdx_Core_HashAlgorithm_sha3_384 = 1364
+const.spdx_Core_HashAlgorithm_sha3_512 = 1365
+const.spdx_Core_HashAlgorithm_sha512 = 1366
+const.IndividualElement = 1367
+const.LifecycleScopeType = 1368
+const.spdx_Core_LifecycleScopeType_build = 1369
+const.spdx_Core_LifecycleScopeType_design = 1370
+const.spdx_Core_LifecycleScopeType_development = 1371
+const.spdx_Core_LifecycleScopeType_other = 1372
+const.spdx_Core_LifecycleScopeType_runtime = 1373
+const.spdx_Core_LifecycleScopeType_test = 1374
+const.NamespaceMap = 1375
+const.PackageVerificationCode = 1376
+const.adler32 = 1377
+const.blake2b256 = 1378
+const.blake2b384 = 1379
+const.blake2b512 = 1380
+const.blake3 = 1381
+const.crystalsDilithium = 1382
+const.crystalsKyber = 1383
+const.falcon = 1384
+const.md2 = 1385
+const.md4 = 1386
+const.md5 = 1387
+const.md6 = 1388
+const.sha1 = 1389
+const.sha224 = 1390
+const.sha256 = 1391
+const.sha384 = 1392
+const.sha3_224 = 1393
+const.sha3_256 = 1394
+const.sha3_384 = 1395
+const.sha3_512 = 1396
+const.sha512 = 1397
+const.PositiveIntegerRange = 1398
+const.PresenceType = 1399
+const.spdx_Core_PresenceType_no = 1400
+const.spdx_Core_PresenceType_noAssertion = 1401
+const.spdx_Core_PresenceType_yes = 1402
+const.ProfileIdentifierType = 1403
+const.spdx_Core_ProfileIdentifierType_ai = 1404
+const.spdx_Core_ProfileIdentifierType_build = 1405
+const.spdx_Core_ProfileIdentifierType_core = 1406
+const.spdx_Core_ProfileIdentifierType_dataset = 1407
+const.spdx_Core_ProfileIdentifierType_expandedLicensing = 1408
+const.spdx_Core_ProfileIdentifierType_extension = 1409
+const.spdx_Core_ProfileIdentifierType_lite = 1410
+const.spdx_Core_ProfileIdentifierType_security = 1411
+const.spdx_Core_ProfileIdentifierType_simpleLicensing = 1412
+const.spdx_Core_ProfileIdentifierType_software = 1413
+const.Relationship = 1414
+const.complete = 1415
+const.incomplete = 1416
+const.affects = 1417
+const.amendedBy = 1418
+const.ancestorOf = 1419
+const.availableFrom = 1420
+const.configures = 1421
+const.contains = 1422
+const.coordinatedBy = 1423
+const.copiedTo = 1424
+const.delegatedTo = 1425
+const.dependsOn = 1426
+const.descendantOf = 1427
+const.describes = 1428
+const.doesNotAffect = 1429
+const.expandsTo = 1430
+const.exploitCreatedBy = 1431
+const.fixedBy = 1432
+const.fixedIn = 1433
+const.foundBy = 1434
+const.generates = 1435
+const.hasAddedFile = 1436
+const.hasAssessmentFor = 1437
+const.hasAssociatedVulnerability = 1438
+const.hasConcludedLicense = 1439
+const.hasDataFile = 1440
+const.hasDeclaredLicense = 1441
+const.hasDeletedFile = 1442
+const.hasDependencyManifest = 1443
+const.hasDistributionArtifact = 1444
+const.hasDocumentation = 1445
+const.hasDynamicLink = 1446
+const.hasEvidence = 1447
+const.hasExample = 1448
+const.hasHost = 1449
+const.hasInput = 1450
+const.hasMetadata = 1451
+const.hasOptionalComponent = 1452
+const.hasOptionalDependency = 1453
+const.hasOutput = 1454
+const.hasPrerequisite = 1455
+const.hasProvidedDependency = 1456
+const.hasRequirement = 1457
+const.hasSpecification = 1458
+const.hasStaticLink = 1459
+const.hasTest = 1460
+const.hasTestCase = 1461
+const.hasVariant = 1462
+const.invokedBy = 1463
+const.modifiedBy = 1464
+const.packagedBy = 1465
+const.patchedBy = 1466
+const.publishedBy = 1467
+const.reportedBy = 1468
+const.republishedBy = 1469
+const.serializedInArtifact = 1470
+const.testedOn = 1471
+const.trainedOn = 1472
+const.underInvestigationFor = 1473
+const.usesTool = 1474
+const.RelationshipCompleteness = 1475
+const.spdx_Core_RelationshipCompleteness_complete = 1476
+const.spdx_Core_RelationshipCompleteness_incomplete = 1477
+const.spdx_Core_RelationshipCompleteness_noAssertion = 1478
+const.RelationshipType = 1479
+const.spdx_Core_RelationshipType_affects = 1480
+const.spdx_Core_RelationshipType_amendedBy = 1481
+const.spdx_Core_RelationshipType_ancestorOf = 1482
+const.spdx_Core_RelationshipType_availableFrom = 1483
+const.spdx_Core_RelationshipType_configures = 1484
+const.spdx_Core_RelationshipType_contains = 1485
+const.spdx_Core_RelationshipType_coordinatedBy = 1486
+const.spdx_Core_RelationshipType_copiedTo = 1487
+const.spdx_Core_RelationshipType_delegatedTo = 1488
+const.spdx_Core_RelationshipType_dependsOn = 1489
+const.spdx_Core_RelationshipType_descendantOf = 1490
+const.spdx_Core_RelationshipType_describes = 1491
+const.spdx_Core_RelationshipType_doesNotAffect = 1492
+const.spdx_Core_RelationshipType_expandsTo = 1493
+const.spdx_Core_RelationshipType_exploitCreatedBy = 1494
+const.spdx_Core_RelationshipType_fixedBy = 1495
+const.spdx_Core_RelationshipType_fixedIn = 1496
+const.spdx_Core_RelationshipType_foundBy = 1497
+const.spdx_Core_RelationshipType_generates = 1498
+const.spdx_Core_RelationshipType_hasAddedFile = 1499
+const.spdx_Core_RelationshipType_hasAssessmentFor = 1500
+const.spdx_Core_RelationshipType_hasAssociatedVulnerability = 1501
+const.spdx_Core_RelationshipType_hasConcludedLicense = 1502
+const.spdx_Core_RelationshipType_hasDataFile = 1503
+const.spdx_Core_RelationshipType_hasDeclaredLicense = 1504
+const.spdx_Core_RelationshipType_hasDeletedFile = 1505
+const.spdx_Core_RelationshipType_hasDependencyManifest = 1506
+const.spdx_Core_RelationshipType_hasDistributionArtifact = 1507
+const.spdx_Core_RelationshipType_hasDocumentation = 1508
+const.spdx_Core_RelationshipType_hasDynamicLink = 1509
+const.spdx_Core_RelationshipType_hasEvidence = 1510
+const.spdx_Core_RelationshipType_hasExample = 1511
+const.spdx_Core_RelationshipType_hasHost = 1512
+const.spdx_Core_RelationshipType_hasInput = 1513
+const.spdx_Core_RelationshipType_hasMetadata = 1514
+const.spdx_Core_RelationshipType_hasOptionalComponent = 1515
+const.spdx_Core_RelationshipType_hasOptionalDependency = 1516
+const.spdx_Core_RelationshipType_hasOutput = 1517
+const.spdx_Core_RelationshipType_hasPrerequisite = 1518
+const.spdx_Core_RelationshipType_hasProvidedDependency = 1519
+const.spdx_Core_RelationshipType_hasRequirement = 1520
+const.spdx_Core_RelationshipType_hasSpecification = 1521
+const.spdx_Core_RelationshipType_hasStaticLink = 1522
+const.spdx_Core_RelationshipType_hasTest = 1523
+const.spdx_Core_RelationshipType_hasTestCase = 1524
+const.spdx_Core_RelationshipType_hasVariant = 1525
+const.spdx_Core_RelationshipType_invokedBy = 1526
+const.spdx_Core_RelationshipType_modifiedBy = 1527
+const.spdx_Core_RelationshipType_other = 1528
+const.spdx_Core_RelationshipType_packagedBy = 1529
+const.spdx_Core_RelationshipType_patchedBy = 1530
+const.spdx_Core_RelationshipType_publishedBy = 1531
+const.spdx_Core_RelationshipType_reportedBy = 1532
+const.spdx_Core_RelationshipType_republishedBy = 1533
+const.spdx_Core_RelationshipType_serializedInArtifact = 1534
+const.spdx_Core_RelationshipType_testedOn = 1535
+const.spdx_Core_RelationshipType_trainedOn = 1536
+const.spdx_Core_RelationshipType_underInvestigationFor = 1537
+const.spdx_Core_RelationshipType_usesTool = 1538
+const.SpdxDocument = 1539
+const.SupportType = 1540
+const.spdx_Core_SupportType_deployed = 1541
+const.spdx_Core_SupportType_development = 1542
+const.spdx_Core_SupportType_endOfSupport = 1543
+const.spdx_Core_SupportType_limitedSupport = 1544
+const.spdx_Core_SupportType_noAssertion = 1545
+const.spdx_Core_SupportType_noSupport = 1546
+const.spdx_Core_SupportType_support = 1547
+const.Tool = 1548
+const.Agent = 1549
+const.Annotation = 1550
+const.review = 1551
+const.development = 1552
+const.endOfSupport = 1553
+const.limitedSupport = 1554
+const.noSupport = 1555
+const.Bundle = 1556
+const.Hash = 1557
+const.LifecycleScopedRelationship = 1558
+const.Organization = 1559
+const.Person = 1560
+const.SoftwareAgent = 1561
+const.Bom = 1562
+</pre><a href="#section-2-1" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="encoding">
+<section id="section-3">
+      <h2 id="name-encoding">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-encoding" class="section-name selfRef">Encoding</a>
+      </h2>
+<p id="section-3-1">The encoding of CoSPDX documents <span class="bcp14">MUST</span> follow the Core Deterministic Encoding Requirements defined in <span><a href="https://rfc-editor.org/rfc/rfc8949#section-4.2.1" class="relref">Section 4.2.1</a> of [<a href="#RFC8949" class="cite xref">RFC8949</a>]</span>.<a href="#section-3-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="conventions-and-definitions">
+<section id="section-4">
+      <h2 id="name-conventions-and-definitions">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-conventions-and-definitions" class="section-name selfRef">Conventions and Definitions</a>
+      </h2>
+<p id="section-4-1">The key words "<span class="bcp14">MUST</span>", "<span class="bcp14">MUST NOT</span>", "<span class="bcp14">REQUIRED</span>", "<span class="bcp14">SHALL</span>", "<span class="bcp14">SHALL NOT</span>", "<span class="bcp14">SHOULD</span>", "<span class="bcp14">SHOULD NOT</span>", "<span class="bcp14">RECOMMENDED</span>", "<span class="bcp14">NOT RECOMMENDED</span>",
+"<span class="bcp14">MAY</span>", and "<span class="bcp14">OPTIONAL</span>" in this document are to be interpreted as
+described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span> when, and only when, they
+appear in all capitals, as shown here.<a href="#section-4-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="security-considerations">
+<section id="section-5">
+      <h2 id="name-security-considerations">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+      </h2>
+<p id="section-5-1">TODO Security<a href="#section-5-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="iana-considerations">
+<section id="section-6">
+      <h2 id="name-iana-considerations">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+      </h2>
+<p id="section-6-1">This document has no IANA actions.<a href="#section-6-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="sec-combined-references">
+<section id="section-7">
+      <h2 id="name-references">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-references" class="section-name selfRef">References</a>
+      </h2>
+<div id="sec-normative-references">
+<section id="section-7.1">
+        <h3 id="name-normative-references">
+<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+        </h3>
+<dl class="references">
+<dt id="CBOR-LD">[CBOR-LD]</dt>
+        <dd>
+<span class="refTitle">"CBOR-LD"</span>, <span>n.d.</span>, <span>&lt;<a href="https://json-ld.github.io/cbor-ld-spec/">https://json-ld.github.io/cbor-ld-spec/</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC2119">[RFC2119]</dt>
+        <dd>
+<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8174">[RFC8174]</dt>
+        <dd>
+<span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8610">[RFC8610]</dt>
+        <dd>
+<span class="refAuthor">Birkholz, H.</span>, <span class="refAuthor">Vigano, C.</span>, and <span class="refAuthor">C. Bormann</span>, <span class="refTitle">"Concise Data Definition Language (CDDL): A Notational Convention to Express Concise Binary Object Representation (CBOR) and JSON Data Structures"</span>, <span class="seriesInfo">RFC 8610</span>, <span class="seriesInfo">DOI 10.17487/RFC8610</span>, <time datetime="2019-06" class="refDate">June 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8610">https://www.rfc-editor.org/rfc/rfc8610</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8949">[RFC8949]</dt>
+        <dd>
+<span class="refAuthor">Bormann, C.</span> and <span class="refAuthor">P. Hoffman</span>, <span class="refTitle">"Concise Binary Object Representation (CBOR)"</span>, <span class="seriesInfo">STD 94</span>, <span class="seriesInfo">RFC 8949</span>, <span class="seriesInfo">DOI 10.17487/RFC8949</span>, <time datetime="2020-12" class="refDate">December 2020</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8949">https://www.rfc-editor.org/rfc/rfc8949</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="SPDX">[SPDX]</dt>
+      <dd>
+<span class="refTitle">"SPDX Specification"</span>, <span>n.d.</span>, <span>&lt;<a href="https://spdx.dev/use/specifications/">https://spdx.dev/use/specifications/</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+</div>
+<div id="sec-informative-references">
+<section id="section-7.2">
+        <h3 id="name-informative-references">
+<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+        </h3>
+<dl class="references">
+<dt id="CAN-SPDX">[CAN-SPDX]</dt>
+        <dd>
+<span class="refTitle">"Canonical Serialization for SPDX"</span>, <span>n.d.</span>, <span>&lt;<a href="https://spdx.github.io/spdx-spec/v3.0.1/serializations/#canonical-serialization">https://spdx.github.io/spdx-spec/v3.0.1/serializations/#canonical-serialization</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8259">[RFC8259]</dt>
+        <dd>
+<span class="refAuthor">Bray, T., Ed.</span>, <span class="refTitle">"The JavaScript Object Notation (JSON) Data Interchange Format"</span>, <span class="seriesInfo">STD 90</span>, <span class="seriesInfo">RFC 8259</span>, <span class="seriesInfo">DOI 10.17487/RFC8259</span>, <time datetime="2017-12" class="refDate">December 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8259">https://www.rfc-editor.org/rfc/rfc8259</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="SER-SPDX">[SER-SPDX]</dt>
+      <dd>
+<span class="refTitle">"Serialization for SPDX"</span>, <span>n.d.</span>, <span>&lt;<a href="https://spdx.github.io/spdx-spec/v3.0.1/serializations">https://spdx.github.io/spdx-spec/v3.0.1/serializations</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+</div>
+</section>
+</div>
+<div id="acknowledgments">
+<section id="appendix-A">
+      <h2 id="name-acknowledgments">
+<a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
+      </h2>
+<p id="appendix-A-1">TODO acknowledge.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="authors-addresses">
+<section id="appendix-B">
+      <h2 id="name-authors-addresses">
+<a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
+      </h2>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Amaury Chamayou</span></div>
+<div dir="auto" class="left"><span class="org">Microsoft</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:amchamay@microsoft.com" class="email">amchamay@microsoft.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Henk Birkholz</span></div>
+<div dir="auto" class="left"><span class="org">Fraunhofer SIT</span></div>
+<div dir="auto" class="left"><span class="street-address">Rheinstrasse 75</span></div>
+<div dir="auto" class="left">
+<span class="postal-code">64295</span> <span class="locality">Darmstadt</span>
+</div>
+<div dir="auto" class="left"><span class="country-name">Germany</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:henk.birkholz@ietf.contact" class="email">henk.birkholz@ietf.contact</a>
+</div>
+</address>
+</section>
+</div>
+<script>const toc = document.getElementById("toc");
+toc.querySelector("h2").addEventListener("click", e => {
+  toc.classList.toggle("active");
+});
+toc.querySelector("nav").addEventListener("click", e => {
+  toc.classList.remove("active");
+});
+</script>
+</body>
+</html>
