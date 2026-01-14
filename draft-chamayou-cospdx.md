@@ -40,6 +40,7 @@ normative:
     target: https://json-ld.github.io/cbor-ld-spec/
     title: CBOR-LD
   RFC8610:
+  RFC8949:
 
 informative:
   SER-SPDX:
@@ -66,11 +67,17 @@ Serialization formats defined for SPDX 3.0.1 (see {{SER-SPDX}}) are text-based a
 
 This document follows an approach similar to that proposed by {{CBOR-LD}}, but aims to contribute CDDL schemas ({{RFC8610}}) rather than registries for the various SPDX profiles that describe how to emit CBOR-encoded SPDX 3.0.1 directly.
 
+CoSPDX documents MUST follow the structure defined in the CDDL schema below:
+
 # CDDL Schema
 
 ~~~ cddl
 {::include-fold cospdx.cddl}
 ~~~
+
+# Encoding
+
+The encoding of CoSPDX documents MUST follow the Core Deterministic Encoding Requirements defined in {{Section 4.2.1 of RFC8949}}.
 
 # Conventions and Definitions
 
