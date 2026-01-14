@@ -50,6 +50,38 @@ shared_savings = multiple.map{|k, v| [0, k.bytesize-4].max * v-1}.sum
 
 puts "Approximate potential savings by string sharing: #{human_size(shared_savings)}"
 
+## const. Analysis
+
+const = {}
+ctypes = Hash.new(0)
+
+File.open("cospdx.cddl") do |f|
+  f.each_line do |l|
+    if /\A(?<ctype>(?:const|label)).(?<cname>\S+)\s*=\s*(?<cvalue>\S+)\s*\z/ =~ l
+      ctypes[ctype] += 1
+      puts ["dup", cname, const[cname], [ctype, cvalue]].inspect if const[cname] # XXX
+      const[cname] = [ctype, cvalue]
+    end
+  end
+end
+
+pp ctypes                       # XXX
+
+covered, uncovered = unpacked_count.partition {|k, v| const[k]}
+
+puts
+puts "Number of string values covered by label.* or const.*: #{covered.size}"
+puts "Number of string values not covered by label.* or const.*: #{uncovered.size}"
+puts "Number of string items covered by label.* or const.*: #{covered.map{|name, count| count}.sum}"
+puts "Number of string item bytes covered by label.* or const.*: #{human_size(covered.map{|name, count| count*name.bytesize}.sum)}"
+puts "Top 15 matches by total bytesize:"
+pp covered.sort_by {|k, v| -v*k.bytesize}[0...15].map{|name, count| [name, count, human_size(count*name.bytesize)] }
+# pp uncovered
+
+## Hex Tail Analysis
+
+puts
+
 hex_tail_count = Hash.new(0)
 hex_tail_size_count = Hash.new(0)
 
