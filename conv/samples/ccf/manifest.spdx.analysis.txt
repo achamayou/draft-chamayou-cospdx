@@ -1,0 +1,37 @@
+Total size of CBOR input: 3.304 MB
+Total byte size of string items: 3.135 MB
+Total number of string items: 123428
+Total number of different string values: 13464
+Average size of string item: 25.4 B
+Average occurrence frequency of string item: 9.167260843731432
+
+Approximate potential savings by string sharing: 1.995 MB
+["dup", "extension", ["label", "119"], ["const", "1226"]]
+{"label" => 163, "const" => 562}
+
+Number of string values covered by label.* or const.*: 40
+Number of string values not covered by label.* or const.*: 13424
+Number of string items covered by label.* or const.*: 77534
+Number of string item bytes covered by label.* or const.*: 715.5 kB
+Top 15 matches by total bytesize:
+[["creationInfo", 11027, "132.3 kB"],
+ ["PackageVerificationCode", 3835, "88.21 kB"],
+ ["relationshipType", 4918, "78.69 kB"],
+ ["spdxId", 11027, "66.16 kB"],
+ ["Relationship", 4918, "59.02 kB"],
+ ["software_copyrightText", 2092, "46.02 kB"],
+ ["type", 11027, "44.11 kB"],
+ ["hashValue", 3835, "34.52 kB"],
+ ["algorithm", 3835, "34.52 kB"],
+ ["verifiedUsing", 1918, "24.93 kB"],
+ ["software_File", 1917, "24.92 kB"],
+ ["from", 4918, "19.67 kB"],
+ ["sha256", 1917, "11.5 kB"],
+ ["to", 4918, "9.836 kB"],
+ ["name", 2098, "8.392 kB"]]
+
+Number of string values with single occurrences: 11117
+Number of string values with multiple occurrences: 2347
+
+Hex tails >= 20 chars (chars => number of tails of this size): [[40, 3813], [64, 7171]]
+Approximate potential savings by representing hex tails as bytes: 283.8 kB
