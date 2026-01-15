@@ -14,7 +14,6 @@ import datetime
 import re
 import hashlib
 
-
 class Schema:
     labels = {}
     enums = {}
@@ -37,6 +36,29 @@ class Schema:
         spdx_2_2_consts["NOASSERTION"] = spdx_2_2_consts["NO_ASSERTION"]
         self.consts.update(spdx_2_2_consts)
 
+class InternedStrings:
+    def __init__(self, offset, active):
+        self.starting_offset = offset
+        self.latest_index = offset
+        self.entries = {}
+        self.active = active
+
+    def get(self, entry):
+        if not self.active:
+            return entry
+        if len(entry) < 2:
+            return entry
+        if not entry in self.entries:
+            # print(f"Interning string '{entry}' as index {self.latest_index}")
+            self.latest_index += 1
+            self.entries[entry] = self.latest_index
+        return self.entries[entry]
+
+    def reset(self):
+        self.latest_index = self.starting_offset
+        self.entries = {}
+    
+INTERNED_STRINGS = InternedStrings(0, True)
 
 def simple_value_convert(key, value, schema):
     if key is not None and key == "hashValue":
@@ -70,14 +92,23 @@ def mapped(document, schema):
                 mapped(item, schema) if isinstance(item, dict) else simple_value_convert(None, item, schema)
                 for item in value
             ]
-        map[schema.labels.get(key, key)] = simple_value_convert(key, val, schema)
+        converted_value = simple_value_convert(key, val, schema)
+        if isinstance(converted_value, str):
+            map[schema.labels.get(key, key)] = INTERNED_STRINGS.get(converted_value)
+        else:
+            map[schema.labels.get(key, key)] = converted_value
     return map
 
 
 def convert(document_path, schema_path, string_referencing=False):
     document = json.loads(document_path.read_text())
     schema = Schema(schema_path)
-    return cbor2.dumps(mapped(document, schema), string_referencing=string_referencing)
+    INTERNED_STRINGS.reset()
+    mapped_doc = mapped(document, schema)
+    if INTERNED_STRINGS.active:
+        # print(f"Total interned strings: {len(INTERNED_STRINGS.entries)}")
+        mapped_doc[2000] = INTERNED_STRINGS.entries
+    return cbor2.dumps(mapped_doc, string_referencing=string_referencing)
 
 
 if __name__ == "__main__":
