@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-01-08T01:57:01.606659+00:00",
+  "timestamp": "2026-01-15T01:56:48.763545+00:00",
   "repo": "achamayou/draft-chamayou-cospdx",
   "labels": [
     {
@@ -138,15 +138,15 @@
       "id": "I_kwDOQEUIIM7dKoPL",
       "title": "Spell out the CDE requirement",
       "url": "https://github.com/achamayou/draft-chamayou-cospdx/issues/4",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "achamayou",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "Reference https://datatracker.ietf.org/doc/html/rfc8949#section-4.2.1 and https://datatracker.ietf.org/doc/draft-ietf-cbor-cde/",
       "createdAt": "2025-12-09T11:57:49Z",
-      "updatedAt": "2025-12-19T13:35:27Z",
-      "closedAt": null,
+      "updatedAt": "2026-01-14T11:01:03Z",
+      "closedAt": "2026-01-14T11:01:02Z",
       "comments": [
         {
           "author": "achamayou",
@@ -157,7 +157,7 @@
         },
         {
           "author": "cabo",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "body": "So what is the definition on the JSON side?  Can I really use text strings with decimals in them?  (But not with exponents as in `1e-2`?). JSON does not have a separate integer type, so we could do all float for these values (which are presumably 0.0..1.0).\n",
           "createdAt": "2025-12-09T23:02:14Z",
           "updatedAt": "2025-12-09T23:02:14Z"
@@ -350,6 +350,140 @@
           "body": "yes, exactly like this. Thx for the pointer.",
           "createdAt": "2025-12-09T15:28:56Z",
           "updatedAt": "2025-12-09T15:28:56Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 12,
+      "id": "PR_kwDOQEUIIM69Gw01",
+      "title": "Update draft to include CoSPDX structure and RFC8949",
+      "url": "https://github.com/achamayou/draft-chamayou-cospdx/pull/12",
+      "state": "MERGED",
+      "author": "achamayou",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Add RFC8949 reference and specify CoSPDX document structure and encoding requirements. Close #4.",
+      "createdAt": "2026-01-14T09:03:31Z",
+      "updatedAt": "2026-01-14T11:01:01Z",
+      "baseRepository": "achamayou/draft-chamayou-cospdx",
+      "baseRefName": "main",
+      "baseRefOid": "9a7b91eb33495f074f08f1a85074c724e8a52450",
+      "headRepository": "achamayou/draft-chamayou-cospdx",
+      "headRefName": "achamayou-patch-1",
+      "headRefOid": "15349649ecd9590e569eec0a226968d7b047ee69",
+      "closedAt": "2026-01-14T11:01:01Z",
+      "mergedAt": "2026-01-14T11:01:01Z",
+      "mergedBy": "achamayou",
+      "mergeCommit": {
+        "oid": "7a86cacb2cc0524b611f24e3860c711149ee36d5"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 13,
+      "id": "PR_kwDOQEUIIM69KAFH",
+      "title": "Add some analysis (and the output)",
+      "url": "https://github.com/achamayou/draft-chamayou-cospdx/pull/13",
+      "state": "MERGED",
+      "author": "cabo",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "I put in some analysis code.\r\nSee conv/samples/ccf/manifest.spdx.analysis.txt\r\n\r\nThis code doesn't know about the enums used by conv.py.\r\nWhat is the best way to find out if there is an enum for a string?\r\nMaybe it is the simplest to run analysis.rb on a conv.py output.",
+      "createdAt": "2026-01-14T13:23:27Z",
+      "updatedAt": "2026-01-14T19:29:42Z",
+      "baseRepository": "achamayou/draft-chamayou-cospdx",
+      "baseRefName": "main",
+      "baseRefOid": "7a86cacb2cc0524b611f24e3860c711149ee36d5",
+      "headRepository": "cabo/draft-chamayou-cospdx",
+      "headRefName": "analysis1",
+      "headRefOid": "a3b7c63adcf89a962cb3c23e7359dc39edaa51d8",
+      "closedAt": "2026-01-14T13:45:20Z",
+      "mergedAt": "2026-01-14T13:45:20Z",
+      "mergedBy": "achamayou",
+      "mergeCommit": {
+        "oid": "e0e1dde6d83002d9acb102f4f1c45e243d2b6026"
+      },
+      "comments": [
+        {
+          "author": "achamayou",
+          "authorAssociation": "OWNER",
+          "body": "> What is the best way to find out if there is an enum for a string? Maybe it is the simplest to run analysis.rb on a conv.py output.\r\n\r\nWhat you propose works and is probably cleaner. `conv.py` does something really crude [using the schema](https://github.com/achamayou/draft-chamayou-cospdx/blob/main/conv/conv.py#L29):\r\n\r\n```\r\n        for line in schema_path.read_text().splitlines():\r\n            line = line.strip()\r\n            ...\r\n            elif line.startswith(\"const.\"):\r\n                const, value = line[len(\"const.\") :].split(\"=\")\r\n                self.consts[const.strip()] = value.strip()\r\n\r\n...\r\n    if isinstance(value, str):\r\n        if value in schema.consts:\r\n            return schema.consts[value]\r\n```",
+          "createdAt": "2026-01-14T13:41:58Z",
+          "updatedAt": "2026-01-14T13:41:58Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "So how do I handle label.*?\r\nBTW, is it a problem that there is both a const.extension and a label.extension?",
+          "createdAt": "2026-01-14T14:17:43Z",
+          "updatedAt": "2026-01-14T14:17:43Z"
+        },
+        {
+          "author": "achamayou",
+          "authorAssociation": "OWNER",
+          "body": "@cabo sorry, `label.*` is used for [keys in maps/attribute names in objects](https://github.com/achamayou/draft-chamayou-cospdx/blob/main/cospdx.cddl#L641) and `const.*` for [values](https://github.com/achamayou/draft-chamayou-cospdx/blob/main/cospdx.cddl#L966).\r\n\r\nI'm not sure why it would be a problem that they are separate. Perhaps it's even an opportunity to use short integers twice, but I am not sure how I feel about `{1: 1}` where the first `1` means something completely different to the second `1`. Happy to discuss! ",
+          "createdAt": "2026-01-14T19:29:42Z",
+          "updatedAt": "2026-01-14T19:29:42Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOQEUIIM7aM1zP",
+          "commit": {
+            "abbreviatedOid": "a3b7c63"
+          },
+          "author": "achamayou",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-01-14T13:42:40Z",
+          "updatedAt": "2026-01-14T13:42:40Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 14,
+      "id": "PR_kwDOQEUIIM69K7el",
+      "title": "Look at const.* (and label.*)",
+      "url": "https://github.com/achamayou/draft-chamayou-cospdx/pull/14",
+      "state": "MERGED",
+      "author": "cabo",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-01-14T14:35:39Z",
+      "updatedAt": "2026-01-14T15:08:34Z",
+      "baseRepository": "achamayou/draft-chamayou-cospdx",
+      "baseRefName": "main",
+      "baseRefOid": "e0e1dde6d83002d9acb102f4f1c45e243d2b6026",
+      "headRepository": "cabo/draft-chamayou-cospdx",
+      "headRefName": "analysis1",
+      "headRefOid": "766d74fb3eb7744e224b772e1883c9eceb94aef3",
+      "closedAt": "2026-01-14T15:08:34Z",
+      "mergedAt": "2026-01-14T15:08:33Z",
+      "mergedBy": "achamayou",
+      "mergeCommit": {
+        "oid": "ad1dcb03153dca95d9d24b90706155f19f8b72d6"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOQEUIIM7aOgQY",
+          "commit": {
+            "abbreviatedOid": "766d74f"
+          },
+          "author": "achamayou",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-01-14T15:08:25Z",
+          "updatedAt": "2026-01-14T15:08:25Z",
           "comments": []
         }
       ]
