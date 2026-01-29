@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-01-18T02:05:23.611731+00:00",
+  "timestamp": "2026-01-29T02:22:44.198974+00:00",
   "repo": "achamayou/draft-chamayou-cospdx",
   "labels": [
     {
@@ -238,9 +238,17 @@
       "labels": [],
       "body": "Experiments with string references as implemented by `cbor2` (https://github.com/achamayou/draft-chamayou-cospdx/issues/2#issuecomment-3655693265) show relatively substantial savings. SPDX has an explicit \"context\" mechanism that could be used to intern larger strings, and replace them with integer values without affecting canonicality.\n\nThis ad-hoc mechanism could be removed in later iterations of CoSPDX once https://www.ietf.org/archive/id/draft-ietf-cbor-packed-14.html is finalised and available.",
       "createdAt": "2025-12-19T13:39:18Z",
-      "updatedAt": "2025-12-19T13:39:22Z",
+      "updatedAt": "2026-01-28T08:54:59Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "achamayou",
+          "authorAssociation": "OWNER",
+          "body": "Done in https://github.com/achamayou/draft-chamayou-cospdx/commit/1895dd27c9940dcee06a5185533e43481b7b2e10, but needs to be specified in the document, in one of two possible ways:\n\n1. Similar to Packed CBOR if the Tag and Simple Value registrations happen\n2. Just stripe positive/negative like in Packed CBOR otherwise, but no special tags or simple values, just schema-described label (2000 at the moment)",
+          "createdAt": "2026-01-28T08:54:59Z",
+          "updatedAt": "2026-01-28T08:54:59Z"
+        }
+      ]
     },
     {
       "number": 9,
